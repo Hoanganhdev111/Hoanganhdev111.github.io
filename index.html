@@ -6,140 +6,223 @@
 <title>WeX Education · HSA + Toán Thầy Chí + Sử Cô Sen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
-    --bg:#0A0D1A; --surface:#111628; --border:#1E2540; --border2:#2E3A60;
-    --primary:#6C8EFF; --violet:#A78BFA; --green:#34D399; --amber:#FBBF24; --red:#F87171;
+    --bg:#0A0D1A; --surface:#111628; --surface2:#161B30; --border:#1E2540; --border2:#2E3A60;
+    --primary:#6C8EFF; --violet:#A78BFA; --green:#34D399; --amber:#FBBF24; --red:#F87171; --pink:#F472B6;
     --text:#F8FAFF; --text2:#C7D0E8; --text3:#8E9AC0; --muted:#6C7A9E;
-    --radius:28px;
+    --radius:20px;
   }
   [data-theme="light"]{
-    --bg:#f0f2f8; --surface:#ffffff; --border:#d8dce8; --border2:#c0c6d8;
-    --primary:#5b4bdb; --violet:#7c5cd6; --green:#10b981; --amber:#d97706; --red:#dc2626;
+    --bg:#f0f2f8; --surface:#ffffff; --surface2:#f8f9fc; --border:#d8dce8; --border2:#c0c6d8;
+    --primary:#5b4bdb; --violet:#7c5cd6; --green:#10b981; --amber:#d97706; --red:#dc2626; --pink:#ec4899;
     --text:#1a1a2e; --text2:#4a4a6a; --text3:#6a6a8a; --muted:#8a8aaa;
   }
   body{
     background:var(--bg); font-family:'Inter',sans-serif; color:var(--text);
-    line-height:1.5; padding:24px 20px 48px; min-height:100vh;
+    line-height:1.5; padding:20px; min-height:100vh;
     transition:background .3s,color .3s;
   }
   body::before{
     content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-    background-image:linear-gradient(rgba(108,142,255,.03) 1px,transparent 1px),
-                     linear-gradient(90deg,rgba(108,142,255,.03) 1px,transparent 1px);
-    background-size:48px 48px;
+    background-image:linear-gradient(rgba(108,142,255,.025) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(108,142,255,.025) 1px,transparent 1px);
+    background-size:44px 44px;
   }
-  [data-theme="light"] body::before{opacity:.4}
-  .app{max-width:1500px; margin:0 auto; position:relative; z-index:2}
+  [data-theme="light"] body::before{opacity:.3}
+  .app{max-width:1600px; margin:0 auto; position:relative; z-index:2}
 
-  /* HEADER */
+  /* ============ HEADER ============ */
   .header{
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
-    background:rgba(17,22,40,.75); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    background:rgba(17,22,40,.85); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
     border:1px solid var(--border); border-radius:var(--radius);
-    padding:14px 26px; margin-bottom:20px;
-    box-shadow:0 20px 35px -12px rgba(0,0,0,.7),0 0 0 1px rgba(108,142,255,.1) inset;
+    padding:16px 26px; margin-bottom:20px;
+    box-shadow:0 20px 35px -12px rgba(0,0,0,.7),0 0 0 1px rgba(108,142,255,.08) inset;
   }
   [data-theme="light"] .header{background:rgba(255,255,255,.85)}
-  .logo-area{display:flex; align-items:center; gap:12px}
+  .logo-area{display:flex; align-items:center; gap:14px}
   .logo-icon{
-    width:42px;height:42px; background:linear-gradient(135deg,var(--primary),var(--violet));
-    border-radius:14px; display:flex; align-items:center; justify-content:center;
-    font-size:20px; color:#0A0D1A; font-weight:800;
-    box-shadow:0 0 20px rgba(108,142,255,.5);
+    width:48px;height:48px; background:linear-gradient(135deg,var(--primary),var(--violet));
+    border-radius:15px; display:flex; align-items:center; justify-content:center;
+    font-size:22px; color:#0A0D1A; font-weight:800;
+    box-shadow:0 0 24px rgba(108,142,255,.55);
   }
-  .logo-text{font-weight:700; font-size:20px; letter-spacing:-.02em;
+  .logo-text{font-weight:800; font-size:22px; letter-spacing:-.03em;
     background:linear-gradient(120deg,var(--text) 20%,var(--violet) 80%);
     -webkit-background-clip:text; background-clip:text; color:transparent;}
-  .logo-text span{font-weight:400; font-size:12px; color:var(--text3);
-    background:none; -webkit-background-clip:unset; background-clip:unset; margin-left:8px;}
-  .header-right{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+  .logo-text small{display:block; font-weight:400; font-size:11px; color:var(--text3);
+    background:none; -webkit-background-clip:unset; background-clip:unset; margin-top:2px; letter-spacing:.3px;}
+  .header-right{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
   .stats-badge{
-    display:flex; gap:18px; background:rgba(10,13,26,.7);
-    padding:8px 20px; border-radius:40px; border:1px solid var(--border);
+    display:flex; gap:16px; background:rgba(10,13,26,.8);
+    padding:9px 20px; border-radius:40px; border:1px solid var(--border);
     font-size:12.5px; font-weight:500;
   }
-  [data-theme="light"] .stats-badge{background:rgba(240,242,248,.7)}
+  [data-theme="light"] .stats-badge{background:rgba(240,242,248,.9)}
   .stats-badge .badge-item{display:flex; align-items:center; gap:6px}
   .stats-badge i{color:var(--primary); font-size:12px}
   .stats-badge span{color:var(--text2)}
-  .stats-badge strong{color:var(--text); font-weight:700; margin-left:4px}
+  .stats-badge strong{color:var(--text); font-weight:700; margin-left:3px}
   .theme-btn{
     background:var(--surface); border:1px solid var(--border); color:var(--text2);
-    width:38px; height:38px; border-radius:50%; cursor:pointer;
+    width:40px; height:40px; border-radius:50%; cursor:pointer;
     display:flex; align-items:center; justify-content:center; font-size:15px;
     transition:all .2s;
   }
   .theme-btn:hover{background:var(--border); color:var(--text)}
 
-  /* TABS */
-  .tabs{
-    display:flex; gap:4px; margin-bottom:16px;
-    background:rgba(17,22,40,.6); padding:5px; border-radius:48px;
-    border:1px solid var(--border); width:fit-content; flex-wrap:wrap; max-width:100%;
+  /* ============ LAYOUT: SIDEBAR + MAIN ============ */
+  .layout{display:grid; grid-template-columns:280px 1fr; gap:20px; align-items:start}
+  @media(max-width:1000px){.layout{grid-template-columns:1fr}}
+
+  /* SIDEBAR */
+  .sidebar{
+    background:rgba(17,22,40,.75); backdrop-filter:blur(12px);
+    border:1px solid var(--border); border-radius:var(--radius);
+    padding:20px 18px; position:sticky; top:20px;
+    max-height:calc(100vh - 40px); overflow-y:auto;
+    scrollbar-width:thin; scrollbar-color:var(--border2) transparent;
   }
-  [data-theme="light"] .tabs{background:rgba(255,255,255,.7)}
-  .tab-btn{
-    padding:9px 16px; border-radius:40px; border:none; background:transparent;
-    color:var(--text3); font-size:12px; font-weight:500; cursor:pointer;
-    transition:all .2s; font-family:'Inter',sans-serif;
-    display:flex; align-items:center; gap:6px; white-space:nowrap;
+  [data-theme="light"] .sidebar{background:rgba(255,255,255,.9)}
+  .sidebar::-webkit-scrollbar{width:4px}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--border2); border-radius:20px}
+
+  .sidebar-title{
+    font-size:11px; font-weight:700; color:var(--text3);
+    text-transform:uppercase; letter-spacing:.8px;
+    margin-bottom:12px; padding-left:4px;
   }
-  .tab-btn i{font-size:12px}
-  .tab-btn:hover{color:var(--text); background:rgba(108,142,255,.1)}
-  .tab-btn.active{background:var(--primary); color:#0A0D1A; font-weight:600}
-  .tab-btn.active i{color:#0A0D1A}
+  .nav-item{
+    display:flex; align-items:center; gap:11px;
+    padding:10px 12px; border-radius:12px;
+    cursor:pointer; transition:all .18s;
+    color:var(--text2); font-size:13.5px; font-weight:500;
+    margin-bottom:3px; border:1px solid transparent;
+    position:relative;
+  }
+  .nav-item:hover{background:rgba(108,142,255,.08); color:var(--text)}
+  .nav-item.active{
+    background:linear-gradient(135deg,rgba(108,142,255,.18),rgba(167,139,250,.12));
+    color:var(--text); font-weight:600; border-color:rgba(108,142,255,.3);
+  }
+  .nav-item.active::before{
+    content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+    width:3px; height:20px; background:var(--primary); border-radius:3px;
+  }
+  .nav-item i:first-child{
+    width:28px; height:28px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; flex-shrink:0;
+    background:rgba(108,142,255,.1); color:var(--primary);
+  }
+  .nav-item[data-color="violet"] i:first-child{background:rgba(167,139,250,.12); color:var(--violet)}
+  .nav-item[data-color="green"] i:first-child{background:rgba(52,211,153,.12); color:var(--green)}
+  .nav-item[data-color="amber"] i:first-child{background:rgba(251,191,36,.12); color:var(--amber)}
+  .nav-item[data-color="red"] i:first-child{background:rgba(248,113,113,.12); color:var(--red)}
+  .nav-item[data-color="pink"] i:first-child{background:rgba(244,114,182,.12); color:var(--pink)}
+  .nav-item .nav-count{
+    margin-left:auto; font-size:10.5px; font-weight:600;
+    background:var(--bg); padding:2px 8px; border-radius:20px;
+    color:var(--text3); border:1px solid var(--border);
+  }
+  .nav-item.active .nav-count{background:var(--primary); color:#0A0D1A; border-color:var(--primary)}
+
+  .sidebar-divider{
+    height:1px; background:var(--border); margin:14px 4px;
+  }
+
+  /* MAIN */
+  .main{min-width:0}
 
   /* TOOLBAR */
   .toolbar{
-    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
-    margin-bottom:20px; gap:14px;
+    display:flex; flex-wrap:wrap; align-items:center; gap:12px;
+    margin-bottom:20px;
   }
-  .search-wrapper{flex:1; min-width:240px; position:relative}
-  .search-wrapper i{position:absolute; left:20px; top:50%; transform:translateY(-50%); color:var(--primary); font-size:15px}
+  .search-wrapper{flex:1; min-width:220px; position:relative}
+  .search-wrapper i{position:absolute; left:18px; top:50%; transform:translateY(-50%); color:var(--primary); font-size:14px}
   .search-wrapper input{
     width:100%; background:rgba(17,22,40,.8); backdrop-filter:blur(8px);
-    border:1px solid var(--border); border-radius:48px; padding:13px 22px 13px 50px;
-    font-size:14px; color:var(--text); outline:none; transition:all .2s;
+    border:1px solid var(--border); border-radius:14px; padding:12px 20px 12px 46px;
+    font-size:13.5px; color:var(--text); outline:none; transition:all .2s;
     font-family:'Inter',sans-serif;
   }
   [data-theme="light"] .search-wrapper input{background:rgba(255,255,255,.9)}
   .search-wrapper input::placeholder{color:var(--muted)}
-  .search-wrapper input:focus{border-color:var(--primary); box-shadow:0 0 0 4px rgba(108,142,255,.15)}
+  .search-wrapper input:focus{border-color:var(--primary); box-shadow:0 0 0 4px rgba(108,142,255,.12)}
 
-  .subject-filters{display:flex; flex-wrap:wrap; gap:8px}
-  .filter-btn{
-    background:rgba(17,22,40,.7); border:1px solid var(--border); color:var(--text2);
-    padding:8px 16px; border-radius:40px; font-size:12px; font-weight:500;
-    cursor:pointer; transition:all .2s; font-family:'Inter',sans-serif;
+  .view-toggle{
+    display:flex; gap:2px; background:rgba(17,22,40,.7); padding:4px;
+    border-radius:12px; border:1px solid var(--border);
+  }
+  [data-theme="light"] .view-toggle{background:rgba(255,255,255,.8)}
+  .view-btn{
+    padding:8px 14px; border-radius:9px; border:none; background:transparent;
+    color:var(--text3); font-size:12.5px; font-weight:500; cursor:pointer;
+    transition:all .2s; font-family:'Inter',sans-serif;
     display:flex; align-items:center; gap:6px;
   }
-  [data-theme="light"] .filter-btn{background:rgba(255,255,255,.8)}
-  .filter-btn i{font-size:11px; color:var(--primary)}
-  .filter-btn:hover{background:var(--border); border-color:var(--border2); color:var(--text)}
-  .filter-btn.active{background:var(--primary); border-color:var(--primary); color:#0A0D1A; font-weight:600}
-  .filter-btn.active i{color:#0A0D1A}
+  .view-btn.active{background:var(--primary); color:#0A0D1A; font-weight:600}
 
-  /* GRID */
-  .subjects-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:22px; margin-bottom:32px}
+  /* CONTENT HEADER */
+  .content-head{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    margin-bottom:18px; gap:12px;
+  }
+  .content-head h2{
+    font-size:19px; font-weight:700; letter-spacing:-.02em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .content-head h2 i{color:var(--primary)}
+  .content-head .meta{
+    font-size:12.5px; color:var(--text3);
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .content-head .meta span{display:flex; align-items:center; gap:5px}
+  .content-head .meta i{color:var(--primary); font-size:11px}
+
+  /* ============ CARD GRID ============ */
+  .subjects-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(380px,1fr));
+    gap:18px;
+  }
+  @media(max-width:1400px){.subjects-grid{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}}
+  @media(max-width:600px){.subjects-grid{grid-template-columns:1fr}}
+
   .subject-card{
     background:rgba(17,22,40,.75); backdrop-filter:blur(8px);
-    border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px 18px;
-    transition:transform .2s,border-color .2s,box-shadow .2s;
+    border:1px solid var(--border); border-radius:var(--radius);
+    padding:20px 22px 16px;
+    transition:transform .22s,border-color .22s,box-shadow .22s;
     display:flex; flex-direction:column;
-    box-shadow:0 15px 25px -12px rgba(0,0,0,.6);
+    box-shadow:0 12px 24px -10px rgba(0,0,0,.5);
+    position:relative; overflow:hidden;
   }
   [data-theme="light"] .subject-card{background:rgba(255,255,255,.9)}
+  .subject-card::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--primary),var(--violet));
+    opacity:.7; transition:opacity .2s;
+  }
+  .subject-card[data-color="violet"]::before{background:linear-gradient(90deg,var(--violet),var(--pink))}
+  .subject-card[data-color="green"]::before{background:linear-gradient(90deg,var(--green),#22d3ee)}
+  .subject-card[data-color="amber"]::before{background:linear-gradient(90deg,var(--amber),var(--red))}
+  .subject-card[data-color="red"]::before{background:linear-gradient(90deg,var(--red),var(--pink))}
+  .subject-card[data-color="pink"]::before{background:linear-gradient(90deg,var(--pink),var(--violet))}
   .subject-card:hover{
     border-color:var(--border2); transform:translateY(-3px);
-    box-shadow:0 22px 30px -12px rgba(0,0,0,.8),0 0 0 1px rgba(108,142,255,.2);
+    box-shadow:0 22px 32px -12px rgba(0,0,0,.75),0 0 0 1px rgba(108,142,255,.18);
   }
-  .card-header{display:flex; align-items:center; gap:12px; margin-bottom:16px}
+  .subject-card:hover::before{opacity:1}
+
+  .card-header{display:flex; align-items:flex-start; gap:12px; margin-bottom:14px}
   .subject-icon{
-    width:46px;height:46px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+    width:46px;height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center;
     font-size:20px; background:rgba(108,142,255,.12); color:var(--primary); border:1px solid var(--border);
     flex-shrink:0;
   }
@@ -147,39 +230,84 @@
   .subject-icon.green{background:rgba(52,211,153,.12); color:var(--green)}
   .subject-icon.amber{background:rgba(251,191,36,.12); color:var(--amber)}
   .subject-icon.red{background:rgba(248,113,113,.12); color:var(--red)}
+  .subject-icon.pink{background:rgba(244,114,182,.12); color:var(--pink)}
   .subject-title{flex:1; min-width:0}
-  .subject-title h3{font-weight:700; font-size:16px; letter-spacing:-.01em; color:var(--text); line-height:1.3}
-  .subject-title .lesson-count{font-size:11px; color:var(--text3); display:flex; align-items:center; gap:5px; margin-top:3px}
-  .lesson-count i{font-size:9px; color:var(--primary)}
-  .progress-indicator{
-    font-size:11px; background:var(--bg); padding:4px 10px; border-radius:40px;
-    border:1px solid var(--border); color:var(--text2); font-weight:500;
-    white-space:nowrap; flex-shrink:0;
+  .subject-title h3{font-weight:700; font-size:15px; letter-spacing:-.01em; color:var(--text); line-height:1.3; display:flex; align-items:center; gap:7px; flex-wrap:wrap}
+  .subject-title .desc{
+    font-size:11.5px; color:var(--text3); margin-top:4px; line-height:1.4;
+    display:flex; align-items:center; gap:6px; flex-wrap:wrap;
   }
-  .progress-indicator i{color:var(--green); font-size:9px; margin-right:3px}
+  .subject-title .desc i{font-size:10px; color:var(--primary)}
+
+  .hsa-badge{
+    background:rgba(52,211,153,.15); border:1px solid rgba(52,211,153,.35);
+    color:var(--green); font-size:9.5px; font-weight:700; padding:2px 8px;
+    border-radius:20px; letter-spacing:.4px;
+  }
+  .tag-badge{
+    font-size:9.5px; font-weight:700; padding:2px 8px;
+    border-radius:20px; letter-spacing:.4px;
+  }
+  .tag-video{background:rgba(108,142,255,.15); border:1px solid rgba(108,142,255,.3); color:var(--primary)}
+  .tag-tailieu{background:rgba(52,211,153,.15); border:1px solid rgba(52,211,153,.3); color:var(--green)}
+  .tag-btvn{background:rgba(251,191,36,.15); border:1px solid rgba(251,191,36,.3); color:var(--amber)}
+
+  .card-actions{
+    display:flex; gap:4px; flex-shrink:0;
+  }
+  .icon-btn{
+    width:30px; height:30px; border-radius:9px; border:1px solid var(--border);
+    background:transparent; color:var(--text3); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .18s; font-size:12px;
+  }
+  .icon-btn:hover{background:var(--border); color:var(--text); border-color:var(--border2)}
+  .icon-btn.expand:hover{background:var(--primary); color:#0A0D1A; border-color:var(--primary)}
 
   .lesson-list{
-    list-style:none; margin-top:4px; max-height:220px; overflow-y:auto;
-    padding-right:6px; scrollbar-width:thin; scrollbar-color:var(--border2) transparent;
+    list-style:none; margin-top:4px;
+    max-height:280px; overflow-y:auto;
+    padding-right:4px; scrollbar-width:thin; scrollbar-color:var(--border2) transparent;
+    margin-bottom:6px;
   }
   .lesson-list::-webkit-scrollbar{width:4px}
   .lesson-list::-webkit-scrollbar-thumb{background:var(--border2); border-radius:20px}
-  .lesson-item{
-    display:flex; align-items:flex-start; gap:9px; padding:7px 8px;
-    border-bottom:1px solid rgba(30,37,64,.6); font-size:12.5px;
-    transition:background .15s; cursor:pointer; border-radius:10px;
-  }
-  [data-theme="light"] .lesson-item{border-bottom-color:rgba(200,206,224,.6)}
-  .lesson-item:hover{background:rgba(108,142,255,.08)}
-  .lesson-item:last-child{border-bottom:none}
-  .lesson-idx{color:var(--primary); font-weight:700; font-size:11px; min-width:22px; opacity:.9; padding-top:1px}
-  .lesson-name{flex:1; color:var(--text2); font-weight:400; line-height:1.4; word-break:break-word}
-  .lesson-date{font-size:10px; color:var(--muted); white-space:nowrap; margin-left:6px; padding-top:1px}
-  .lesson-item i.fa-play-circle{color:var(--primary); font-size:11px; opacity:.6; margin-top:2px}
-  .lesson-item i.fa-file-download{color:var(--green); font-size:11px; opacity:.6; margin-top:2px}
-  .material-tag{font-size:9px; padding:1px 6px; border-radius:10px; background:var(--border); color:var(--text3); white-space:nowrap}
 
-  .card-footer{margin-top:14px; display:flex; justify-content:flex-end; gap:8px}
+  .lesson-item{
+    display:flex; align-items:flex-start; gap:9px; padding:8px 10px;
+    border-radius:10px; font-size:12.5px; cursor:pointer;
+    transition:all .15s;
+    border-left:2px solid transparent;
+  }
+  .lesson-item:hover{
+    background:rgba(108,142,255,.09);
+    border-left-color:var(--primary);
+    padding-left:14px;
+  }
+  .lesson-idx{
+    color:var(--primary); font-weight:700; font-size:11px;
+    min-width:22px; opacity:.9; padding-top:2px; font-variant-numeric:tabular-nums;
+  }
+  .lesson-body{flex:1; min-width:0}
+  .lesson-name{color:var(--text2); font-weight:400; line-height:1.42; word-break:break-word; display:block}
+  .lesson-meta{display:flex; align-items:center; gap:8px; margin-top:3px; font-size:10px; color:var(--muted)}
+  .lesson-type{
+    display:inline-flex; align-items:center; gap:3px;
+    font-size:9.5px; padding:1px 6px; border-radius:8px; font-weight:600;
+  }
+  .lesson-type.video{background:rgba(108,142,255,.12); color:var(--primary)}
+  .lesson-type.tailieu{background:rgba(52,211,153,.12); color:var(--green)}
+  .lesson-type.btvn{background:rgba(251,191,36,.12); color:var(--amber)}
+  .lesson-arrow{color:var(--muted); font-size:10px; opacity:.5; padding-top:3px}
+
+  .card-footer{
+    margin-top:auto; padding-top:12px; border-top:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
+  }
+  .card-footer .count{
+    font-size:11px; color:var(--text3); display:flex; align-items:center; gap:5px;
+  }
+  .card-footer .count i{color:var(--primary)}
   .btn-ghost{
     background:transparent; border:1px solid var(--border); color:var(--text3);
     font-size:11px; padding:7px 14px; border-radius:30px; font-weight:500;
@@ -189,35 +317,59 @@
   .btn-ghost i{font-size:11px; color:var(--primary)}
   .btn-ghost:hover{background:var(--border); color:var(--text); border-color:var(--border2)}
 
-  /* TABLE */
-  .table-wrap{overflow-x:auto; border-radius:16px; border:1px solid var(--border); background:rgba(17,22,40,.75); backdrop-filter:blur(8px); margin-bottom:24px}
-  [data-theme="light"] .table-wrap{background:rgba(255,255,255,.9)}
-  table{width:100%; border-collapse:collapse; font-size:13px; min-width:600px}
-  thead th{
-    background:var(--border); color:var(--text); font-weight:600;
-    padding:11px 14px; text-align:left; border-bottom:2px solid var(--border2);
-    position:sticky; top:0; z-index:5; font-size:12px;
+  /* EMPTY */
+  .empty-state{
+    text-align:center; padding:70px 20px; color:var(--muted);
+    font-size:14px; border:1px dashed var(--border); border-radius:var(--radius);
+    grid-column:1/-1;
   }
-  tbody td{
-    padding:9px 14px; border-bottom:1px solid rgba(30,37,64,.6);
-    color:var(--text2); vertical-align:middle;
-  }
-  [data-theme="light"] tbody td{border-bottom-color:rgba(200,206,224,.6)}
-  tbody tr:hover td{background:rgba(108,142,255,.05)}
-  .link-btn{
-    display:inline-flex; align-items:center; gap:5px; padding:4px 12px;
-    background:var(--primary); color:#fff !important; border-radius:20px;
-    font-size:11px; font-weight:500; text-decoration:none; transition:all .2s;
-    cursor:pointer; border:none; font-family:'Inter',sans-serif;
-  }
-  .link-btn:hover{background:var(--violet); transform:scale(1.05)}
-  .link-btn.green{background:var(--green); color:#0A0D1A !important}
-  .link-btn.green:hover{background:#10b981}
+  .empty-state i{font-size:38px; margin-bottom:14px; display:block; opacity:.35}
 
+  /* ============ MODAL EXPAND ============ */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(5,8,18,.88); backdrop-filter:blur(8px);
+    z-index:9999; display:none; align-items:center; justify-content:center; padding:24px;
+    animation:fadeIn .2s ease;
+  }
+  .modal-overlay.active{display:flex}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .modal-box{
+    width:100%; max-width:920px; max-height:90vh;
+    background:var(--surface); border:1px solid var(--border2);
+    border-radius:24px; overflow:hidden;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.9);
+    display:flex; flex-direction:column;
+    animation:slideUp .25s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(20px); opacity:0}to{transform:translateY(0); opacity:1}}
+  .modal-head{
+    padding:18px 24px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:14px; background:var(--bg);
+  }
+  .modal-head .subject-icon{width:42px; height:42px; font-size:18px}
+  .modal-head h3{font-size:16px; font-weight:700; flex:1}
+  .modal-head h3 .desc{font-size:11.5px; color:var(--text3); font-weight:400; margin-top:2px; display:block}
+  .modal-close{
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--border);
+    background:transparent; color:var(--text3); cursor:pointer; font-size:15px;
+    display:flex; align-items:center; justify-content:center; transition:all .2s;
+  }
+  .modal-close:hover{background:var(--red); color:#fff; border-color:var(--red)}
+  .modal-body{
+    flex:1; overflow-y:auto; padding:12px 20px 20px;
+    scrollbar-width:thin; scrollbar-color:var(--border2) transparent;
+  }
+  .modal-body::-webkit-scrollbar{width:6px}
+  .modal-body::-webkit-scrollbar-thumb{background:var(--border2); border-radius:20px}
+  .modal-body .lesson-item{padding:10px 12px; font-size:13px}
+  .modal-body .lesson-name{font-size:13.5px}
+
+  /* INFO */
   .info-bar{
-    display:flex; flex-wrap:wrap; gap:14px 22px; background:rgba(17,22,40,.75);
-    padding:12px 20px; border-radius:14px; margin-bottom:18px;
-    border:1px solid var(--border); font-size:13px; color:var(--text2);
+    display:flex; flex-wrap:wrap; gap:12px 20px;
+    background:rgba(17,22,40,.6); backdrop-filter:blur(8px);
+    padding:12px 20px; border-radius:14px; margin-bottom:20px;
+    border:1px solid var(--border); font-size:12.5px; color:var(--text2);
   }
   [data-theme="light"] .info-bar{background:rgba(255,255,255,.9)}
   .info-bar span strong{color:var(--text); font-weight:600}
@@ -227,61 +379,40 @@
   }
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-  /* FOOTER */
-  .stats-footer{
-    background:rgba(17,22,40,.6); backdrop-filter:blur(8px);
-    border:1px solid var(--border); border-radius:var(--radius);
-    padding:18px 28px; display:flex; flex-wrap:wrap; justify-content:space-between;
-    align-items:center; font-size:13px; color:var(--text3); margin-top:24px;
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr}
+    .sidebar{position:static; max-height:none}
+    .sidebar .nav-list{display:flex; overflow-x:auto; gap:6px; padding-bottom:6px}
+    .sidebar .nav-item{flex-shrink:0; margin-bottom:0}
+    .sidebar-divider{display:none}
   }
-  [data-theme="light"] .stats-footer{background:rgba(255,255,255,.8)}
-  .stats-footer .total-badge{display:flex; align-items:center; gap:16px}
-  .total-badge .big-number{font-size:26px; font-weight:700; color:var(--primary); letter-spacing:-.02em}
-  .total-badge .label{color:var(--text3); font-size:12px}
-  .tag-web3{
-    background:linear-gradient(135deg,rgba(108,142,255,.15),rgba(167,139,250,.15));
-    border:1px solid rgba(108,142,255,.25); padding:6px 16px; border-radius:40px;
-    font-size:11px; font-weight:600; color:var(--violet); letter-spacing:.3px;
-    display:flex; align-items:center; gap:7px;
-  }
-  .tag-web3 i{color:var(--primary)}
-
-  .hsa-badge{
-    background:rgba(52,211,153,.15); border:1px solid rgba(52,211,153,.3);
-    color:var(--green); font-size:9px; font-weight:700; padding:2px 8px;
-    border-radius:30px; margin-left:6px; letter-spacing:.3px;
-  }
-  .empty-state{
-    grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--muted);
-    font-size:15px; border:1px dashed var(--border); border-radius:var(--radius);
-  }
-  .empty-state i{font-size:38px; margin-bottom:14px; display:block; opacity:.4}
-
-  @media(max-width:700px){
-    body{padding:14px 10px 32px}
-    .header{padding:12px 16px}
-    .logo-text{font-size:16px}
-    .logo-text span{display:none}
+  @media(max-width:600px){
+    body{padding:12px}
+    .header{padding:12px 16px; border-radius:16px}
+    .logo-text{font-size:18px}
     .stats-badge{display:none}
     .subjects-grid{grid-template-columns:1fr}
-    .toolbar{flex-direction:column; align-items:stretch}
-    .subject-filters{overflow-x:auto; padding-bottom:4px}
-    .tabs{width:100%; justify-content:flex-start; overflow-x:auto}
-    .stats-footer{flex-direction:column; gap:14px; align-items:flex-start}
+    .content-head h2{font-size:16px}
+    .modal-box{max-height:95vh; border-radius:18px}
   }
 </style>
 </head>
 <body>
 
 <div class="app">
+  <!-- HEADER -->
   <header class="header">
     <div class="logo-area">
       <div class="logo-icon">W</div>
-      <div class="logo-text">WeX Education <span>HSA · Thầy Chí · Cô Sen</span></div>
+      <div class="logo-text">
+        WeX Education
+        <small>HSA · Toán Thầy Chí · Sử Cô Sen · SGK</small>
+      </div>
     </div>
     <div class="header-right">
       <div class="stats-badge">
-        <div class="badge-item"><i class="fas fa-book-open"></i><span>Tổng:</span><strong id="totalLessons">0</strong></div>
+        <div class="badge-item"><i class="fas fa-book-open"></i><span>Bài:</span><strong id="totalLessons">0</strong></div>
         <div class="badge-item"><i class="fas fa-layer-group" style="color:#A78BFA"></i><span>Môn:</span><strong id="totalSubjects">0</strong></div>
         <div class="badge-item"><i class="fas fa-link" style="color:#34D399"></i><span>Link:</span><strong id="totalLinks">0</strong></div>
       </div>
@@ -289,207 +420,464 @@
     </div>
   </header>
 
-  <div class="tabs" id="tabContainer">
-    <button class="tab-btn active" data-tab="all"><i class="fas fa-globe"></i> Tất cả</button>
-    <button class="tab-btn" data-tab="hsa"><i class="fas fa-graduation-cap"></i> HSA</button>
-    <button class="tab-btn" data-tab="thaychi"><i class="fas fa-chalkboard-teacher"></i> Toán Thầy Chí</button>
-    <button class="tab-btn" data-tab="cosen"><i class="fas fa-scroll"></i> Sử Cô Sen</button>
-    <button class="tab-btn" data-tab="sgk"><i class="fas fa-book"></i> SGK</button>
-    <button class="tab-btn" data-tab="tailieu"><i class="fas fa-file-alt"></i> Tài liệu</button>
-    <button class="tab-btn" data-tab="btvn"><i class="fas fa-pen-to-square"></i> BTVN</button>
-  </div>
+  <!-- LAYOUT -->
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Danh mục chính</div>
+      <div class="nav-list" id="navList"></div>
+    </aside>
 
-  <div class="toolbar">
-    <div class="search-wrapper">
-      <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Tìm bài học, tài liệu, BTVN...">
-    </div>
-    <div class="subject-filters" id="filterContainer"></div>
-  </div>
-
-  <div class="info-bar">
-    <span><span class="dot"></span> <strong>Live</strong> · cập nhật 16/09/2026</span>
-    <span>📚 <strong id="infoLessons">0</strong> mục</span>
-    <span>🎓 <strong id="infoSubjects">0</strong> môn</span>
-    <span>🔗 <strong id="infoLinks">0</strong> link</span>
-    <span>▶️ Click để mở bài giảng</span>
-  </div>
-
-  <div id="contentArea"></div>
-
-  <div class="stats-footer">
-    <div class="total-badge">
-      <div>
-        <div class="big-number" id="footerTotal">0</div>
-        <div class="label">bài giảng · tài liệu · BTVN</div>
+    <!-- MAIN -->
+    <main class="main">
+      <div class="toolbar">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Tìm bài học, tài liệu, BTVN...">
+        </div>
+        <div class="view-toggle">
+          <button class="view-btn active" data-view="all"><i class="fas fa-th-large"></i> Tất cả</button>
+          <button class="view-btn" data-view="video"><i class="fas fa-play-circle"></i> Video</button>
+          <button class="view-btn" data-view="tailieu"><i class="fas fa-file-alt"></i> Tài liệu</button>
+          <button class="view-btn" data-view="btvn"><i class="fas fa-pen-to-square"></i> BTVN</button>
+        </div>
       </div>
-      <div style="width:1px;height:30px;background:var(--border)"></div>
-      <div>
-        <div style="font-size:18px;font-weight:700;color:var(--text)" id="footerSubjects">0</div>
-        <div class="label">môn học / chuyên đề</div>
+
+      <div class="info-bar">
+        <span><span class="dot"></span> <strong>Live</strong> · cập nhật 16/09/2026</span>
+        <span>📚 <strong id="infoLessons">0</strong> mục</span>
+        <span>🎓 <strong id="infoSubjects">0</strong> môn</span>
+        <span>🔗 <strong id="infoLinks">0</strong> link</span>
+        <span>⛶ Click <strong>phóng to</strong> để xem full danh sách</span>
       </div>
+
+      <div id="contentArea"></div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL EXPAND -->
+<div class="modal-overlay" id="expandModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="subject-icon" id="modalIcon"><i class="fas fa-book"></i></div>
+      <h3 id="modalTitle">Danh sách bài học<span class="desc" id="modalDesc"></span></h3>
+      <button class="modal-close" onclick="closeExpand()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="tag-web3"><i class="fas fa-cube"></i> WeX Education · HSA · Toán · Sử</div>
+    <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
 
 <script>
 /* ============================================================
-   HSA MEGAEDU — bài giảng + tài liệu + BTVN
+   DATA: HSA MEGAEDU — 11 MÔN (đầy đủ)
    ============================================================ */
 const MEGA_SUBJECTS = [
-  {id:'toan_co_ban',name:'TOÁN CƠ BẢN',icon:'fa-calculator',color:'green',group:'hsa',lessons:[
-    // BÀI GIẢNG
+  {id:'toan_co_ban',name:'TOÁN CƠ BẢN',desc:'Toán · HSA · Chuyên đề 12',icon:'fa-calculator',color:'green',group:'hsa',lessons:[
     {name:'Khoảng cách từ điểm đến mp-Góc trong KG',date:'10/04',link:'https://www.youtube.com/watch?v=jEJu4H_cUSs',type:'video'},
     {name:'Khoảng cách từ điểm đến MP ( tiếp)',date:'17/04',link:'https://www.youtube.com/watch?v=t3Vw_yxlgHI',type:'video'},
     {name:'Khoảng cách giữa 2 ĐT chéo nhau',date:'24/04',link:'https://www.youtube.com/watch?v=LQQrSZvD5Os',type:'video'},
     {name:'Công thức DKH tính KC giữa 2 ĐT',date:'05/05',link:'https://www.youtube.com/watch?v=tgPdx8EEfsk',type:'video'},
+    {name:'Công thức DKH tính KC giữa 2 ĐT-TIẾP',date:'08/05',link:'https://www.youtube.com/watch?v=FZ1xjaVf38s',type:'video'},
     {name:'Thể tích',date:'12/05',link:'https://www.youtube.com/watch?v=c9cIE6m6r3c',type:'video'},
     {name:'Tính đơn điệu của hàm số',date:'15/05',link:'https://www.youtube.com/watch?v=kagwiaGQ00I',type:'video'},
     {name:'Cực trị của hàm số',date:'19/05',link:'https://www.youtube.com/watch?v=Hv38t3-E6ME',type:'video'},
     {name:'GTLN-GTNN của hàm số',date:'22/05',link:'https://www.youtube.com/watch?v=hsAErSmUpUc',type:'video'},
-    {name:'Đường tiệm cận của Đồ thị hàm sồ',date:'26/05',link:'https://www.youtube.com/watch?v=SZPl80hyXCo',type:'video'},
+    {name:'Đường tiệm cận của Đồ thị hàm số',date:'26/05',link:'https://www.youtube.com/watch?v=SZPl80hyXCo',type:'video'},
     {name:'Khảo sát sự Biến thiên và vẽ ĐTHS',date:'29/05',link:'https://www.youtube.com/watch?v=8a9rXTS750M',type:'video'},
     {name:'CHỮA ĐỀ THI THỬ T5 - ĐỊNH LƯỢNG',date:'01/06',link:'https://www.youtube.com/watch?v=zL5faREUzLQ',type:'video'},
     {name:'Khảo sát hàm phân thức',date:'03/06',link:'https://www.youtube.com/watch?v=WrugSPSW6t4',type:'video'},
+    {name:'Khảo sát hàm phân thức-Tiếp',date:'06/06',link:'https://www.youtube.com/watch?v=nk7Gse2CK40',type:'video'},
     {name:'Tính đơn điệu của Hàm hợp',date:'09/06',link:'https://www.youtube.com/watch?v=rhlaiNxmki0',type:'video'},
     {name:'Cực trị của Hàm hợp',date:'12/06',link:'https://www.youtube.com/watch?v=mYKfj3T6tm0',type:'video'},
+    {name:'Tính đơn điệu của Hàm hợp-Tiếp',date:'16/06',link:'https://www.youtube.com/watch?v=yaRCocsWjXw',type:'video'},
     {name:'GTLN-GTNN của Hàm hợp',date:'19/06',link:'https://www.youtube.com/watch?v=OAgwmfNl6mI',type:'video'},
     {name:'Tương giao của Đồ thị HS',date:'23/06',link:'https://www.youtube.com/watch?v=XiXOX9xnWzE',type:'video'},
+    {name:'Tương giao của Đồ thị HS - Tiếp',date:'27/06',link:'https://www.youtube.com/watch?v=9xQu8B1bAJA',type:'video'},
+    {name:'(Có tham số) Tính đơn điệu của Hàm số',date:'30/06',link:'https://www.youtube.com/watch?v=9JJQGipRT54',type:'video'},
+    {name:'(Có tham số) Tính đơn điệu của Hàm số - Tiếp',date:'03/07',link:'https://www.youtube.com/watch?v=pYglUBnSSJU',type:'video'},
+    {name:'(Có tham số) Cực trị của Hàm số (P1)',date:'07/07',link:'https://www.youtube.com/watch?v=qcfXhfvBTyU',type:'video'},
+    {name:'(Có tham số) Cực trị của Hàm số (P1) - Tiếp',date:'10/07',link:'https://www.youtube.com/watch?v=3GW8z4P6wvQ',type:'video'},
+    {name:'(Có tham số) Cực trị của Hàm số (P2)',date:'14/07',link:'https://www.youtube.com/watch?v=R4BmwVUUiZg',type:'video'},
+    {name:'Biện luận số nghiệm của PT',date:'17/07',link:'https://www.youtube.com/watch?v=tglFDtvHiG0',type:'video'},
+    {name:'Biện luận số nghiệm của PT - Tiếp',date:'21/07',link:'https://www.youtube.com/watch?v=JW0GrPcDrGE',type:'video'},
+    {name:'Đường tiệm cận chứa tham số m',date:'24/07',link:'https://www.youtube.com/watch?v=Fk_4Kk-39bA',type:'video'},
+    {name:'Vectơ và các phép toán vectơ trong không gian',date:'28/07',link:'https://www.youtube.com/watch?v=y3MqAmS6icI',type:'video'},
+    {name:'Vectơ và các phép toán vectơ trong không gian - Tiếp',date:'31/07',link:'https://www.youtube.com/watch?v=J1igzZW_i_s',type:'video'},
+    {name:'Hệ trục toạ độ trong không gian',date:'04/08',link:'https://www.youtube.com/watch?v=gHYXMiebGY8',type:'video'},
+    {name:'Hệ trục toạ độ trong không gian - Tiếp',date:'06/08',link:'https://www.youtube.com/watch?v=cMJ77JGb44Y',type:'video'},
+    {name:'CHỮA ĐỀ THI THỬ THÁNG 7',date:'10/08',link:'https://www.youtube.com/watch?v=ZzIjOyG8Dv8',type:'video'},
+    {name:'Biểu thức toạ độ của các phép toán vectơ',date:'11/08',link:'https://www.youtube.com/watch?v=i1s2L1v9MUw',type:'video'},
+    {name:'Biểu thức toạ độ của các phép toán vectơ - Tiếp',date:'14/08',link:'https://www.youtube.com/watch?v=hHdeZUGo5hc',type:'video'},
     {name:'B17. Tâm tỉ cự và tích có hướng',date:'18/08',link:'https://www.youtube.com/watch?v=WuQVuuUC-Mc',type:'video'},
-    {name:'B19. Mẫu số liệu + Phương sai',date:'28/08',link:'https://www.youtube.com/watch?v=-umtsPNjfos',type:'video'},
-    {name:'B20. Nguyên hàm và tính chất',date:'08/09',link:'https://www.youtube.com/watch?v=oIKRJeF95KQ',type:'video'},
-    // TÀI LIỆU
-    {name:'Tài liệu: Khoảng cách từ điểm đến mp',date:'10/04',link:'https://drive.google.com/uc?export=download&id=1EnwCYK-TqJRkaQIsvye5pBHS-IPw8lzs',type:'tailieu'},
-    {name:'Tài liệu: Thể tích',date:'12/05',link:'https://drive.google.com/uc?export=download&id=1XnC0qR5qStNQZi0oToLEzrhEeuHSSaEC',type:'tailieu'},
-    {name:'Tài liệu: Tính đơn điệu',date:'15/05',link:'https://drive.google.com/uc?export=download&id=1MUqJmD_jQ1xborohVlnYt-bkoRnAyX1l',type:'tailieu'},
-    {name:'Tài liệu: Nguyên hàm',date:'08/09',link:'https://drive.google.com/uc?export=download&id=1Q3UnmahuvEt-XsOiT2RWra-tHxSSJvme',type:'tailieu'},
-    // BTVN
+    {name:'B17. Tâm tỉ cự và tích có hướng - Tiếp',date:'21/08',link:'https://www.youtube.com/watch?v=PJokQjhQlpM',type:'video'},
+    {name:'B17. Tâm tỉ cự và tích có hướng - Tiếp',date:'25/08',link:'https://www.youtube.com/watch?v=m5A9BMaSni4',type:'video'},
+    {name:'B19. Mẫu số liệu (P1) + Phương sai và độ lệch chuẩn (P2)',date:'28/08',link:'https://www.youtube.com/watch?v=-umtsPNjfos',type:'video'},
+    {name:'CHỮA ĐỀ THI THỬ ĐỊNH LƯỢNG THÁNG',date:'04/09',link:'https://www.youtube.com/watch?v=n9pc8PtU7SU',type:'video'},
+    {name:'B20. Nguyên hàm và tính chất của nguyên hàm',date:'08/09',link:'https://www.youtube.com/watch?v=oIKRJeF95KQ',type:'video'},
+    {name:'B20. Nguyên hàm và tính chất của nguyên hàm - Tiếp',date:'11/09',link:'https://www.youtube.com/watch?v=zpvTcO6idms',type:'video'},
+    {name:'TL: Khoảng cách từ điểm đến mp-Góc trong KG',date:'10/04',link:'https://drive.google.com/uc?export=download&id=1EnwCYK-TqJRkaQIsvye5pBHS-IPw8lzs',type:'tailieu'},
+    {name:'TL: Khoảng cách giữa 2 ĐT chéo nhau',date:'24/04',link:'https://drive.google.com/uc?export=download&id=1MtQfAsKQUn0mmNvoata1vMqzj4rGZrK6',type:'tailieu'},
+    {name:'TL: Công thức DKH tính KC giữa 2 ĐT',date:'05/05',link:'https://drive.google.com/uc?export=download&id=1UQnyq-T08COsQ_lnRsLr2OBLFd3wxW-d',type:'tailieu'},
+    {name:'TL: Thể tích',date:'12/05',link:'https://drive.google.com/uc?export=download&id=1XnC0qR5qStNQZi0oToLEzrhEeuHSSaEC',type:'tailieu'},
+    {name:'TL: Tính đơn điệu của hàm số',date:'15/05',link:'https://drive.google.com/uc?export=download&id=1MUqJmD_jQ1xborohVlnYt-bkoRnAyX1l',type:'tailieu'},
+    {name:'TL: Cực trị của hàm số',date:'19/05',link:'https://drive.google.com/uc?export=download&id=1lCQDr4ObqjT_pc9Uqndv7TtN-MAo_1qW',type:'tailieu'},
+    {name:'TL: GTLN-GTNN của hàm số',date:'22/05',link:'https://drive.google.com/uc?export=download&id=1bd_SpGrNtqbBabHdrsZMKJIFaecxjdOF',type:'tailieu'},
+    {name:'TL: Đường tiệm cận của Đồ thị hàm số',date:'26/05',link:'https://drive.google.com/uc?export=download&id=1FVcsvnu8TcPjAqYGXmXohkocaqMGtpsa',type:'tailieu'},
+    {name:'TL: Khảo sát sự Biến thiên và vẽ ĐTHS',date:'29/05',link:'https://drive.google.com/uc?export=download&id=1p9oeVj1_0WKnFe7BYuWDgcPHJ-C9tgwN',type:'tailieu'},
+    {name:'TL: CHỮA ĐỀ THI THỬ T5 - ĐỊNH LƯỢNG',date:'01/06',link:'https://drive.google.com/uc?export=download&id=1uOwdW7NsAHpqbPmK-Pf93z8ddJVIUkGm',type:'tailieu'},
+    {name:'TL: Khảo sát hàm phân thức',date:'03/06',link:'https://drive.google.com/uc?export=download&id=1ln43kZyckL_msziP9Wgf-t8BzxCV2mKX',type:'tailieu'},
+    {name:'TL: Tính đơn điệu của Hàm hợp',date:'09/06',link:'https://drive.google.com/uc?export=download&id=1y9LN43DOa6ZG7KYjDg0o2wegFM53bOmC',type:'tailieu'},
+    {name:'TL: Cực trị của Hàm hợp',date:'12/06',link:'https://drive.google.com/uc?export=download&id=1qSyfGWfBuN0hJjgaPiXqSPAwjXomoTA7',type:'tailieu'},
+    {name:'TL: GTLN-GTNN của Hàm hợp',date:'19/06',link:'https://drive.google.com/uc?export=download&id=1QWJc8BVh4O2zpsJgIQyjgmIfX-q1Qo33',type:'tailieu'},
+    {name:'TL: Tương giao của Đồ thị HS',date:'23/06',link:'https://drive.google.com/uc?export=download&id=1v3_C7_gbjYptAVzo9v3TYptSlks3KT3y',type:'tailieu'},
+    {name:'TL: (Có tham số) Tính đơn điệu của Hàm số',date:'30/06',link:'https://drive.google.com/uc?export=download&id=1COrcjYnn-eA1jRoq2Kjgb52GB-c3fICL',type:'tailieu'},
+    {name:'TL: (Có tham số) Cực trị của Hàm số (P1)',date:'07/07',link:'https://drive.google.com/uc?export=download&id=1TgtcJVwR7fOyzJEEK3s2jjIU3UZLkHM8',type:'tailieu'},
+    {name:'TL: (Có tham số) Cực trị của Hàm số (P2)',date:'14/07',link:'https://drive.google.com/uc?export=download&id=1kuVTvXxzIGCXDdxFWf9BmcdYANSKnsJ5',type:'tailieu'},
+    {name:'TL: Biện luận số nghiệm của PT',date:'17/07',link:'https://drive.google.com/uc?export=download&id=1aRymNExby_zqZu9NzQ1HhtW3S3ykPijH',type:'tailieu'},
+    {name:'TL: Đường tiệm cận chứa tham số m',date:'24/07',link:'https://drive.google.com/uc?export=download&id=1E50-hJDJ-i4EKnVvLxmZh7iX-aLvYmjl',type:'tailieu'},
+    {name:'TL: Vectơ và các phép toán vectơ trong không gian',date:'28/07',link:'https://drive.google.com/uc?export=download&id=1mMGL83Q-VSPqm6W7I-hsnzPAZ9jsQNVG',type:'tailieu'},
+    {name:'TL: Hệ trục toạ độ trong không gian',date:'04/08',link:'https://drive.google.com/uc?export=download&id=1Dx1U8XUBOx6GAEruY6dONEoNN10BO1LW',type:'tailieu'},
+    {name:'TL: Biểu thức toạ độ của các phép toán vectơ',date:'11/08',link:'https://drive.google.com/uc?export=download&id=1uFltDt1Iom2HmJ8RtrNxFdUZAVX6Q5al',type:'tailieu'},
+    {name:'TL: B17. Tâm tỉ cự và tích có hướng',date:'18/08',link:'https://drive.google.com/uc?export=download&id=1lqj0SQ5TGsdhYxX-SdE0TViI2g4Wg3uj',type:'tailieu'},
+    {name:'TL: B19. Mẫu số liệu + Phương sai',date:'28/08',link:'https://drive.google.com/uc?export=download&id=1a1nG_N4OyCEsMGg84Bq-tWlb0EVfDO7a',type:'tailieu'},
+    {name:'TL: B20. Nguyên hàm và tính chất',date:'08/09',link:'https://drive.google.com/uc?export=download&id=1Q3UnmahuvEt-XsOiT2RWra-tHxSSJvme',type:'tailieu'},
     {name:'BTVN: Khoảng cách từ điểm đến mp',date:'10/04',link:'https://drive.google.com/drive/folders/1GtjZE100qb87gZvYuOc4s-GGj6dD6YES',type:'btvn'},
     {name:'Chữa BTVN: Tính đơn điệu',date:'19/05',link:'https://drive.google.com/file/d/1HAOxa3KSPE5C9RiUD7Pkk5m1bcirFgg-/view',type:'btvn'},
     {name:'BTVN + Chữa: Nguyên hàm',date:'08/09',link:'https://drive.google.com/drive/folders/1GQNP0JxTphcJs-qBNyQ4BkLygwOuMZBC',type:'btvn'}
   ]},
-  {id:'toan_nang_cao',name:'TOÁN NÂNG CAO',icon:'fa-chart-line',color:'violet',group:'hsa',lessons:[
+  {id:'toan_nang_cao',name:'TOÁN NÂNG CAO',desc:'Toán · HSA · Chuyên đề nâng cao',icon:'fa-chart-line',color:'violet',group:'hsa',lessons:[
     {name:'Khoảng cách giữa 2 ĐT chéo nhau',date:'14/04',link:'https://www.youtube.com/watch?v=lkIdIf1aKSP4',type:'video'},
+    {name:'Công thức DKH tính khoảng cách giữa 2 ĐT',date:'21/04',link:'https://www.youtube.com/watch?v=jBNvSSnaDSg',type:'video'},
     {name:'Thể tích',date:'28/04',link:'https://www.youtube.com/watch?v=q5YufpNSBSw',type:'video'},
+    {name:'Thể tích (tiếp)',date:'05/05',link:'https://www.youtube.com/watch?v=GGbSRbenKQE',type:'video'},
     {name:'Bài toán nước dâng',date:'07/05',link:'https://www.youtube.com/watch?v=s26weHYHNPA',type:'video'},
     {name:'Tính đơn điệu của hàm số',date:'12/05',link:'https://www.youtube.com/watch?v=5hRO3HyzU5A',type:'video'},
     {name:'Cực trị của hàm số',date:'14/05',link:'https://www.youtube.com/watch?v=99z_rvIgmko',type:'video'},
+    {name:'Chữa BT tính đơn điệu của hàm số',date:'19/05',link:'https://www.youtube.com/watch?v=1ZqhGy_Zdh0',type:'video'},
     {name:'GTLN-GTNN của hàm số',date:'21/05',link:'https://www.youtube.com/watch?v=ExCVQXMNYGs',type:'video'},
+    {name:'Đường tiệm cận của Đồ thị hàm số',date:'26/05',link:'https://www.youtube.com/watch?v=oo1PlNrIork',type:'video'},
+    {name:'Khảo sát sự Biến thiên và vẽ ĐTHS',date:'28/05',link:'https://www.youtube.com/watch?v=ZjNS83DGemA',type:'video'},
+    {name:'Khảo sát hàm phân thức',date:'03/06',link:'https://www.youtube.com/watch?v=18OR9kzkG8M',type:'video'},
+    {name:'Khảo sát hàm phân thức-Tiếp',date:'08/06',link:'https://www.youtube.com/watch?v=csL7LaTT8yI',type:'video'},
+    {name:'Tính đơn điệu của Hàm hợp',date:'09/06',link:'https://www.youtube.com/watch?v=QBXPNii6PrI',type:'video'},
+    {name:'Cực trị của hàm hợp',date:'11/06',link:'https://www.youtube.com/watch?v=VCYj7u5d8PI',type:'video'},
+    {name:'GTLN-GTNN của Hàm hợp',date:'16/06',link:'https://www.youtube.com/watch?v=qeOeqnfIVfA',type:'video'},
+    {name:'Chữa BTVN phần Hàm hợp (Bài 6+7)',date:'18/06',link:'https://www.youtube.com/watch?v=rqK1ReAIcow',type:'video'},
+    {name:'Tương giao của Đồ thị HS',date:'23/06',link:'https://www.youtube.com/watch?v=b9v0wjZU0h4',type:'video'},
+    {name:'(Có tham số) Tính đơn điệu của Hàm số',date:'30/06',link:'https://www.youtube.com/watch?v=KfYkNet0dig',type:'video'},
+    {name:'(Có tham số) Tính đơn điệu - Tiếp',date:'02/07',link:'https://www.youtube.com/watch?v=55mQrZerLrw',type:'video'},
+    {name:'Hàm số có chứa dấu GTTĐ',date:'04/07',link:'https://www.youtube.com/watch?v=uOAE8uqt0u4',type:'video'},
+    {name:'(Có tham số) Cực trị của Hàm số (P1)',date:'07/07',link:'https://www.youtube.com/watch?v=Uv3bHBj-lHw',type:'video'},
+    {name:'(Có tham số) Cực trị của Hàm số (P1) - Tiếp',date:'09/07',link:'https://www.youtube.com/watch?v=V5uc8vZSDd0',type:'video'},
+    {name:'(Có tham số) Cực trị của Hàm số (P2)',date:'14/07',link:'https://www.youtube.com/watch?v=FCQvHw4gHgM',type:'video'},
+    {name:'Biện luận số nghiệm của PT',date:'16/07',link:'https://www.youtube.com/watch?v=48P04cgewAU',type:'video'},
+    {name:'Biện luận số nghiệm của PT -Tiếp',date:'21/07',link:'https://www.youtube.com/watch?v=3yFYMdBoL1s',type:'video'},
+    {name:'Đường tiệm cận chứa tham số m',date:'23/07',link:'https://www.youtube.com/watch?v=wzz2ZJ2Ulq0',type:'video'},
+    {name:'Vectơ và các phép toán vectơ trong không gian',date:'28/07',link:'https://www.youtube.com/watch?v=b31ncDC1hwE',type:'video'},
+    {name:'Vectơ và các phép toán vectơ trong không gian-Tiếp',date:'30/07',link:'https://www.youtube.com/watch?v=AloZncV_56s',type:'video'},
+    {name:'Hệ trục toạ độ trong không gian',date:'04/08',link:'https://www.youtube.com/watch?v=dtHvaqyI_Ao',type:'video'},
+    {name:'Hệ trục toạ độ trong không gian - Tiếp',date:'06/08',link:'https://www.youtube.com/watch?v=GQupOI0Bq0U',type:'video'},
+    {name:'Hệ trục toạ độ trong không gian - Tiếp',date:'11/08',link:'https://www.youtube.com/watch?v=QKubS93wUDo',type:'video'},
+    {name:'Biểu thức toạ độ của các phép toán vectơ',date:'13/08',link:'https://www.youtube.com/watch?v=7fGquJpArys',type:'video'},
+    {name:'B17. Tâm tỉ cự và tích có hướng',date:'18/08',link:'https://www.youtube.com/watch?v=pUuIB4lb-yw',type:'video'},
+    {name:'B17. Tâm tỉ cự và tích có hướng (ƯD)',date:'20/08',link:'https://www.youtube.com/watch?v=mXQlgz2rZF0',type:'video'},
+    {name:'B18. Phương pháp trải phẳng hình',date:'25/08',link:'https://www.youtube.com/watch?v=OZVNpQyS4EY',type:'video'},
+    {name:'B19. Mẫu số liệu + Phương sai',date:'27/08',link:'https://www.youtube.com/watch?v=GdIDx11inD8',type:'video'},
     {name:'B20. Nguyên hàm và tính chất',date:'03/09',link:'https://www.youtube.com/watch?v=SwdIimp4kOE',type:'video'},
+    {name:'B20. Nguyên hàm - Tiếp',date:'08/09',link:'https://www.youtube.com/watch?v=VuG18ukcWOs',type:'video'},
     {name:'B21. Tích phân và tính chất',date:'10/09',link:'https://www.youtube.com/watch?v=aQva_PEDX0A',type:'video'},
-    {name:'Tài liệu: Khoảng cách 2 ĐT',date:'14/04',link:'https://drive.google.com/uc?export=download&id=1hcOTO_pSuiBCXxKyeDUYGrAns_5Celxk',type:'tailieu'},
-    {name:'Tài liệu: Thể tích',date:'28/04',link:'https://drive.google.com/uc?export=download&id=11BgX9bAKKnSx6wrSgqnXMzuZkBCWUTmY',type:'tailieu'},
-    {name:'Tài liệu: Tích phân',date:'10/09',link:'https://drive.google.com/uc?export=download&id=1wGjIEwCzQ16TYO7kEg5FZu7n32x5E0xN',type:'tailieu'},
+    {name:'TL: Khoảng cách giữa 2 ĐT chéo nhau',date:'14/04',link:'https://drive.google.com/uc?export=download&id=1hcOTO_pSuiBCXxKyeDUYGrAns_5Celxk',type:'tailieu'},
+    {name:'TL: Công thức DKH tính khoảng cách 2 ĐT',date:'21/04',link:'https://drive.google.com/uc?export=download&id=14h7QhNYSei77zSNeZV9MtBJQ4x4At7kP',type:'tailieu'},
+    {name:'TL: Thể tích',date:'28/04',link:'https://drive.google.com/uc?export=download&id=11BgX9bAKKnSx6wrSgqnXMzuZkBCWUTmY',type:'tailieu'},
+    {name:'TL: Bài toán nước dâng',date:'07/05',link:'https://drive.google.com/uc?export=download&id=1x6UCTQSgl8UsQJDUHTZbUJA22Yheg7mt',type:'tailieu'},
+    {name:'TL: Tính đơn điệu của hàm số',date:'12/05',link:'https://drive.google.com/uc?export=download&id=1ajJ47vBi4W7ot5WjjPIfCqBODxoI1vAH',type:'tailieu'},
+    {name:'TL: Cực trị của hàm số',date:'14/05',link:'https://drive.google.com/uc?export=download&id=14yEQkPcBnRcHiaTp1uzjia-0m0RilHCw',type:'tailieu'},
+    {name:'TL: GTLN-GTNN của hàm số',date:'21/05',link:'https://drive.google.com/uc?export=download&id=1bMy5qAjSpCeciGP21gVLapjlw1SynRFu',type:'tailieu'},
+    {name:'TL: Đường tiệm cận của Đồ thị hàm số',date:'26/05',link:'https://drive.google.com/uc?export=download&id=1gG6yhZuVuAMSZr-V6nSGkk17hp0susGb',type:'tailieu'},
+    {name:'TL: Khảo sát sự Biến thiên và vẽ ĐTHS',date:'28/05',link:'https://drive.google.com/uc?export=download&id=1fefpv64K3L5aurvBtvm6jcbLbEFSvvbj',type:'tailieu'},
+    {name:'TL: Khảo sát hàm phân thức',date:'03/06',link:'https://drive.google.com/uc?export=download&id=1ln43kZyckL_msziP9Wgf-t8BzxCV2mKX',type:'tailieu'},
+    {name:'TL: Tính đơn điệu của Hàm hợp',date:'09/06',link:'https://drive.google.com/uc?export=download&id=1-AAbuGPxm2btqK-OEm0oSRVXcmETsAVg',type:'tailieu'},
+    {name:'TL: Cực trị của hàm hợp',date:'11/06',link:'https://drive.google.com/uc?export=download&id=1qtLBR88PK6-eKKWtr1VYCJ8OFVGI9BiI',type:'tailieu'},
+    {name:'TL: GTLN-GTNN của Hàm hợp',date:'16/06',link:'https://drive.google.com/uc?export=download&id=1U1QrCGRap8l4v1iLaVB004klCQkvKn0S',type:'tailieu'},
+    {name:'TL: Tương giao của Đồ thị HS',date:'23/06',link:'https://drive.google.com/uc?export=download&id=1mocGoYAsKB8C9KLliDarjhJEPA9cklqm',type:'tailieu'},
+    {name:'TL: (Có tham số) Tính đơn điệu của Hàm số',date:'30/06',link:'https://drive.google.com/uc?export=download&id=1COrcjYnn-eA1jRoq2Kjgb52GB-c3fICL',type:'tailieu'},
+    {name:'TL: (Có tham số) Cực trị của Hàm số (P1)',date:'07/07',link:'https://drive.google.com/uc?export=download&id=1IwQmUELDc3cznxHvTLsgKkLvuTDlD1-1',type:'tailieu'},
+    {name:'TL: (Có tham số) Cực trị của Hàm số (P2)',date:'14/07',link:'https://drive.google.com/uc?export=download&id=1Yieikxa89UjGFRPQada3yfyMZ66NrPWg',type:'tailieu'},
+    {name:'TL: Biện luận số nghiệm của PT',date:'16/07',link:'https://drive.google.com/uc?export=download&id=15lzP873vVdqBWvRN4_vm6J9iPoJSQc5T',type:'tailieu'},
+    {name:'TL: Đường tiệm cận chứa tham số m',date:'23/07',link:'https://drive.google.com/uc?export=download&id=1PJoyNYTGfRW7ynIDpjK50gmFcWggwd8-',type:'tailieu'},
+    {name:'TL: Vectơ và các phép toán vectơ KG',date:'28/07',link:'https://drive.google.com/uc?export=download&id=1K_teZnO8lXEFJ4r3-nPXQlRYJhlk-B_G',type:'tailieu'},
+    {name:'TL: Hệ trục toạ độ trong không gian',date:'04/08',link:'https://drive.google.com/uc?export=download&id=1twk0mknQGTqz-qT-0K8nyt2JJ10ne5n4',type:'tailieu'},
+    {name:'TL: Biểu thức toạ độ các phép toán vectơ',date:'13/08',link:'https://drive.google.com/uc?export=download&id=1YhB1YKf5QZcGkM3WB8eerhufAkDp0mOo',type:'tailieu'},
+    {name:'TL: B17. Tâm tỉ cự và tích có hướng',date:'18/08',link:'https://drive.google.com/uc?export=download&id=1w28yNmd58zdbKMyq6wHOow6dyuiiJ1fU',type:'tailieu'},
+    {name:'TL: B18. Phương pháp trải phẳng hình',date:'25/08',link:'https://drive.google.com/uc?export=download&id=1q9K7ngJW_0kdvZEVOx2vc9CztmKlTpxe',type:'tailieu'},
+    {name:'TL: B19. Mẫu số liệu + Phương sai',date:'27/08',link:'https://drive.google.com/uc?export=download&id=1UzBQL10CxCYvoBtk6VjEkMj3MWkVllxt',type:'tailieu'},
+    {name:'TL: B20. Nguyên hàm và tính chất',date:'03/09',link:'https://drive.google.com/uc?export=download&id=1VDJTYRFyl_7VXM3ti7nhPh17Bz8Mmy9a',type:'tailieu'},
+    {name:'TL: B21. Tích phân và tính chất',date:'10/09',link:'https://drive.google.com/uc?export=download&id=1wGjIEwCzQ16TYO7kEg5FZu7n32x5E0xN',type:'tailieu'},
     {name:'BTVN: Khoảng cách 2 ĐT',date:'14/04',link:'https://drive.google.com/drive/folders/1Nkbab9E_hESVecGJw72eTMevxVM-Blpn',type:'btvn'}
   ]},
-  {id:'toan_mat_goc',name:'TOÁN MẤT GỐC-BỔ TRỢ',icon:'fa-puzzle-piece',color:'amber',group:'hsa',lessons:[
+  {id:'toan_mat_goc',name:'TOÁN MẤT GỐC-BỔ TRỢ',desc:'Toán · HSA · Bổ trợ mất gốc',icon:'fa-puzzle-piece',color:'amber',group:'hsa',lessons:[
     {name:'Đơn điệu',date:'06/08',link:'https://www.youtube.com/watch?v=2fdELuVqzEU',type:'video'},
     {name:'Song trục hàm ẩn',date:'19/08',link:'https://www.youtube.com/watch?v=iPsWb1IsG8M',type:'video'},
-    {name:'Đơn điệu hàm số chứa tham số',date:'26/08',link:'https://www.youtube.com/watch?v=v7puLuDFLHI',type:'video'}
+    {name:'Đơn điệu hàm số chứa tham số',date:'26/08',link:'https://www.youtube.com/watch?v=v7puLuDFLHI',type:'video'},
+    {name:'TL: Đơn điệu',date:'06/08',link:'https://drive.google.com/uc?export=download&id=1n8UBjMJ4GuFcqx_iGbQOIbod7cy_sRIH',type:'tailieu'},
+    {name:'TL: Song trục hàm ẩn',date:'19/08',link:'https://drive.google.com/uc?export=download&id=180ebAPFOfFAMk5QqSnJntT7S7yZIbKF3',type:'tailieu'},
+    {name:'TL: Đơn điệu hàm số chứa tham số',date:'26/08',link:'https://drive.google.com/uc?export=download&id=1KTie5jIedaRGOPF-9y4Q0ln-eF3QGGJt',type:'tailieu'}
   ]},
-  {id:'van_co_ban',name:'VĂN CƠ BẢN',icon:'fa-feather-alt',color:'violet',group:'hsa',lessons:[
+  {id:'van_co_ban',name:'VĂN CƠ BẢN',desc:'Ngữ văn · HSA · Lớp 12',icon:'fa-feather-alt',color:'violet',group:'hsa',lessons:[
     {name:'Tổng quan chương trình và bt minh họa',date:'12/04',link:'https://www.youtube.com/watch?v=Z-w9VSavfms',type:'video'},
     {name:'Khái quát về từ và các vấn đề của từ Tiếng Việt',date:'19/04',link:'https://www.youtube.com/watch?v=hB-g9ln_050',type:'video'},
     {name:'Biện pháp tu từ về từ Tiếng Việt',date:'07/05',link:'https://www.youtube.com/watch?v=blxHvOEP4Ig',type:'video'},
+    {name:'Biện pháp tu từ về từ Tiếng Việt -Tiếp',date:'10/05',link:'https://www.youtube.com/watch?v=a36xa_nZBCs',type:'video'},
     {name:'Khái quát tiến trình VHVN',date:'16/05',link:'https://www.youtube.com/watch?v=Y9DWFwIy8Ps',type:'video'},
     {name:'Phong cách ngôn ngữ',date:'17/05',link:'https://www.youtube.com/watch?v=eC9tqrBlvkU',type:'video'},
+    {name:'Phong cách ngôn ngữ trong TV(sách)',date:'21/05',link:'https://www.youtube.com/watch?v=OcBeSVjuKC8',type:'video'},
+    {name:'Khái quát tiến trình văn học VN-Tiếp',date:'23/05',link:'https://www.youtube.com/watch?v=LGPh0uWkKj4',type:'video'},
+    {name:'Tổng quan về câu và những vấn để câu Tiếng Việt',date:'24/05',link:'https://www.youtube.com/watch?v=g1HLtU9v4xs',type:'video'},
     {name:'Đặc điểm của Văn học Việt Nam-Cô P',date:'30/05',link:'https://www.youtube.com/watch?v=Sr6-0HxQVFs',type:'video'},
     {name:'CHỮA ĐỀ THI THỬ T5 - ĐỊNH TÍNH',date:'01/06',link:'https://www.youtube.com/watch?v=yoSJPBKg7EA',type:'video'},
     {name:'Văn bản nghị luận',date:'04/06',link:'https://www.youtube.com/watch?v=EGcJkMDuCM0',type:'video'},
+    {name:'Đặc điểm của Văn học Việt Nam-Tiếp(Cô P)',date:'05/06',link:'https://www.youtube.com/watch?v=8Xd57zZ9F70',type:'video'},
     {name:'Các dạng câu hỏi định tính',date:'07/06',link:'https://www.youtube.com/watch?v=nS2nVqDZuCk',type:'video'},
-    {name:'Đặc điểm của Văn học dân gian VN',date:'13/06',link:'https://www.youtube.com/watch?v=RxvzptgGBwA',type:'video'},
+    {name:'Đặc điểm của Văn học dân gian Việt Nam',date:'13/06',link:'https://www.youtube.com/watch?v=RxvzptgGBwA',type:'video'},
+    {name:'6 Thao tác lập luận và chữa bài tập',date:'14/06',link:'https://www.youtube.com/watch?v=zzTFiVZEQ5k',type:'video'},
+    {name:'Đặc điểm của Văn học dân gian Việt Nam-Tiếp',date:'20/06',link:'https://www.youtube.com/watch?v=cBCUvCly_eI',type:'video'},
     {name:'Chuyên đề đọc hiểu - Cô Huế',date:'21/06',link:'https://www.youtube.com/watch?v=7iDv0pAjupQ',type:'video'},
-    {name:'Đặc điểm của Văn học trung đại VN',date:'26/06',link:'https://www.youtube.com/watch?v=xix1WsQzwAc',type:'video'},
+    {name:'Đặc điểm của Văn học trung đại Việt Nam',date:'26/06',link:'https://www.youtube.com/watch?v=xix1WsQzwAc',type:'video'},
+    {name:'Cô Huế',date:'28/06',link:'https://www.youtube.com/watch?v=v15pgPofxXo',type:'video'},
+    {name:'Đặc điểm Văn học trung đại VN - Tiếp',date:'04/07',link:'https://www.youtube.com/watch?v=UYxtNNSerUU',type:'video'},
+    {name:'Chữa đề thi thử Định tính tháng 6 - Cô Huế',date:'05/07',link:'https://www.youtube.com/watch?v=9Dpg7tWHrx8',type:'video'},
+    {name:'Luyện tập đọc VB Thơ Đường luật - Cô Phương',date:'11/07',link:'https://www.youtube.com/watch?v=06bhgipyl0s',type:'video'},
+    {name:'Thơ và truyện thơ - cô Huế',date:'12/07',link:'https://www.youtube.com/watch?v=zrh8supFlMo',type:'video'},
+    {name:'Luyện tập đọc VB Thơ Đường luật - Tiếp - Cô Phương',date:'18/07',link:'https://www.youtube.com/watch?v=i_HoFdrhIrg',type:'video'},
+    {name:'Đọc hiểu thơ - Phong trào thơ mới - Cô Huế',date:'19/07',link:'https://www.youtube.com/watch?v=ulkMdoUd1V8',type:'video'},
+    {name:'Đặc điểm Văn học hiện đại VN - Cô Phương',date:'22/07',link:'https://www.youtube.com/watch?v=TTsngvvlVL4',type:'video'},
+    {name:'Đọc hiểu truyện - Khái quát một số vấn đề của truyện',date:'26/07',link:'https://www.youtube.com/watch?v=6obgoFQN5Jk',type:'video'},
+    {name:'Đặc điểm Văn học hiện đại VN (Tiếp) - Cô Phương',date:'01/08',link:'https://www.youtube.com/watch?v=X9xaJxIhwg8',type:'video'},
+    {name:'Đọc hiểu truyện (P2) - Các thao tác khám phá VB truyện',date:'02/08',link:'https://www.youtube.com/watch?v=L9ZnhIESz-k',type:'video'},
+    {name:'Luyện đọc truyện ngắn, tiểu thuyết hiện đại - Cô Phương',date:'08/08',link:'https://www.youtube.com/watch?v=EkdHcmYlmQs',type:'video'},
+    {name:'Đọc hiểu truyện (P3) - Tiểu thuyết hiện đại - Cô Huế',date:'09/08',link:'https://www.youtube.com/watch?v=bjnnuUVWnkM',type:'video'},
+    {name:'Luyện đọc truyện ngắn, tiểu thuyết hiện đại (Tiếp)',date:'15/08',link:'https://www.youtube.com/watch?v=k4TIco0Vwzw',type:'video'},
+    {name:'CHỮA ĐỀ THI THỬ THÁNG 7',date:'17/08',link:'https://www.youtube.com/watch?v=IpIFcC1ibjo',type:'video'},
+    {name:'Luyện đọc truyện ngắn, tiểu thuyết Hiện thực - Cô Phương',date:'22/08',link:'https://www.youtube.com/watch?v=X6kIHu52zxo',type:'video'},
+    {name:'Chữa đề thi thử Định tính tháng 7 (Tiếp) - Cô Huế',date:'23/08',link:'https://www.youtube.com/watch?v=y0wEdcOm1GU',type:'video'},
     {name:'CHỮA ĐỀ THI ĐỊNH TÍNH THÁNG 8',date:'05/09',link:'https://www.youtube.com/watch?v=T6hHaxonSBI',type:'video'},
+    {name:'Luyện đọc truyện ngắn, tiểu thuyết Hiện thực (Tiếp)',date:'12/09',link:'https://www.youtube.com/watch?v=Gkwcrdkyfi4',type:'video'},
     {name:'Thể loại kí - Phần 1 - Cô Huế',date:'13/09',link:'https://www.youtube.com/watch?v=7Z6PeZvTKZo',type:'video'},
-    {name:'Tài liệu: Tổng quan chương trình',date:'12/04',link:'https://drive.google.com/uc?export=download&id=1g7MF25cMAoMl1LgzLMzCZlF9WVoXZITT',type:'tailieu'},
-    {name:'Tài liệu: Câu Tiếng Việt',date:'22/04',link:'https://drive.google.com/uc?export=download&id=11yZdXCqmav2DZfw_Pu6jABbv74UmWltW',type:'tailieu'},
-    {name:'Tài liệu: Ngữ văn 12 - Cô Huế',date:'21/06',link:'https://drive.google.com/uc?export=download&id=1Q-A6E5gMjGM8_VY3OfyHWgk7FP-lvGNh',type:'tailieu'}
+    {name:'TL: Tổng quan chương trình và bt minh họa',date:'12/04',link:'https://drive.google.com/uc?export=download&id=1g7MF25cMAoMl1LgzLMzCZlF9WVoXZITT',type:'tailieu'},
+    {name:'TL: Khái quát về từ và các vấn đề của từ Tiếng Việt',date:'19/04',link:'https://drive.google.com/uc?export=download&id=1fmkWhEJck7JqufzzhxBpJX8lwbp0swAe',type:'tailieu'},
+    {name:'TL: Biện pháp tu từ về từ Tiếng Việt',date:'07/05',link:'https://drive.google.com/uc?export=download&id=161phZSU80T8EacOrPMfTlrr-Wizt7JUf',type:'tailieu'},
+    {name:'TL: Khái quát tiến trình VHVN',date:'16/05',link:'https://drive.google.com/uc?export=download&id=1VJGBIu1ECIFB3eQM5ly4HwT2iku6Ln5r',type:'tailieu'},
+    {name:'TL: Phong cách ngôn ngữ',date:'17/05',link:'https://drive.google.com/uc?export=download&id=1pUTE80dUfP0IrfCEW5En_uxubv_hlgpm',type:'tailieu'},
+    {name:'TL: Phong cách ngôn ngữ trong TV(sách)',date:'21/05',link:'https://drive.google.com/uc?export=download&id=1dyn7nR2DK0icJHWjTAaU2j5SZovI7VH-',type:'tailieu'},
+    {name:'TL: Tổng quan về câu và những vấn để câu Tiếng Việt',date:'24/05',link:'https://drive.google.com/uc?export=download&id=11yZdXCqmav2DZfw_Pu6jABbv74UmWltW',type:'tailieu'},
+    {name:'TL: Đặc điểm của Văn học Việt Nam-Cô P',date:'30/05',link:'https://drive.google.com/uc?export=download&id=1syuCfbK_vf5lgTBFGaniwcQz-fbtqbpM',type:'tailieu'},
+    {name:'TL: CHỮA ĐỀ THI THỬ T5 - ĐỊNH TÍNH',date:'01/06',link:'https://drive.google.com/uc?export=download&id=1KFF0XOvwxJKeo4kiqHdLiSjCHPb7Fp4c',type:'tailieu'},
+    {name:'TL: Văn bản nghị luận',date:'04/06',link:'https://drive.google.com/uc?export=download&id=124u1H-BYbYbrfwpDTHGS_QZPIhW-ZkxX',type:'tailieu'},
+    {name:'TL: Các dạng câu hỏi định tính',date:'07/06',link:'https://drive.google.com/uc?export=download&id=1DxegSl5g_M9PyWiLwNlAmr3uz5O2XmtQ',type:'tailieu'},
+    {name:'TL: Đặc điểm của Văn học dân gian Việt Nam',date:'13/06',link:'https://drive.google.com/uc?export=download&id=1HqnVj5ppPjGPJYEWLbOyHN5rERnxFb7s',type:'tailieu'},
+    {name:'TL: 6 Thao tác lập luận và chữa bài tập',date:'14/06',link:'https://drive.google.com/uc?export=download&id=1jGx387U_e_2rsgTKRV3SkPcUv3Q3UEMZ',type:'tailieu'},
+    {name:'TL: Chuyên đề đọc hiểu - Cô Huế',date:'21/06',link:'https://drive.google.com/uc?export=download&id=1Q-A6E5gMjGM8_VY3OfyHWgk7FP-lvGNh',type:'tailieu'},
+    {name:'TL: Đặc điểm Văn học trung đại Việt Nam',date:'26/06',link:'https://drive.google.com/uc?export=download&id=1HFIbJTvWnUEGo232c-ByS6AkQFK7FprV',type:'tailieu'},
+    {name:'TL: Chữa đề thi thử Định tính tháng 6 - Cô Huế',date:'05/07',link:'https://drive.google.com/uc?export=download&id=1lzuVIaFthc6L51cXHvuKBrZ-rQXjO7Va',type:'tailieu'},
+    {name:'TL: Luyện tập đọc VB Thơ Đường luật',date:'11/07',link:'https://drive.google.com/uc?export=download&id=1s6PdB3R_xT9Df4wivWmxIRTGCwyc5_18',type:'tailieu'},
+    {name:'TL: Thơ và truyện thơ - cô Huế',date:'12/07',link:'https://drive.google.com/uc?export=download&id=1A759D2LavUdYyW9G9pPdVrpARBfnn0ld',type:'tailieu'},
+    {name:'TL: Đọc hiểu thơ - Phong trào thơ mới',date:'19/07',link:'https://drive.google.com/uc?export=download&id=1DUVQtjF0FFZIaWqTGXf76XeTxV6YuJnt',type:'tailieu'},
+    {name:'TL: Đặc điểm Văn học hiện đại VN - Cô Phương',date:'22/07',link:'https://drive.google.com/uc?export=download&id=1UX-awVX0TxRNQNGj9NDY9Q8d_zqTJEX_',type:'tailieu'},
+    {name:'TL: Đọc hiểu truyện - Khái quát vấn đề của truyện',date:'26/07',link:'https://drive.google.com/uc?export=download&id=1Zwwn-eHkklQFxi8gEiSIEDY0kOpNp4Fs',type:'tailieu'},
+    {name:'TL: Đọc hiểu truyện (P2) - Các thao tác khám phá VB',date:'02/08',link:'https://drive.google.com/uc?export=download&id=1JBpolU-V8YbR6xmuH9jumdg7xlNQaQ1T',type:'tailieu'},
+    {name:'TL: Luyện đọc truyện ngắn, tiểu thuyết hiện đại',date:'08/08',link:'https://drive.google.com/uc?export=download&id=1Y3rgt4cSzxtOMW6a-0QSK9Rc0OVRn2Au',type:'tailieu'},
+    {name:'TL: Đọc hiểu truyện (P3) - Tiểu thuyết hiện đại',date:'09/08',link:'https://drive.google.com/uc?export=download&id=1HvLkToWjZDmCBpDTBzak99ptCZdNxZVD',type:'tailieu'},
+    {name:'TL: CHỮA ĐỀ THI THỬ THÁNG 7',date:'17/08',link:'https://drive.google.com/uc?export=download&id=1tBh0zQCSzVtLgIrktfN6BRHOsR4Z8XUJ',type:'tailieu'},
+    {name:'TL: Luyện đọc truyện ngắn, tiểu thuyết Hiện thực',date:'22/08',link:'https://drive.google.com/uc?export=download&id=1YKwUvL4Wu6WQaNVRZzGoDCstaRTw50NN',type:'tailieu'},
+    {name:'TL: CHỮA ĐỀ THI ĐỊNH TÍNH THÁNG 8',date:'05/09',link:'https://drive.google.com/uc?export=download&id=1H7RITtz4vCJfZ1K-cfjAow2-qxT1yxSi',type:'tailieu'},
+    {name:'TL: Thể loại kí - Phần 1 - Cô Huế',date:'13/09',link:'https://drive.google.com/uc?export=download&id=1ybpN0EXukw4zJSinV_VHhDANRM_gZY3-',type:'tailieu'}
   ]},
-  {id:'van_nang_cao',name:'VĂN NÂNG CAO',icon:'fa-star',color:'violet',group:'hsa',lessons:[
+  {id:'van_nang_cao',name:'VĂN NÂNG CAO',desc:'Ngữ văn · HSA · Nâng cao',icon:'fa-star',color:'violet',group:'hsa',lessons:[
     {name:'Khái quát về từ và các vấn đề của từ Tiếng Việt',date:'15/04',link:'https://www.youtube.com/watch?v=LrL8Z9stsvM',type:'video'},
     {name:'Câu Tiếng Việt',date:'22/04',link:'https://www.youtube.com/watch?v=FX3aQFeojqk',type:'video'},
     {name:'Biện pháp tu từ',date:'29/04',link:'https://www.youtube.com/watch?v=ygep-A-D9dw',type:'video'},
     {name:'Phong cách ngôn ngữ',date:'06/05',link:'https://www.youtube.com/watch?v=vqaFN4nKdtg',type:'video'},
+    {name:'Phong cách ngôn ngữ - Tiếp',date:'13/05',link:'https://www.youtube.com/watch?v=55QW7eGf0Dg',type:'video'},
     {name:'Khái quát tiến trình văn học VN',date:'17/05',link:'https://www.youtube.com/watch?v=8KPwGpOoYM4',type:'video'},
+    {name:'Các dạng câu hỏi định tính',date:'20/05',link:'https://www.youtube.com/watch?v=8hEflqI8CuU',type:'video'},
+    {name:'Khái quát tiến trình văn học VN-Tiếp',date:'24/05',link:'https://www.youtube.com/watch?v=hyrGPSybEqo',type:'video'},
+    {name:'Các dạng câu hỏi định tính(Tiếp)',date:'27/05',link:'https://www.youtube.com/watch?v=z2E90skw1tM',type:'video'},
     {name:'Đặc điểm chung của văn học Việt Nam-Cô P',date:'31/05',link:'https://www.youtube.com/watch?v=AcHwP_9a60Q',type:'video'},
     {name:'Văn bản nghị luận',date:'03/06',link:'https://www.youtube.com/watch?v=eAEZzZHkIYQ',type:'video'},
-    {name:'Đặc điểm của Văn học dân gian VN',date:'14/06',link:'https://www.youtube.com/watch?v=XjWRf_eeVXU',type:'video'},
+    {name:'Đặc điểm của văn học Việt Nam-Tiếp',date:'04/06',link:'https://www.youtube.com/watch?v=SGBzvU3FRDM',type:'video'},
+    {name:'6 Thao tác lập luận và chữa bài tập',date:'10/06',link:'https://www.youtube.com/watch?v=yvvoeliIFoY',type:'video'},
+    {name:'Đặc điểm của Văn học dân gian Việt Nam',date:'14/06',link:'https://www.youtube.com/watch?v=XjWRf_eeVXU',type:'video'},
     {name:'Chuyên đề đọc hiểu - Cô Huế',date:'17/06',link:'https://www.youtube.com/watch?v=4WjCE2j99Mg',type:'video'},
+    {name:'Đặc điểm của Văn học dân gian Việt Nam-Tiếp',date:'21/06',link:'https://www.youtube.com/watch?v=nzUWw6pMprc',type:'video'},
+    {name:'Đặc điểm của Văn học trung đại Việt Nam',date:'25/06',link:'https://www.youtube.com/watch?v=q37nPLcutHE',type:'video'},
+    {name:'Chuyên đề đọc hiểu - Tiếp - Cô Huế',date:'26/06',link:'https://www.youtube.com/watch?v=HnIegSVxtMc',type:'video'},
     {name:'Đọc hiểu thơ - Cô Huế',date:'01/07',link:'https://www.youtube.com/watch?v=9zNRVEB9Z84',type:'video'},
+    {name:'Đặc điểm Văn học trung đại VN - Tiếp',date:'05/07',link:'https://www.youtube.com/watch?v=AcuvxHNhEoI',type:'video'},
+    {name:'Chữa đề thi thử Định tính tháng 6 - Cô Huế',date:'05/07',link:'https://www.youtube.com/watch?v=9Dpg7tWHrx8',type:'video'},
+    {name:'Thơ và truyện thơ - Cô Huế',date:'08/07',link:'https://www.youtube.com/watch?v=TGQWcW4xMiY',type:'video'},
     {name:'Luyện tập đọc VB Thơ Đường luật',date:'12/07',link:'https://www.youtube.com/watch?v=_frGadKB6e8',type:'video'},
-    {name:'Đặc điểm của Văn học Hiện đại VN - Cô Phương',date:'20/07',link:'https://www.youtube.com/watch?v=5c05UYBEO2o',type:'video'},
-    {name:'Đọc hiểu truyện - Tiểu thuyết hiện đại',date:'05/08',link:'https://www.youtube.com/watch?v=k8j15kRlVYE',type:'video'},
+    {name:'Đọc hiểu thơ - Phong trào thơ mới - Cô Huế',date:'15/07',link:'https://www.youtube.com/watch?v=Y5DVFmpI7kQ',type:'video'},
+    {name:'Luyện tập đọc VB Thơ Đường luật - Tiếp - Cô Phương',date:'19/07',link:'https://www.youtube.com/watch?v=eaqhCacUs3E',type:'video'},
+    {name:'Đặc điểm Văn học Hiện đại VN - Cô Phương',date:'20/07',link:'https://www.youtube.com/watch?v=5c05UYBEO2o',type:'video'},
+    {name:'Đọc hiểu truyện - Khái quát vấn đề của truyện - Cô Huế',date:'22/07',link:'https://www.youtube.com/watch?v=RpTRD4dRgg8',type:'video'},
+    {name:'Đặc điểm Văn học hiện đại VN (Tiếp) - Cô Phương',date:'02/08',link:'https://www.youtube.com/watch?v=9hNzfn34qzs',type:'video'},
+    {name:'Đọc hiểu truyện - Tiểu thuyết hiện đại - Cô Huế',date:'05/08',link:'https://www.youtube.com/watch?v=k8j15kRlVYE',type:'video'},
+    {name:'Luyện đọc truyện ngắn, tiểu thuyết hiện đại - Cô Phương',date:'09/08',link:'https://www.youtube.com/watch?v=NSYagOlEMS0',type:'video'},
+    {name:'Đọc hiểu truyện - Tiểu thuyết hiện đại (Tiếp) - Cô Huế',date:'12/08',link:'https://www.youtube.com/watch?v=0XQ0pDmYQss',type:'video'},
+    {name:'Luyện đọc truyện ngắn, tiểu thuyết hiện đại (Tiếp)',date:'16/08',link:'https://www.youtube.com/watch?v=LN00hFIRMHA',type:'video'},
+    {name:'Chữa đề thi thử Định tính tháng 7 - Cô Huế',date:'19/08',link:'https://www.youtube.com/watch?v=w7vP56o7-mo',type:'video'},
+    {name:'Luyện đọc truyện ngắn, tiểu thuyết Hiện thực - Cô Phương',date:'23/08',link:'https://www.youtube.com/watch?v=CooeLYxlr5c',type:'video'},
+    {name:'Truyện Trung đại (Truyện truyền kì)+Truyện dân gian - Cô Huế',date:'26/08',link:'https://www.youtube.com/watch?v=Zr0JEzbJ4sw',type:'video'},
     {name:'Thể loại kí - Phần 1 - Cô Huế',date:'09/09',link:'https://www.youtube.com/watch?v=p5xRA4JGz1g',type:'video'},
-    {name:'Tài liệu: Câu Tiếng Việt',date:'22/04',link:'https://drive.google.com/uc?export=download&id=11yZdXCqmav2DZfw_Pu6jABbv74UmWltW',type:'tailieu'}
+    {name:'Luyện đọc truyện ngắn, tiểu thuyết Hiện thực (Tiếp)',date:'13/09',link:'https://www.youtube.com/watch?v=GY5r_t4M6_w',type:'video'},
+    {name:'TL: Khái quát về từ và các vấn đề của từ Tiếng Việt',date:'15/04',link:'https://drive.google.com/uc?export=download&id=1T8_KrwdAlTMWUwHQDFOBa6CaPqsiYJKz',type:'tailieu'},
+    {name:'TL: Câu Tiếng Việt',date:'22/04',link:'https://drive.google.com/uc?export=download&id=11yZdXCqmav2DZfw_Pu6jABbv74UmWltW',type:'tailieu'},
+    {name:'TL: Phong cách ngôn ngữ',date:'06/05',link:'https://drive.google.com/uc?export=download&id=137cHEN1z-knMgR2-Kaii3larb1mbS1si',type:'tailieu'},
+    {name:'TL: Khái quát tiến trình văn học VN',date:'17/05',link:'https://drive.google.com/uc?export=download&id=1uIO2yVvjsThO3vjbKNxGKOaLIcDItOCo',type:'tailieu'},
+    {name:'TL: Các dạng câu hỏi định tính',date:'20/05',link:'https://drive.google.com/uc?export=download&id=1LaOj_qSe9zd7XFPoDIVpm8kLyvWW4oHz',type:'tailieu'},
+    {name:'TL: Đặc điểm chung của văn học Việt Nam-Cô P',date:'31/05',link:'https://drive.google.com/uc?export=download&id=1YFgwFryfb5A7iRN9XwEoRFsRqUlU_qpt',type:'tailieu'},
+    {name:'TL: Văn bản nghị luận',date:'03/06',link:'https://drive.google.com/uc?export=download&id=1ey56G5woU2s-Q9Oy3xcRQz_Vp6SxTBt3',type:'tailieu'},
+    {name:'TL: 6 Thao tác lập luận và chữa bài tập',date:'10/06',link:'https://drive.google.com/uc?export=download&id=1QkxLqM8orM-goVnUQwIeMqO8TaCQ4Cna',type:'tailieu'},
+    {name:'TL: Đặc điểm của Văn học dân gian Việt Nam',date:'14/06',link:'https://drive.google.com/uc?export=download&id=1tEk7GskcPpM8oNEMiMSdu4DfjoVniFRh',type:'tailieu'},
+    {name:'TL: Chuyên đề đọc hiểu - Cô Huế',date:'17/06',link:'https://drive.google.com/uc?export=download&id=1KoJcOxDJr5SOc6_ccs8k7kj1LrvoueKo',type:'tailieu'},
+    {name:'TL: Đặc điểm Văn học trung đại Việt Nam',date:'25/06',link:'https://drive.google.com/uc?export=download&id=18pc9Qu8kbDyn_lofr-X3XsXNG31Ton-0',type:'tailieu'},
+    {name:'TL: Đọc hiểu thơ - Cô Huế',date:'01/07',link:'https://drive.google.com/uc?export=download&id=1e8e_s-QnUbRIy5VblvrTlpO9D5BZNPwG',type:'tailieu'},
+    {name:'TL: Chữa đề thi thử Định tính tháng 6 - Cô Huế',date:'05/07',link:'https://drive.google.com/uc?export=download&id=1lzuVIaFthc6L51cXHvuKBrZ-rQXjO7Va',type:'tailieu'},
+    {name:'TL: Thơ và truyện thơ - Cô Huế',date:'08/07',link:'https://drive.google.com/uc?export=download&id=1dVqiQqjRHCYsxg2hEzWNQaZjkhFx8-Rb',type:'tailieu'},
+    {name:'TL: Luyện tập đọc VB Thơ Đường luật',date:'12/07',link:'https://drive.google.com/uc?export=download&id=1qqksrnggpuutSlRIXaRQ7bm1rV7Qv4Yw',type:'tailieu'},
+    {name:'TL: Đọc hiểu thơ - Phong trào thơ mới - Cô Huế',date:'15/07',link:'https://drive.google.com/uc?export=download&id=11CSERjnH-P9io1owIuMSO0_wX6H0NrzI',type:'tailieu'},
+    {name:'TL: Đặc điểm Văn học Hiện đại VN - Cô Phương',date:'20/07',link:'https://drive.google.com/uc?export=download&id=1HWc8b3Mk9oHFB6DR9ymAyOLkVM2HjbSg',type:'tailieu'},
+    {name:'TL: Đọc hiểu truyện - Khái quát vấn đề của truyện',date:'22/07',link:'https://drive.google.com/uc?export=download&id=1LcMPDK4nrqJI7liq9QJair8WOaWVrcPc',type:'tailieu'},
+    {name:'TL: Đọc hiểu truyện - Tiểu thuyết hiện đại - Cô Huế',date:'05/08',link:'https://drive.google.com/uc?export=download&id=1Mqo8aV3ICHIi8bz2VKpB1WsjdeO0Z5ty',type:'tailieu'},
+    {name:'TL: Luyện đọc truyện ngắn, tiểu thuyết hiện đại',date:'09/08',link:'https://drive.google.com/uc?export=download&id=1Lb_LwRWnyyJv79VBwQzvWwUe57qXqZQ9',type:'tailieu'},
+    {name:'TL: Chữa đề thi thử Định tính tháng 7 - Cô Huế',date:'19/08',link:'https://drive.google.com/uc?export=download&id=1Ir-YcWDjo0bLAAJ29_p-KW6VDZvNMivM',type:'tailieu'},
+    {name:'TL: Luyện đọc truyện ngắn, tiểu thuyết Hiện thực',date:'23/08',link:'https://drive.google.com/uc?export=download&id=18pPEBkW7VahNe080a2MaoF71oT5GZV_O',type:'tailieu'},
+    {name:'TL: Truyện Trung đại + Truyện dân gian - Cô Huế',date:'26/08',link:'https://drive.google.com/uc?export=download&id=1RCDkU2BIgOqgXdNvFmozdvVJa42_HdPi',type:'tailieu'},
+    {name:'TL: Thể loại kí - Phần 1 - Cô Huế',date:'09/09',link:'https://drive.google.com/uc?export=download&id=1-Srcm8jnlwR-3G_tgbaFn9t7zRqPMUwR',type:'tailieu'}
   ]},
-  {id:'tieng_anh',name:'TIẾNG ANH',icon:'fa-language',color:'amber',group:'hsa',lessons:[
+  {id:'tieng_anh',name:'TIẾNG ANH',desc:'Tiếng Anh · HSA · Lớp 12',icon:'fa-language',color:'amber',group:'hsa',lessons:[
     {name:'Thì ĐT ( Đơn, Tiếp Diễn)',date:'09/04',link:'https://www.youtube.com/watch?v=ctgcJ5Ig4w8',type:'video'},
     {name:'Vocab : Sports, Healthy & Lifestyle',date:'15/04',link:'https://www.youtube.com/watch?v=UX8jskaVvoE',type:'video'},
+    {name:'Vocab : Sports, Healthy & Lifestyle',date:'22/04',link:'https://www.youtube.com/watch?v=0m-yB6YitWg',type:'video'},
+    {name:'Chữa BTVN Vocab : Sports, Healthy & Lifestyle',date:'06/05',link:'https://www.youtube.com/watch?v=cvhbVrUTEQs',type:'video'},
+    {name:'Thì ĐT ( Tiếp Diễn, Hoàn thành)',date:'13/05',link:'https://www.youtube.com/watch?v=fQ7HdUGHdYw',type:'video'},
     {name:'Vocab: Travel& Tourism',date:'17/05',link:'https://www.youtube.com/watch?v=GixszVOzSJ4',type:'video'},
     {name:'Thì HTTD, TLTĐ - Thì hoàn thành',date:'20/05',link:'https://www.youtube.com/watch?v=XtbtsHf08fM',type:'video'},
+    {name:'Vocab: Travel& Tourism',date:'22/05',link:'https://www.youtube.com/watch?v=z-OUzQ5EidY',type:'video'},
+    {name:'Thì ĐT (QKHT-TLHT - Thì HTTD)',date:'27/05',link:'https://www.youtube.com/watch?v=GBs5S_fAFA4',type:'video'},
+    {name:'Vocab: Travel& Tourism - Tiếp',date:'31/05',link:'https://www.youtube.com/watch?v=32vUKhzDf-k',type:'video'},
     {name:'Thì Hoàn thành tiếp diễn',date:'03/06',link:'https://www.youtube.com/watch?v=2UU5p0hmBZQ',type:'video'},
     {name:'Vocab: Environment and Sustainable development',date:'07/06',link:'https://www.youtube.com/watch?v=sYJ1LHZTvqU',type:'video'},
+    {name:'Chữa BTVN Sự phối hợp thì',date:'10/06',link:'https://www.youtube.com/watch?v=6PS8aWYxmzs',type:'video'},
+    {name:'Vocab: Environment and Sustainable development - Tiếp',date:'14/06',link:'https://www.youtube.com/watch?v=iiLUe-ZUZPA',type:'video'},
+    {name:'Chữa BTVN Sự phối hợp thì-Tiếp',date:'17/06',link:'https://www.youtube.com/watch?v=BP-R1BJxu2Q',type:'video'},
+    {name:'Vocab: Environment and Sustainable development - Tiếp',date:'21/06',link:'https://www.youtube.com/watch?v=RbtplYHJEj8',type:'video'},
+    {name:'Sự phối hợp thì - Tiếp',date:'24/06',link:'https://www.youtube.com/watch?v=cJ_W-wOvJHg',type:'video'},
     {name:'Vocab: Topic Education',date:'28/06',link:'https://www.youtube.com/watch?v=bM_cj3TzVtE',type:'video'},
     {name:'Sự hoà hợp Chủ ngữ - Động từ',date:'01/07',link:'https://www.youtube.com/watch?v=3aWdlDYf-Qg',type:'video'},
+    {name:'Vocab: Topic Education - Tiếp',date:'05/07',link:'https://www.youtube.com/watch?v=zUe9s7Pl5yQ',type:'video'},
+    {name:'Sự hoà hợp Chủ ngữ - Động từ - Tiếp',date:'08/07',link:'https://www.youtube.com/watch?v=96MV6ZpN9t4',type:'video'},
+    {name:'Vocab: Topic Education - Tiếp',date:'12/07',link:'https://www.youtube.com/watch?v=EIFujSreZGo',type:'video'},
+    {name:'Sự hoà hợp Chủ ngữ - Động từ - Tiếp',date:'15/07',link:'https://www.youtube.com/watch?v=X_aGX3FNxoE',type:'video'},
+    {name:'Vocab (5): Science and technology',date:'19/07',link:'https://www.youtube.com/watch?v=PDAnkyY4K18',type:'video'},
     {name:'Modal verbs (Động từ khuyết thiếu)',date:'22/07',link:'https://www.youtube.com/watch?v=gZuUDItZWP4',type:'video'},
+    {name:'Vocab (5): Science and technology - Tiếp',date:'26/07',link:'https://www.youtube.com/watch?v=xG8_l8j5PZI',type:'video'},
+    {name:'Modal verbs (Động từ khuyết thiếu) - Tiếp',date:'29/07',link:'https://www.youtube.com/watch?v=7D9m5z83MhE',type:'video'},
     {name:'Word formation (Cách thành lập từ)',date:'02/08',link:'https://www.youtube.com/watch?v=_bgR_VlKFnQ',type:'video'},
     {name:'Câu bị động',date:'05/08',link:'https://www.youtube.com/watch?v=BnwCJvc8hlA',type:'video'},
+    {name:'Word formation (Cách thành lập từ) - Tiếp',date:'09/08',link:'https://www.youtube.com/watch?v=QXqmJZzBc2w',type:'video'},
+    {name:'Câu bị động - Tiếp',date:'12/08',link:'https://www.youtube.com/watch?v=Gi9aW5atG-U',type:'video'},
+    {name:'Chữa BTVN Word formation (Cách thành lập từ)',date:'16/08',link:'https://www.youtube.com/watch?v=PhJCJ23Xqko',type:'video'},
+    {name:'Câu bị động (Passive voice)',date:'19/08',link:'https://www.youtube.com/watch?v=TWX9jGYMsCE',type:'video'},
+    {name:'Vocab (6): Work and Employment',date:'23/08',link:'https://www.youtube.com/watch?v=_B9rcQOqkWk',type:'video'},
     {name:'Reported speech',date:'26/08',link:'https://www.youtube.com/watch?v=3_vTGZy6vt4',type:'video'},
     {name:'CHỮA ĐỀ THI TIẾNG ANH THÁNG 8',date:'06/09',link:'https://www.youtube.com/watch?v=BqmDlhMpsvY',type:'video'},
-    {name:'Tài liệu: Thì ĐT',date:'09/04',link:'https://drive.google.com/uc?export=download&id=1q1b3Bjf1Vx1S21LDWVdASy7pRiousgn2',type:'tailieu'},
-    {name:'Tài liệu: Vocab Sports',date:'15/04',link:'https://drive.google.com/uc?export=download&id=1NGuqWRJonhA0nojqeASscmQ3X5URD0Le',type:'tailieu'},
-    {name:'BTVN: Reported speech',date:'26/08',link:'https://drive.google.com/uc?export=download&id=1ZqFe8_6n1zbpx_r5egaHVFK44J0z2k4n',type:'btvn'}
+    {name:'Reported speech - Tiếp',date:'09/09',link:'https://www.youtube.com/watch?v=c9MswOXY8lA',type:'video'},
+    {name:'Vocab (6): Work and Employment - Tiếp',date:'13/09',link:'https://www.youtube.com/watch?v=VefKmQvIats',type:'video'},
+    {name:'TL: Thì ĐT ( Đơn, Tiếp Diễn)',date:'09/04',link:'https://drive.google.com/uc?export=download&id=1q1b3Bjf1Vx1S21LDWVdASy7pRiousgn2',type:'tailieu'},
+    {name:'TL: Vocab : Sports, Healthy & Lifestyle',date:'15/04',link:'https://drive.google.com/uc?export=download&id=1NGuqWRJonhA0nojqeASscmQ3X5URD0Le',type:'tailieu'},
+    {name:'TL: Vocab : Sports, Healthy & Lifestyle',date:'22/04',link:'https://drive.google.com/uc?export=download&id=1jM7sg42dBksPBNr--sudrcSQsR3ldYqZ',type:'tailieu'},
+    {name:'TL: Thì ĐT ( Tiếp Diễn, Hoàn thành)',date:'13/05',link:'https://drive.google.com/uc?export=download&id=1XfX8NHaer7mlbMXVZd7_G4TnZ7v2gSOA',type:'tailieu'},
+    {name:'TL: Vocab: Travel& Tourism',date:'17/05',link:'https://drive.google.com/uc?export=download&id=1iD78VtY1UVnyMflFH8YyD7fsOzH9PN0H',type:'tailieu'},
+    {name:'TL: Thì HTTD, TLTĐ - Thì hoàn thành',date:'20/05',link:'https://drive.google.com/uc?export=download&id=1OiyC_6V5ZybbeoJR4W4UIyMKIIeyo9tF',type:'tailieu'},
+    {name:'TL: Thì ĐT (QKHT-TLHT - Thì HTTD)',date:'27/05',link:'https://drive.google.com/uc?export=download&id=1XX6Jhtg0dPt3v_dbre74P6bebtGk641a',type:'tailieu'},
+    {name:'TL: Thì Hoàn thành tiếp diễn',date:'03/06',link:'https://drive.google.com/uc?export=download&id=1SJdLPt7WtcyuPi1wWTuzyykLxlNDMnqt',type:'tailieu'},
+    {name:'TL: Vocab: Environment and Sustainable development',date:'07/06',link:'https://drive.google.com/uc?export=download&id=1dZRDZ2zDhGTETHUI4ri1ReYWzc0hBfdi',type:'tailieu'},
+    {name:'TL: Chữa BTVN Sự phối hợp thì',date:'10/06',link:'https://drive.google.com/uc?export=download&id=186dmWmuFIJ3Lir_9R9PymvpCglV5fCZ_',type:'tailieu'},
+    {name:'TL: Vocab: Topic Education',date:'28/06',link:'https://drive.google.com/uc?export=download&id=1F9SZ1b98hX7y7V4LBkqSvx3PxJcRxWoG',type:'tailieu'},
+    {name:'TL: Sự hoà hợp Chủ ngữ - Động từ',date:'01/07',link:'https://drive.google.com/uc?export=download&id=1VqE7tPbRBqBRjo7xLJADdZCJwU0F3_aj',type:'tailieu'},
+    {name:'TL: Vocab (5): Science and technology',date:'19/07',link:'https://drive.google.com/uc?export=download&id=1mEKN3npgj4-EQB2GDu_YkSnT73UwPbOJ',type:'tailieu'},
+    {name:'TL: Modal verbs (Động từ khuyết thiếu)',date:'22/07',link:'https://drive.google.com/uc?export=download&id=1F0TpK0T4fOCBDPA_J6O2OjLQ5kZ5ysT8',type:'tailieu'},
+    {name:'TL: Word formation (Cách thành lập từ)',date:'02/08',link:'https://drive.google.com/uc?export=download&id=1WlRTso-9xN042GdC2NViT5J60WMAt25C',type:'tailieu'},
+    {name:'TL: Câu bị động',date:'05/08',link:'https://drive.google.com/uc?export=download&id=1vo66P-aDe480DN908XMkgwQVxWKGH6lR',type:'tailieu'},
+    {name:'TL: Chữa BTVN Word formation',date:'16/08',link:'https://drive.google.com/uc?export=download&id=1hWjREk31DngncpRRb-hkrR6iWzW0ualM',type:'tailieu'},
+    {name:'TL: Vocab (6): Work and Employment',date:'23/08',link:'https://drive.google.com/uc?export=download&id=1NxZhhgaVL0_T97d7MtEYiWAZneDkOKoQ',type:'tailieu'},
+    {name:'TL: Reported speech',date:'26/08',link:'https://drive.google.com/uc?export=download&id=1ZqFe8_6n1zbpx_r5egaHVFK44J0z2k4n',type:'tailieu'}
   ]},
-  {id:'vat_ly',name:'VẬT LÝ',icon:'fa-atom',color:'green',group:'hsa',lessons:[
+  {id:'vat_ly',name:'VẬT LÝ',desc:'Vật lý · HSA · Lớp 12',icon:'fa-atom',color:'green',group:'hsa',lessons:[
     {name:'Động học chất điểm',date:'02/07',link:'https://www.youtube.com/watch?v=ibliEnzO2WM',type:'video'},
     {name:'Động học chất điểm - Tiếp',date:'13/07',link:'https://www.youtube.com/watch?v=TZCOVCtXPTg',type:'video'},
-    {name:'Bài toán tính tốc độ TB, vận tốc TB',date:'16/07',link:'https://www.youtube.com/watch?v=IMcjB8PR15g',type:'video'},
+    {name:'Động học chất điểm - Bài toán tính tốc độ TB, tính vận tốc TB - Tiếp',date:'16/07',link:'https://www.youtube.com/watch?v=IMcjB8PR15g',type:'video'},
+    {name:'Động học chất điểm - Tiếp',date:'23/07',link:'https://www.youtube.com/watch?v=vNIQV725_Cs',type:'video'},
     {name:'Rơi tự do',date:'06/08',link:'https://www.youtube.com/watch?v=TeDiQvXadzg',type:'video'},
+    {name:'Rơi tự do - Tiếp',date:'12/08',link:'https://www.youtube.com/watch?v=RDjefjKbkCE',type:'video'},
     {name:'Động lực học chất điểm',date:'13/08',link:'https://www.youtube.com/watch?v=7WGeVkzR3Z0',type:'video'},
     {name:'Động lực học chất điểm - Tiếp',date:'20/08',link:'https://www.youtube.com/watch?v=_ibgvhvJ5S8',type:'video'},
     {name:'Động lực học chất điểm - Tiếp',date:'03/09',link:'https://www.youtube.com/watch?v=YTMA49sZgzM',type:'video'},
     {name:'Động lực học chất điểm - Tiếp',date:'10/09',link:'https://www.youtube.com/watch?v=eK67If5X1AE',type:'video'}
   ]},
-  {id:'hoa_hoc',name:'HOÁ HỌC',icon:'fa-flask',color:'amber',group:'hsa',lessons:[
+  {id:'hoa_hoc',name:'HOÁ HỌC',desc:'Hoá học · HSA · Lớp 12',icon:'fa-flask',color:'amber',group:'hsa',lessons:[
     {name:'Ester lipid',date:'04/07',link:'https://www.youtube.com/watch?v=m3x1-W1V2Hc',type:'video'},
     {name:'Xà phòng',date:'16/07',link:'https://www.youtube.com/watch?v=SPaQ4U_wEA8',type:'video'},
+    {name:'Luyện Tập ester lipid',date:'18/07',link:'https://www.youtube.com/watch?v=ZqcJ1GG_hZM',type:'video'},
     {name:'Carbohydrate',date:'25/07',link:'https://www.youtube.com/watch?v=BI2brc000g4',type:'video'},
+    {name:'Carbohydrate (Tiếp) - Tinh bột và Cellulose',date:'31/07',link:'https://www.youtube.com/watch?v=VSZK3iyDgls',type:'video'},
     {name:'Amine',date:'07/08',link:'https://www.youtube.com/watch?v=Wtxl70xV-bY',type:'video'},
     {name:'Amino acid',date:'11/08',link:'https://www.youtube.com/watch?v=ZD5SO9CMWU8',type:'video'},
     {name:'Peptide Protein',date:'15/08',link:'https://www.youtube.com/watch?v=d6AYWcWDwl0',type:'video'},
+    {name:'Luyện tập hợp chất hữu cơ chứa Nitrogen',date:'18/08',link:'https://www.youtube.com/watch?v=GGT0MivfMzE',type:'video'},
     {name:'Đại cương Polymer',date:'21/08',link:'https://www.youtube.com/watch?v=kQFU4jyMELw',type:'video'},
+    {name:'Vật liệu Polymer',date:'25/08',link:'https://www.youtube.com/watch?v=Wvlq86u_HQs',type:'video'},
+    {name:'Luyện tập Polymer',date:'28/08',link:'https://www.youtube.com/watch?v=XhuEzsFyhxY',type:'video'},
     {name:'Thế điện cực và nguồn điện hoá học',date:'08/09',link:'https://www.youtube.com/watch?v=Wi7SToBoZk4',type:'video'},
     {name:'Điện phân',date:'11/09',link:'https://www.youtube.com/watch?v=kC7IX2XB5ms',type:'video'}
   ]},
-  {id:'sinh_hoc',name:'SINH HỌC',icon:'fa-dna',color:'green',group:'hsa',lessons:[
+  {id:'sinh_hoc',name:'SINH HỌC',desc:'Sinh học · HSA · Lớp 12',icon:'fa-dna',color:'green',group:'hsa',lessons:[
     {name:'Ôn tập di truyền phân tử (P1)',date:'29/06',link:'https://www.youtube.com/watch?v=NE0uuL60kdA',type:'video'},
+    {name:'Ôn tập di truyền phân tử (P1)-Tiếp',date:'06/07',link:'https://www.youtube.com/watch?v=v4n7w_QAty0',type:'video'},
     {name:'Ôn tập di truyền phân tử (P2)',date:'13/07',link:'https://www.youtube.com/watch?v=FA5fEpxUoxU',type:'video'},
+    {name:'Ôn tập di truyền phân tử (P2)-Tiếp',date:'20/07',link:'https://www.youtube.com/watch?v=0MOjGoJA-rU',type:'video'},
     {name:'Ôn tập di truyền phân tử (P3)',date:'27/07',link:'https://www.youtube.com/watch?v=QdY4WPDWDaQ',type:'video'},
+    {name:'Ôn tập di truyền phân tử (P3)-Tiếp',date:'03/08',link:'https://www.youtube.com/watch?v=M_Fewkn1tgA',type:'video'},
     {name:'Tổng ôn di truyền nhiễm sắc thể',date:'10/08',link:'https://www.youtube.com/watch?v=vjO-GnXttls',type:'video'},
+    {name:'Tổng ôn di truyền nhiễm sắc thể-Tiếp',date:'17/08',link:'https://www.youtube.com/watch?v=zs7OcqSWGCM',type:'video'},
     {name:'Tổng ôn quy luật di truyền (P1)',date:'24/08',link:'https://www.youtube.com/watch?v=2Nc-8IIx9HA',type:'video'},
-    {name:'Chữa BT Di truyền NST+Quy luật',date:'07/09',link:'https://www.youtube.com/watch?v=x5KKzcys1bs',type:'video'},
+    {name:'Chữa BT Di truyền NST+Quy luật di truyền',date:'07/09',link:'https://www.youtube.com/watch?v=x5KKzcys1bs',type:'video'},
     {name:'Tổng ôn quy luật di truyền (P2)',date:'14/09',link:'https://www.youtube.com/watch?v=mr-gY4X5FEA',type:'video'}
   ]},
-  {id:'lich_su',name:'LỊCH SỬ (HSA)',icon:'fa-landmark',color:'violet',group:'hsa',lessons:[
+  {id:'lich_su',name:'LỊCH SỬ (HSA)',desc:'Lịch sử · HSA · Lớp 12',icon:'fa-landmark',color:'violet',group:'hsa',lessons:[
     {name:'Liên Hợp Quốc',date:'03/07',link:'https://www.youtube.com/watch?v=OWs24pIJsYI',type:'video'},
     {name:'Trật tự thế giới trong Chiến tranh lạnh',date:'10/07',link:'https://www.youtube.com/watch?v=n_MQrIOIYDM',type:'video'},
     {name:'Trật tự thế giới sau Chiến tranh lạnh',date:'17/07',link:'https://www.youtube.com/watch?v=6vp3TMaV-r0',type:'video'},
     {name:'Tổng ôn chủ đề 1',date:'01/08',link:'https://www.youtube.com/watch?v=p1JFoOgW8-8',type:'video'},
     {name:'Sự ra đời của Asean',date:'08/08',link:'https://www.youtube.com/watch?v=G8l13tpwgMg',type:'video'},
     {name:'Cộng đồng Asean',date:'14/08',link:'https://www.youtube.com/watch?v=y6V8NrhhNuo',type:'video'},
+    {name:'Luyện đề Asean',date:'22/08',link:'https://www.youtube.com/watch?v=DT-8E7DE_CA',type:'video'},
     {name:'Cách mạng tháng 8',date:'26/08',link:'https://www.youtube.com/watch?v=dQB3swcF90I',type:'video'},
     {name:'Kháng chiến chống Pháp',date:'12/09',link:'https://www.youtube.com/watch?v=9-qQqTM8AGE',type:'video'}
   ]},
-  {id:'dia_ly',name:'ĐỊA LÝ',icon:'fa-globe-asia',color:'green',group:'hsa',lessons:[
+  {id:'dia_ly',name:'ĐỊA LÝ',desc:'Địa lý · HSA · Lớp 12',icon:'fa-globe-asia',color:'green',group:'hsa',lessons:[
     {name:'Vị trí địa lí và khí hậu',date:'30/06',link:'https://www.youtube.com/watch?v=-M2ZMjgmqHA',type:'video'},
+    {name:'Vị trí địa lí và khí hậu - Tiếp',date:'07/07',link:'https://www.youtube.com/watch?v=DebZcz8mWtI',type:'video'},
     {name:'Đặc điểm của thiên nhiên Việt Nam',date:'14/07',link:'https://www.youtube.com/watch?v=t9y4Agvul90',type:'video'},
     {name:'Sự phân hoá đa dạng của thiên nhiên',date:'21/07',link:'https://www.youtube.com/watch?v=985mMNNzHog',type:'video'},
     {name:'Thiên nhiên theo độ cao',date:'28/07',link:'https://www.youtube.com/watch?v=uAyR8tspGu0',type:'video'},
     {name:'Tổng ôn Tự nhiên VN+CT nhiệt độ lượng mưa',date:'04/08',link:'https://www.youtube.com/watch?v=bp9L_o5UDvU',type:'video'},
+    {name:'Chữa BT CT tính nhiệt độ lượng mưa+KC biển',date:'11/08',link:'https://www.youtube.com/watch?v=WjdxOl9POKk',type:'video'},
     {name:'Dân số và lao động',date:'18/08',link:'https://www.youtube.com/watch?v=e-pp-h82NOQ',type:'video'},
-    {name:'Công thức tính toán Địa lý Dân cư',date:'08/09',link:'https://www.youtube.com/watch?v=dP-Bg3E4ScU',type:'video'}
+    {name:'Dân số và lao động - Tiếp',date:'25/08',link:'https://www.youtube.com/watch?v=Z-Xs4VegGGU',type:'video'},
+    {name:'Công thức tính toán Địa lý Dân cư - Lao động',date:'08/09',link:'https://www.youtube.com/watch?v=dP-Bg3E4ScU',type:'video'}
   ]}
 ];
 
@@ -497,19 +885,20 @@ const MEGA_SUBJECTS = [
    SGK
    ============================================================ */
 const SGK_SUBJECTS = [
-  {id:'sgk_toan',name:'SGK TOÁN',icon:'fa-square-root-alt',color:'green',group:'sgk',lessons:[
+  {id:'sgk_toan',name:'SGK TOÁN',desc:'Sách giáo khoa · Video bài giảng',icon:'fa-square-root-alt',color:'green',group:'sgk',lessons:[
     {name:'Bài 1: TÍNH ĐƠN ĐIỆU',date:'SGK',link:'https://www.youtube.com/watch?v=vqkvTdGX5c8',type:'video'},
     {name:'Bài 2: TÍNH ĐƠN ĐIỆU - P2',date:'SGK',link:'https://www.youtube.com/watch?v=G5NXZbxmM-A',type:'video'},
     {name:'Bài 3: CỰC TRỊ CỦA HÀM SỐ',date:'SGK',link:'https://www.youtube.com/watch?v=Z_9UpGK991M',type:'video'},
     {name:'Bài 4: CỰC TRỊ HÀM SỐ - P2',date:'SGK',link:'https://www.youtube.com/watch?v=40WVbV3G540',type:'video'},
     {name:'Bài 5: GTLN - GTNN CỦA HÀM SỐ',date:'SGK',link:'https://www.youtube.com/watch?v=qCKviOxmmeE',type:'video'},
-    {name:'Bài 1.1: VECTO TRONG KHÔNG GIAN (P1)',date:'SGK',link:'https://www.youtube.com/watch?v=OA3vVKt71zM',type:'video'},
-    {name:'Bài 2: VECTƠ VÀ PHÉP TOÁN VECTƠ',date:'SGK',link:'https://www.youtube.com/watch?v=-s19sD15ayw',type:'video'},
-    {name:'BÀI 1: PHƯƠNG TRÌNH MẶT PHẲNG P1',date:'SGK',link:'https://www.youtube.com/watch?v=_nnpTm2Ju2o',type:'video'},
-    {name:'BÀI 2: PHƯƠNG TRÌNH MẶT PHẲNG P2',date:'SGK',link:'https://www.youtube.com/watch?v=s4eXhU4B5gU',type:'video'},
-    {name:'BÀI 3: PHƯƠNG TRÌNH MẶT PHẲNG P3',date:'SGK',link:'https://www.youtube.com/watch?v=Fcn3odFMHK0',type:'video'}
+    {name:'Bài 1.1: VECTO TƯƠNG KHÔNG GIAN (P1)',date:'SGK',link:'https://www.youtube.com/watch?v=OA3vVKt71zM',type:'video'},
+    {name:'Bài 1.2: VECTO TRONG KHÔNG GIAN (P2)',date:'SGK',link:'https://www.youtube.com/watch?v=Qh4UjgpfA1U',type:'video'},
+    {name:'Bài 2: VECTƠ VÀ CÁC PHÉP TOÁN VECTƠ TRONG KHÔNG GIAN',date:'SGK',link:'https://www.youtube.com/watch?v=-s19sD15ayw',type:'video'},
+    {name:'BÀI 1: PHƯƠNG TRÌNH MẶT PHẲNG PHẦN 1',date:'SGK',link:'https://www.youtube.com/watch?v=_nnpTm2Ju2o',type:'video'},
+    {name:'BÀI 2: PHƯƠNG TRÌNH MẶT PHẲNG PHẦN 2',date:'SGK',link:'https://www.youtube.com/watch?v=s4eXhU4B5gU',type:'video'},
+    {name:'BÀI 3: PHƯƠNG TRÌNH MẶT PHẲNG PHẦN 3',date:'SGK',link:'https://www.youtube.com/watch?v=Fcn3odFMHK0',type:'video'}
   ]},
-  {id:'sgk_su',name:'SGK LỊCH SỬ',icon:'fa-scroll',color:'violet',group:'sgk',lessons:[
+  {id:'sgk_su',name:'SGK LỊCH SỬ',desc:'Sách giáo khoa · Video bài giảng',icon:'fa-scroll',color:'violet',group:'sgk',lessons:[
     {name:'Bài 1: LIÊN HỢP QUỐC',date:'SGK',link:'https://www.youtube.com/watch?v=mwwDY8qR8Mw',type:'video'},
     {name:'Bài 2: TRẬT TỰ THẾ GIỚI TRONG CHIẾN TRANH LẠNH',date:'SGK',link:'https://www.youtube.com/watch?v=7u2UtWcCeIM',type:'video'},
     {name:'Bài 3: TRẬT TỰ THẾ GIỚI SAU CHIẾN TRANH LẠNH',date:'SGK',link:'https://www.youtube.com/watch?v=-LbgOYSkbUo',type:'video'},
@@ -521,53 +910,52 @@ const SGK_SUBJECTS = [
 ];
 
 /* ============================================================
-   TOÁN THẦY CHÍ 12
+   TOÁN THẦY CHÍ 12 (đầy đủ 120+ bài)
    ============================================================ */
 const THAY_CHI = {
-  id:'thay_chi',name:'TOÁN THẦY CHÍ 12',icon:'fa-chalkboard-teacher',color:'red',group:'thaychi',
+  id:'thay_chi',name:'TOÁN THẦY CHÍ 12',desc:'Toán · Thầy Nguyễn Quốc Chí · Chuyên đề 12',icon:'fa-chalkboard-teacher',color:'red',group:'thaychi',
   lessons:[
-    // BÀI GIẢNG
     {name:'[TIẾT 1] Tìm khoảng Đồng biến, Nghịch biến',date:'CH1',link:'https://drive.google.com/file/d/1chkipC3u4b6v34MqTdMO0ETJRtVLYx6b/view',type:'video'},
     {name:'[TIẾT 2] Các bài toán thực tế tính đơn điệu',date:'CH1',link:'https://drive.google.com/file/d/1fZ6pK6OGAO_WcKzRXz0JN7SPfWai1Di_/view',type:'video'},
     {name:'LUYỆN TẬP TRẮC NGHIỆM ĐÚNG SAI',date:'CH1',link:'https://drive.google.com/file/d/1YXBx94QxVsqm6WGsV936m8HOWMNQW9ea/view',type:'video'},
     {name:'[TIẾT 3] Biện luận tính đơn điệu (buổi 1)',date:'CH1',link:'https://drive.google.com/file/d/1gvazwf-TSaQgZ5fIH1QIet5bxBAiZ0oZ/view',type:'video'},
-    {name:'Biện luận tính đơn điệu (buổi 2)',date:'CH1',link:'https://drive.google.com/file/d/1upygs3FzPDvHmjM_9kazm4AxpnI5PuHf/view',type:'video'},
-    {name:'Biện luận tính đơn điệu (buổi 3)',date:'CH1',link:'https://drive.google.com/file/d/1-81cBuIoYfd8ZyS8qjcDn8gb4bgqY8iC/view',type:'video'},
+    {name:'Biện luận tính đơn điệu của hàm số (buổi 2)',date:'CH1',link:'https://drive.google.com/file/d/1upygs3FzPDvHmjM_9kazm4AxpnI5PuHf/view',type:'video'},
+    {name:'Biện luận tính đơn điệu của hàm số (buổi 3)',date:'CH1',link:'https://drive.google.com/file/d/1-81cBuIoYfd8ZyS8qjcDn8gb4bgqY8iC/view',type:'video'},
     {name:'TỔNG ÔN TÍNH ĐƠN ĐIỆU HÀM SỐ',date:'CH1',link:'https://drive.google.com/file/d/1I29o23EQjRRAuU7RdqMfRtan2mjFGAp4/view',type:'video'},
-    {name:'[TIẾT 1] Xác định cực trị',date:'CH1',link:'https://drive.google.com/file/d/1Bs3_-ENQbL5Nbei5Cyjkc5LXW5ZOsdZn/view',type:'video'},
-    {name:'[TIẾT 2] Khảo sát hàm số Mũ, Logarit',date:'CH1',link:'https://drive.google.com/file/d/13igE-5PcN8FX4IOkg1V2tMNC3HIqJKcZ/view',type:'video'},
+    {name:'[TIẾT 1] Xác định cực trị (Cực đại, cực tiểu)',date:'CH1',link:'https://drive.google.com/file/d/1Bs3_-ENQbL5Nbei5Cyjkc5LXW5ZOsdZn/view',type:'video'},
+    {name:'[TIẾT 2] Khảo sát hàm số Mũ, Logarit, Lượng giác',date:'CH1',link:'https://drive.google.com/file/d/13igE-5PcN8FX4IOkg1V2tMNC3HIqJKcZ/view',type:'video'},
     {name:'LUYỆN TẬP "ĐÚNG SAI - TRẢ LỜI NGẮN"',date:'CH1',link:'https://drive.google.com/file/d/1uK05aj7WllGHngSrGblP5vSsx4y_0WEb/view',type:'video'},
     {name:'LUYỆN TẬP THÊM CỰC TRỊ HÀM SỐ',date:'CH1',link:'https://drive.google.com/file/d/1QbcNX-GZHENsC5d9rKMF0oghIa6BHUSi/view',type:'video'},
     {name:'[TIẾT 3] Biện luận cực trị hàm số Bậc 3',date:'CH1',link:'https://drive.google.com/file/d/1S3ebFQonfgq-3eCLwIZgKiREV8eqId1i/view',type:'video'},
-    {name:'[TIẾT 4] Biện luận cực trị hàm số bậc 2/bậc 1',date:'CH1',link:'https://drive.google.com/file/d/1Uk40XmM268VuX0UZloVX2JrHmsqOM23f/view',type:'video'},
+    {name:'[TIẾT 4] Biện luận cực trị hàm số bậc 2 trên bậc 1',date:'CH1',link:'https://drive.google.com/file/d/1Uk40XmM268VuX0UZloVX2JrHmsqOM23f/view',type:'video'},
     {name:'[TIẾT 1] Tìm GTLN, GTNN của hàm số trên đoạn',date:'CH1',link:'https://drive.google.com/file/d/1cfxyRKJd-5xSD9SqOkMVI53A3UI56S9R/view',type:'video'},
-    {name:'[TIẾT 2] Tìm GTLN, GTNN trên khoảng',date:'CH1',link:'https://drive.google.com/file/d/1biNLghnW6lvxKCzXb67Za7OMFjvOAAoU/view',type:'video'},
-    {name:'LUYỆN TẬP "ĐÚNG SAI" GTLN - GTNN',date:'CH1',link:'https://drive.google.com/file/d/1-U0SebaV_OPThT-s-AdDvJvvOquS54I-/view',type:'video'},
+    {name:'[TIẾT 2] Tìm GTLN, GTNN trên khoảng, đặt ẩn phụ',date:'CH1',link:'https://drive.google.com/file/d/1biNLghnW6lvxKCzXb67Za7OMFjvOAAoU/view',type:'video'},
+    {name:'LUYỆN TẬP DẠNG BÀI "ĐÚNG SAI" GTLN - GTNN',date:'CH1',link:'https://drive.google.com/file/d/1-U0SebaV_OPThT-s-AdDvJvvOquS54I-/view',type:'video'},
     {name:'[TIẾT 3] Tìm m để hàm số đạt GTLN, GTNN',date:'CH1',link:'https://drive.google.com/file/d/1OJjY_eUF-TzgQFJP5RCJnnC2bGpzwqKr/view',type:'video'},
-    {name:'[TIẾT 1] Ứng dụng đạo hàm - Thực tiễn',date:'CH1',link:'https://drive.google.com/file/d/1I9iELWE8gZ5eWWr8P_SrdxlZjkfXtN1H/view',type:'video'},
+    {name:'[TIẾT 1] Ứng dụng đạo hàm tìm GTLN, GTNN - Thực tiễn',date:'CH1',link:'https://drive.google.com/file/d/1I9iELWE8gZ5eWWr8P_SrdxlZjkfXtN1H/view',type:'video'},
     {name:'BẤM MÁY TÍNH FX580 GIẢI ĐẠO HÀM',date:'CH1',link:'https://drive.google.com/file/d/1TSqE_ERkjLgasHqvh6-keDUIdHQSj-NC/view',type:'video'},
     {name:'[TIẾT 2] Ứng dụng đạo hàm - Khối đa diện',date:'CH1',link:'https://drive.google.com/file/d/18YdIAe4TirtF5eJLv_s6hy0RLczRAKD6/view',type:'video'},
     {name:'[TIẾT 3] Ứng dụng đạo hàm - Khối tròn xoay',date:'CH1',link:'https://drive.google.com/file/d/1T-kU1hjCyXkkCmYMDIYbP5hYNQ4p6qNU/view',type:'video'},
     {name:'[TIẾT 4] Các bài toán tối ưu lợi nhuận',date:'CH1',link:'https://drive.google.com/file/d/1y3AUaJfI5vTIt6ge9FvK63BffwbEtrUI/view',type:'video'},
     {name:'[TIẾT 5] Bài toán tăng giảm giá (Hàm cầu)',date:'CH1',link:'https://drive.google.com/file/d/1QzuyGGgEyDNjbgqFaKNO8D5w_3fMivnX/view',type:'video'},
-    {name:'LUYỆN TẬP TRẮC NGHIỆM THỰC TẾ',date:'CH1',link:'https://drive.google.com/file/d/17P70AfWoYlhe44OBUePbsSJZ4yKVvXm2/view',type:'video'},
-    {name:'LUYỆN TẬP ĐÚNG SAI THỰC TẾ KHÁC',date:'CH1',link:'https://drive.google.com/file/d/1Wa7e8N5u2v6w0gQMAfmiP0I9lVgFiUVV/view',type:'video'},
+    {name:'LUYỆN TẬP TRẮC NGHIỆM BÀI TOÁN THỰC TẾ',date:'CH1',link:'https://drive.google.com/file/d/17P70AfWoYlhe44OBUePbsSJZ4yKVvXm2/view',type:'video'},
+    {name:'LUYỆN TẬP THÊM ĐÚNG SAI BÀI TOÁN THỰC TẾ',date:'CH1',link:'https://drive.google.com/file/d/1Wa7e8N5u2v6w0gQMAfmiP0I9lVgFiUVV/view',type:'video'},
     {name:'[TIẾT 1] Xác định đường tiệm cận đứng, ngang',date:'CH1',link:'https://drive.google.com/file/d/1cqVnXZZ_REo4aee2hemCFZybi_Y5z1Sz/view',type:'video'},
     {name:'[TIẾT 2] Biện luận đường tiệm cận đứng, ngang',date:'CH1',link:'https://drive.google.com/file/d/1OkFFR7IZUdxocY3tJHM1wXrrkW_dFAsE/view',type:'video'},
     {name:'[TIẾT 3] Tiệm cận xiên',date:'CH1',link:'https://drive.google.com/file/d/1Jafdl28LPDrGMZSKhIe6KN_IYypuH09R/view',type:'video'},
     {name:'[TIẾT 1] KHẢO SÁT ĐỒ THỊ HÀM SỐ BẬC 3',date:'CH1',link:'https://drive.google.com/file/d/1ioD-_oQWtHrZ1Hi6dCD4tnBhsxAY6uU2/view',type:'video'},
-    {name:'[TIẾT 2] KHẢO SÁT ĐỒ THỊ PHÂN THỨC BẬC 1/1',date:'CH1',link:'https://drive.google.com/file/d/1znjP5IfOj5BT1A3oMwlYZ8zpS2KScFuv/view',type:'video'},
-    {name:'[TIẾT 3] KHẢO SÁT ĐỒ THỊ PHÂN THỨC BẬC 2/1',date:'CH1',link:'https://drive.google.com/file/d/1Oc35BF-2eAKgFwPsL31tlo2pbK36ORm9/view',type:'video'},
+    {name:'[TIẾT 2] KHẢO SÁT ĐỒ THỊ PHÂN THỨC BẬC NHẤT/BẬC NHẤT',date:'CH1',link:'https://drive.google.com/file/d/1znjP5IfOj5BT1A3oMwlYZ8zpS2KScFuv/view',type:'video'},
+    {name:'[TIẾT 3] KHẢO SÁT ĐỒ THỊ PHÂN THỨC BẬC 2 TRÊN BẬC 1',date:'CH1',link:'https://drive.google.com/file/d/1Oc35BF-2eAKgFwPsL31tlo2pbK36ORm9/view',type:'video'},
     {name:'[TIẾT 4] BÀI TOÁN THỰC TẾ ĐỒ THỊ',date:'CH1',link:'https://drive.google.com/file/d/18fdm_4eg-hD-VKAsSXDqjZ09_Cb0inep/view',type:'video'},
-    {name:'[TIẾT 5] CÁC DẠNG ĐỒ THỊ ĐẶC BIỆT',date:'CH1',link:'https://drive.google.com/file/d/1N9g2brXKwRUmhdM-sZsiIDFG_X1Uobge/view',type:'video'},
-    {name:'[TIẾT 6] ĐẾM SỐ NGHIỆM & BIỆN LUẬN PT',date:'CH1',link:'https://drive.google.com/file/d/1V7r5bXKxzK04EYjWGjmIgLuJN8ztnb_4/view',type:'video'},
-    {name:'[TIẾT 7] CÁC BÀI TOÁN TÌM M',date:'CH1',link:'https://drive.google.com/file/d/1_zVSOeL3WpCMBPmA9SYDtxZ5bKFbFCjB/view',type:'video'},
+    {name:'[TIẾT 5] CÁC DẠNG ĐỒ THỊ HÀM SỐ ĐẶC BIỆT',date:'CH1',link:'https://drive.google.com/file/d/1N9g2brXKwRUmhdM-sZsiIDFG_X1Uobge/view',type:'video'},
+    {name:'[TIẾT 6] ĐẾM SỐ NGHIỆM & BIỆN LUẬN PT DỰA VÀO ĐỒ THỊ',date:'CH1',link:'https://drive.google.com/file/d/1V7r5bXKxzK04EYjWGjmIgLuJN8ztnb_4/view',type:'video'},
+    {name:'[TIẾT 7] CÁC BÀI TOÁN TÌM M HÀM BẬC 3, PHÂN THỨC',date:'CH1',link:'https://drive.google.com/file/d/1_zVSOeL3WpCMBPmA9SYDtxZ5bKFbFCjB/view',type:'video'},
     {name:'LUYỆN TẬP "ĐÚNG SAI" ĐỒ THỊ HÀM SỐ',date:'CH1',link:'https://drive.google.com/file/d/1boNqps3CSA9S1oUKkwFK6Xbqkk-hB7kY/view',type:'video'},
     {name:'LUYỆN TẬP "ĐÚNG SAI" TƯƠNG GIAO ĐỒ THỊ',date:'CH1',link:'https://drive.google.com/file/d/1bq0UVpcthDD_Mj-Gbjm1VTCpsY-R9F83/view',type:'video'},
-    {name:'LUYỆN TẬP ĐÚNG SAI HÀM BẬC 3 - PHÂN THỨC',date:'CH1',link:'https://drive.google.com/file/d/1UwhGCmIwMl-Jv5tejWV2r5XQn2Rs4Fwy/view',type:'video'},
-    {name:'LUYỆN TẬP ĐÚNG SAI HÀM PHÂN THỨC BẬC 2/1',date:'CH1',link:'https://drive.google.com/file/d/1p3gXA5EkwfrgIP4mxkModJ_zX9UX_edE/view',type:'video'},
-    {name:'[TIẾT 1] Tính đơn điệu của hàm hợp (P1)',date:'CH1',link:'https://drive.google.com/file/d/1HIHKSL6i3u8VrQ3IhVpCIPkC1TCBGDu3/view',type:'video'},
-    {name:'Tính đơn điệu của hàm hợp (P2)',date:'CH1',link:'https://drive.google.com/file/d/1TsjGSY0U6CdKBYUSiENZnpIByGGtYGZZ/view',type:'video'},
+    {name:'LUYỆN TẬP ĐÚNG SAI HÀM SỐ BẬC 3 - PHÂN THỨC',date:'CH1',link:'https://drive.google.com/file/d/1UwhGCmIwMl-Jv5tejWV2r5XQn2Rs4Fwy/view',type:'video'},
+    {name:'LUYỆN TẬP ĐÚNG SAI HÀM PHÂN THỨC BẬC HAI/BẬC NHẤT',date:'CH1',link:'https://drive.google.com/file/d/1p3gXA5EkwfrgIP4mxkModJ_zX9UX_edE/view',type:'video'},
+    {name:'[TIẾT 1] Tính đơn điệu của hàm hợp (Phần 1)',date:'CH1',link:'https://drive.google.com/file/d/1HIHKSL6i3u8VrQ3IhVpCIPkC1TCBGDu3/view',type:'video'},
+    {name:'Tính đơn điệu của hàm hợp (Phần 2)',date:'CH1',link:'https://drive.google.com/file/d/1TsjGSY0U6CdKBYUSiENZnpIByGGtYGZZ/view',type:'video'},
     {name:'[TIẾT 2] Biện luận đơn điệu hàm hợp',date:'CH1',link:'https://drive.google.com/file/d/19tsjM4wJi06j9PVyztIv1LSMriRWXkoL/view',type:'video'},
     {name:'[TIẾT 3] Luyện tập thêm',date:'CH1',link:'https://drive.google.com/file/d/19Prs6ku2OivOx6SdfQzvSQPs9DQaXz9O/view',type:'video'},
     {name:'[TIẾT 1] Cực trị hàm hợp (Buổi 1)',date:'CH1',link:'https://drive.google.com/file/d/1OrNgOkMWXPMQHxio3RXF-LLphRB9SQTx/view',type:'video'},
@@ -580,26 +968,26 @@ const THAY_CHI = {
     {name:'Tiết 4: Luyện tập thêm',date:'CH1',link:'https://drive.google.com/file/d/1PUYwwDDPGJ4vvCStSQD7eXJD-gLGa2sL/view',type:'video'},
     {name:'Tiết 1: Cực trị hàm y=|f(x)|',date:'CH1',link:'https://drive.google.com/file/d/1bv0f_TQlMFzQkIZzteuh7jy3MuonY7sy/view',type:'video'},
     {name:'Tiết 2: Cực trị hàm y=f(|x|)',date:'CH1',link:'https://drive.google.com/file/d/11lCv-RzYeYBJYXzGB0ZPbQRpKheK5yEJ/view',type:'video'},
-    {name:'MIN-MAX HÀM SỐ CHỨA GTTĐ',date:'CH1',link:'https://drive.google.com/file/d/1i6UxOdqwamxvHKcZlmkwk-39MUo4lABO/view',type:'video'},
-    {name:'Tiết 1: PT tiếp tuyến tại điểm',date:'CH1',link:'https://drive.google.com/file/d/1axnoodSz9-f0VecL1hTd3GGjW3D1E432/view',type:'video'},
-    {name:'Tiết 2: PT tiếp tuyến qua điểm',date:'CH1',link:'https://drive.google.com/file/d/1N8CfD4B0-qK7oxZ_JASHeXC_67i8h-oc/view',type:'video'},
-    {name:'KHÁI NIỆM VÀ QUY TẮC VECTƠ TRONG KG',date:'CH2',link:'https://drive.google.com/file/d/12kQw9UktLgj2J6BvU2vmfmaOfoOiQK0G/view',type:'video'},
+    {name:'MIN-MAX HÀM SỐ CHỨA DẤU GIÁ TRỊ TUYỆT ĐỐI',date:'CH1',link:'https://drive.google.com/file/d/1i6UxOdqwamxvHKcZlmkwk-39MUo4lABO/view',type:'video'},
+    {name:'Tiết 1: Phương trình tiếp tuyến tại điểm',date:'CH1',link:'https://drive.google.com/file/d/1axnoodSz9-f0VecL1hTd3GGjW3D1E432/view',type:'video'},
+    {name:'Tiết 2: Phương trình tiếp tuyến qua điểm',date:'CH1',link:'https://drive.google.com/file/d/1N8CfD4B0-qK7oxZ_JASHeXC_67i8h-oc/view',type:'video'},
+    {name:'KHÁI NIỆM VÀ QUY TẮC VECTƠ TRONG KHÔNG GIAN',date:'CH2',link:'https://drive.google.com/file/d/12kQw9UktLgj2J6BvU2vmfmaOfoOiQK0G/view',type:'video'},
     {name:'PHÉP TOÁN VECTƠ TRONG HÌNH CHÓP, TỨ DIỆN',date:'CH2',link:'https://drive.google.com/file/d/1IRsmH1TLZrIFKEDSPL0FZUBWuDIBVAFT/view',type:'video'},
     {name:'PHÉP TOÁN VECTƠ TRONG HÌNH HỘP, LĂNG TRỤ',date:'CH2',link:'https://drive.google.com/file/d/1ewQ2VkU8ujyzvPSEjM65h5ZU0DssycFq/view',type:'video'},
     {name:'PHÉP TOÁN VECTƠ TRONG LĂNG TRỤ TAM GIÁC',date:'CH2',link:'https://drive.google.com/file/d/1ZeCA4pJzMK49TAbW76nCSMtcxPnqn3iG/view',type:'video'},
     {name:'BÀI VỀ NHÀ LUYỆN TẬP',date:'CH2',link:'https://drive.google.com/file/d/1bA8Sjjs-rhXdtxaRf8TT2SRF6x59xuv5/view',type:'video'},
-    {name:'ĐỀ LUYỆN TẬP: CÁC PHÉP TOÁN VECTƠ',date:'CH2',link:'https://drive.google.com/file/d/1YKNNZHTRmKEY2Mwc0vRefboFcwAQNkJP/view',type:'video'},
+    {name:'ĐỀ LUYỆN TẬP: CÁC PHÉP TOÁN VECTƠ TRONG KHÔNG GIAN',date:'CH2',link:'https://drive.google.com/file/d/1YKNNZHTRmKEY2Mwc0vRefboFcwAQNkJP/view',type:'video'},
     {name:'BÀI TOÁN THỰC TẾ TỔNG HỢP LỰC',date:'CH2',link:'https://drive.google.com/file/d/1wxNkzcxHmTfGI4023eX5bM1aPM9eoUfx/view',type:'video'},
-    {name:'GÓC GIỮA 2 VECTƠ - TÍCH VÔ HƯỚNG',date:'CH2',link:'https://drive.google.com/file/d/1JuvzMCdK8grCgcM8AeIkjoMYLyYPivRn/view',type:'video'},
-    {name:'ĐỀ LUYỆN: GÓC GIỮA 2 VECTƠ',date:'CH2',link:'https://drive.google.com/file/d/1L8RLcj2rRvg3bOW4-b7rxxQq8T73L1Ml/view',type:'video'},
-    {name:'ĐỀ LUYỆN: ĐÚNG SAI - ĐIỀN ĐÁP ÁN',date:'CH2',link:'https://drive.google.com/file/d/1y0Fub0Ai-aR7aiu-V9635Z56JxiC68na/view',type:'video'},
+    {name:'GÓC GIỮA 2 VECTƠ - TÍCH VÔ HƯỚNG 2 VECTƠ',date:'CH2',link:'https://drive.google.com/file/d/1JuvzMCdK8grCgcM8AeIkjoMYLyYPivRn/view',type:'video'},
+    {name:'ĐỀ LUYỆN TẬP: GÓC GIỮA 2 VECTƠ',date:'CH2',link:'https://drive.google.com/file/d/1L8RLcj2rRvg3bOW4-b7rxxQq8T73L1Ml/view',type:'video'},
+    {name:'ĐỀ LUYỆN TẬP: ĐÚNG SAI - ĐIỀN ĐÁP ÁN',date:'CH2',link:'https://drive.google.com/file/d/1y0Fub0Ai-aR7aiu-V9635Z56JxiC68na/view',type:'video'},
     {name:'[TIẾT 1] TỌA ĐỘ ĐIỂM - CÁC CÔNG THỨC VECTƠ',date:'CH2',link:'https://drive.google.com/file/d/1MSduE1pCXQSuWqRow2d9iKZoMIlUulzn/view',type:'video'},
     {name:'[TIẾT 2] TÌM ĐIỂM THỎA MÃN ĐẲNG THỨC VECTƠ',date:'CH2',link:'https://drive.google.com/file/d/1Xo5jjgGcKByJnr7If_hpvEDrVu5HMivm/view',type:'video'},
-    {name:'[TIẾT 3] TÍCH CÓ HƯỚNG VÀ ỨNG DỤNG',date:'CH2',link:'https://drive.google.com/file/d/1CevzkmFKtd-gqBTDhCrxQT4up3YqtVzC/view',type:'video'},
+    {name:'[TIẾT 3] TÍCH CÓ HƯỚNG CỦA VECTƠ VÀ ỨNG DỤNG',date:'CH2',link:'https://drive.google.com/file/d/1CevzkmFKtd-gqBTDhCrxQT4up3YqtVzC/view',type:'video'},
     {name:'HƯỚNG DẪN BẤM MÁY TÍNH TÍCH CÓ HƯỚNG',date:'CH2',link:'https://drive.google.com/file/d/1-OBwwfcMAQ-l9E2Ix_IivZSM4ew4I-0W/view',type:'video'},
-    {name:'HƯỚNG DẪN BẤM MÁY TỌA ĐỘ VECTO OXYZ',date:'CH2',link:'https://drive.google.com/file/d/1aGMU2ZataRvIsA79r9x2KHpUE8_N-hvn/view',type:'video'},
-    {name:'LUYỆN TẬP THÊM (TRẮC NGHIỆM)',date:'CH2',link:'https://drive.google.com/file/d/1QrRL6bCAZNuudO_r3NlHZY0lHZ00uvTh/view',type:'video'},
-    {name:'LUYỆN TẬP THÊM (ĐÚNG SAI)',date:'CH2',link:'https://drive.google.com/file/d/1J-v93tWncQZXwAnUU44SJq9dKglaJQwb/view',type:'video'},
+    {name:'HƯỚNG DẪN BẤM MÁY TỌA ĐỘ VECTO TRONG OXYZ',date:'CH2',link:'https://drive.google.com/file/d/1aGMU2ZataRvIsA79r9x2KHpUE8_N-hvn/view',type:'video'},
+    {name:'LUYỆN TẬP THÊM (TRẮC NGHIỆM 4 ĐÁP ÁN)',date:'CH2',link:'https://drive.google.com/file/d/1QrRL6bCAZNuudO_r3NlHZY0lHZ00uvTh/view',type:'video'},
+    {name:'LUYỆN TẬP THÊM (ĐÚNG SAI - ĐIỀN ĐÁP ÁN)',date:'CH2',link:'https://drive.google.com/file/d/1J-v93tWncQZXwAnUU44SJq9dKglaJQwb/view',type:'video'},
     {name:'[TIẾT 1] NGUYÊN HÀM CƠ BẢN',date:'CH4',link:'https://youtu.be/a6A-sqViYDo',type:'video'},
     {name:'[TIẾT 2] NGUYÊN HÀM HÀM HỢP',date:'CH4',link:'https://youtu.be/prCq7C6iNss',type:'video'},
     {name:'[TIẾT 3] NGUYÊN HÀM HỮU TỈ',date:'CH4',link:'https://youtu.be/ScnKHTtPOxQ',type:'video'},
@@ -609,34 +997,33 @@ const THAY_CHI = {
     {name:'TÍNH TÍCH PHÂN',date:'CH4',link:'https://youtu.be/3kgqyFEFzkc',type:'video'},
     {name:'HƯỚNG DẪN BẤM MÁY TÍNH TÍCH PHÂN',date:'CH4',link:'https://youtu.be/3ku8RdmRteQ',type:'video'},
     {name:'LUYỆN TẬP THÊM TÍCH PHÂN',date:'CH4',link:'https://youtu.be/ss7RbW_FYAE',type:'video'},
-    {name:'[TIẾT 1] ỨNG DỤNG NGUYÊN HÀM - HÀM TỐC ĐỘ',date:'CH4',link:'https://youtu.be/eJRmXWTHCyM',type:'video'},
-    {name:'[TIẾT 2] ỨNG DỤNG CƠ HỌC - CHUYỂN ĐỘNG',date:'CH4',link:'https://youtu.be/2fm3iPZBcwU',type:'video'},
-    {name:'BÀI TOÁN CHUYỂN ĐỘNG - ĐÚNG SAI',date:'CH4',link:'https://youtu.be/FWsUttiMSAI',type:'video'},
+    {name:'[TIẾT 1] ỨNG DỤNG NGUYÊN HÀM GIẢI BÀI HÀM TỐC ĐỘ',date:'CH4',link:'https://youtu.be/eJRmXWTHCyM',type:'video'},
+    {name:'[TIẾT 2] ỨNG DỤNG CƠ HỌC - BÀI TOÁN CHUYỂN ĐỘNG',date:'CH4',link:'https://youtu.be/2fm3iPZBcwU',type:'video'},
+    {name:'BÀI TOÁN CHUYỂN ĐỘNG - DẠNG BÀI ĐÚNG SAI',date:'CH4',link:'https://youtu.be/FWsUttiMSAI',type:'video'},
     {name:'[TIẾT 3] ỨNG DỤNG TÍCH PHÂN TÍNH DIỆN TÍCH',date:'CH4',link:'https://youtu.be/gyS75FR-Ing',type:'video'},
-    {name:'[TIẾT 4] TÍNH DIỆN TÍCH (CÓ HÌNH)',date:'CH4',link:'https://youtu.be/xcnkGuv5ZdE',type:'video'},
-    {name:'[TIẾT 5] BÀI TOÁN THỰC TẾ DIỆN TÍCH',date:'CH4',link:'https://youtu.be/SKfPRUyellA',type:'video'},
-    {name:'[TIẾT 6] THỂ TÍCH KHỐI TRÒN XOAY',date:'CH4',link:'https://m.youtube.com/watch?v=exrmuIKHZLM',type:'video'},
-    {name:'[TIẾT 7] THỂ TÍCH KHỐI TRÒN XOAY (CÓ HÌNH)',date:'CH4',link:'https://m.youtube.com/watch?v=ohivLY7y20Y',type:'video'},
-    {name:'[TIẾT 8] THỂ TÍCH QUANH TRỤC TUNG',date:'CH4',link:'https://m.youtube.com/watch?v=KsyL217yQgk',type:'video'},
-    {name:'[TIẾT 1] XÁC ĐỊNH YẾU TỐ, GÓC & VỊ TRÍ TƯƠNG ĐỐI',date:'CH5',link:'https://youtu.be/HjSwPiPdy8M',type:'video'},
-    {name:'[TIẾT 2] LẬP PT KHI BIẾT VTPT & ĐIỂM',date:'CH5',link:'https://youtu.be/YKqdtVDwq3c',type:'video'},
+    {name:'[TIẾT 4] ỨNG DỤNG TÍCH PHÂN TÍNH DIỆN TÍCH (CÓ HÌNH)',date:'CH4',link:'https://youtu.be/xcnkGuv5ZdE',type:'video'},
+    {name:'[TIẾT 5] BÀI TOÁN THỰC TẾ TÍNH DIỆN TÍCH',date:'CH4',link:'https://youtu.be/SKfPRUyellA',type:'video'},
+    {name:'[TIẾT 6] TÍNH THỂ TÍCH KHỐI TRÒN XOAY',date:'CH4',link:'https://m.youtube.com/watch?v=exrmuIKHZLM',type:'video'},
+    {name:'[TIẾT 7] TÍNH THỂ TÍCH KHỐI TRÒN XOAY (CÓ HÌNH)',date:'CH4',link:'https://m.youtube.com/watch?v=ohivLY7y20Y',type:'video'},
+    {name:'[TIẾT 8] TÍNH THỂ TÍCH KHỐI TRÒN XOAY QUANH TRỤC TUNG',date:'CH4',link:'https://m.youtube.com/watch?v=KsyL217yQgk',type:'video'},
+    {name:'[TIẾT 1] XÁC ĐỊNH CÁC YẾU TỐ, TÍNH GÓC & VỊ TRÍ TƯƠNG ĐỐI',date:'CH5',link:'https://youtu.be/HjSwPiPdy8M',type:'video'},
+    {name:'[TIẾT 2] LẬP PT KHI BIẾT VECTƠ PHÁP TUYẾN & ĐIỂM',date:'CH5',link:'https://youtu.be/YKqdtVDwq3c',type:'video'},
     {name:'[TIẾT 3] LẬP PT CÓ YẾU TỐ KHOẢNG CÁCH',date:'CH5',link:'https://youtu.be/1ef2CtT4qAc',type:'video'},
-    {name:'[TIẾT 1] XÁC ĐỊNH YẾU TỐ, VỊ TRÍ TƯƠNG ĐỐI, KC, GÓC',date:'CH5',link:'https://youtu.be/P_kRnQX1YEA',type:'video'},
-    {name:'[TIẾT 2] LẬP PT KHI BIẾT VTCP & ĐIỂM',date:'CH5',link:'https://youtu.be/C5c9IclXCIg',type:'video'},
+    {name:'[TIẾT 1] XÁC ĐỊNH YẾU TỐ, VỊ TRÍ, KC, GÓC',date:'CH5',link:'https://youtu.be/P_kRnQX1YEA',type:'video'},
+    {name:'[TIẾT 2] LẬP PT KHI BIẾT VECTƠ CHỈ PHƯƠNG & ĐIỂM',date:'CH5',link:'https://youtu.be/C5c9IclXCIg',type:'video'},
     {name:'[TIẾT 3] LẬP PT CÓ YẾU TỐ GIAO ĐIỂM',date:'CH5',link:'https://youtu.be/GuLTtsFODvE',type:'video'},
     {name:'[TIẾT 1] XÁC ĐỊNH YẾU TỐ, LẬP PT MẶT CẦU',date:'CH5',link:'https://youtu.be/h3iitITyzsM',type:'video'},
-    {name:'[TIẾT 2] VỊ TRÍ TƯƠNG ĐỐI TRONG MẶT CẦU',date:'CH5',link:'https://youtu.be/QCJM0N3wWTI',type:'video'},
+    {name:'[TIẾT 2] BÀI TOÁN VỊ TRÍ TƯƠNG ĐỐI TRONG MẶT CẦU',date:'CH5',link:'https://youtu.be/QCJM0N3wWTI',type:'video'},
     {name:'[TIẾT 3] ÔN TẬP PT MẶT CẦU - ĐÚNG SAI',date:'CH5',link:'https://youtu.be/DICVaiFcwIo',type:'video'},
     {name:'[TIẾT 4] ỨNG DỤNG THỰC TẾ MẶT CẦU',date:'CH5',link:'https://youtu.be/teMUkIFSW6s',type:'video'},
     {name:'[TIẾT 1] TÌM HÌNH CHIẾU & ĐIỂM ĐỐI XỨNG',date:'CH5',link:'https://youtu.be/nunJkhY2SUg',type:'video'},
-    {name:'[TIẾT 2] MINMAX LIÊN QUAN ĐẾN HÌNH CHIẾU',date:'CH5',link:'https://youtu.be/C8x6tSgiksU',type:'video'},
+    {name:'[TIẾT 2] BÀI TOÁN MINMAX LIÊN QUAN ĐẾN HÌNH CHIẾU',date:'CH5',link:'https://youtu.be/C8x6tSgiksU',type:'video'},
     {name:'[TIẾT 3] ĐIỂM & ĐƯỜNG ĐẶC BIỆT TRONG TAM GIÁC',date:'CH5',link:'https://youtu.be/y0Im-EaMo6Q',type:'video'},
-    {name:'[TIẾT 1] CÔNG THỨC XÁC SUẤT CÓ ĐIỀU KIỆN',date:'CH6',link:'https://youtu.be/_JPLqrLhuPw',type:'video'},
+    {name:'[TIẾT 1] CÔNG THỨC TÍNH XÁC SUẤT CÓ ĐIỀU KIỆN',date:'CH6',link:'https://youtu.be/_JPLqrLhuPw',type:'video'},
     {name:'[TIẾT 2] XS KHI BIẾT TRƯỚC XS THÀNH PHẦN',date:'CH6',link:'https://youtu.be/A1Y97N3KEPY',type:'video'},
     {name:'[TIẾT 3] XS CÓ ĐIỀU KIỆN THEO CT CỔ ĐIỂN',date:'CH6',link:'https://youtu.be/G7FZdauDaZs',type:'video'},
     {name:'[TIẾT 4] XS CÓ ĐIỀU KIỆN - ĐẾM HAI LẦN',date:'CH6',link:'https://youtu.be/EeecuYkA85U',type:'video'},
-    {name:'[TIẾT 5] XS CÓ ĐIỀU KIỆN - BI HAI HỘP',date:'CH6',link:'https://youtu.be/05MwE30cfgc',type:'video'},
-    // TÀI LIỆU (gộp từ Google Sheet)
+    {name:'[TIẾT 5] XS CÓ ĐIỀU KIỆN - BÀI TOÁN BI HAI HỘP',date:'CH6',link:'https://youtu.be/05MwE30cfgc',type:'video'},
     {name:'TL: [TIẾT 1] Đồng biến, Nghịch biến',date:'TL1',link:'https://drive.google.com/drive/folders/16phOwE1M58dluU3EXqXOdSYQ-SbLCE6M',type:'tailieu'},
     {name:'TL: [TIẾT 2] Bài toán thực tế đơn điệu',date:'TL1',link:'https://drive.google.com/drive/folders/1d11906EgNxJ3bZ5kB_zov8n1YVW9JkQ4',type:'tailieu'},
     {name:'TL: Luyện tập trắc nghiệm đúng sai',date:'TL1',link:'https://drive.google.com/drive/folders/1xB6NezT1w8uxxXcUl27CcqYkI8HwNX5y',type:'tailieu'},
@@ -654,7 +1041,6 @@ const THAY_CHI = {
     {name:'TL: GTLN-GTNN trên khoảng',date:'TL3',link:'https://drive.google.com/drive/folders/13wqR2nzDJ5hiRWBIKuHPFm4Xz97YUO3H',type:'tailieu'},
     {name:'TL: Luyện tập Đúng Sai GTLN-GTNN',date:'TL3',link:'https://drive.google.com/drive/folders/10IwaJbNdPJgV0WsYQPN8siwPbg8AIdIj',type:'tailieu'},
     {name:'TL: Tìm m để hs đạt GTLN-GTNN',date:'TL3',link:'https://drive.google.com/drive/folders/1HoQBERU2Vkc9UMk5ReESoAa_rTY3Mdtn',type:'tailieu'},
-    // BTVN (gộp từ Google Sheet)
     {name:'BTVN: [TIẾT 1] Đồng biến, Nghịch biến',date:'BTVN1',link:'https://drive.google.com/drive/folders/1HlwHHkKkdXmFLNrDFRPgx7eE1b61o1s3',type:'btvn'},
     {name:'BTVN: [TIẾT 2] Bài toán thực tế đơn điệu',date:'BTVN1',link:'https://drive.google.com/drive/folders/1HUxOOeuk5FZg9FarEBA-l_YfYZyC6th0',type:'btvn'},
     {name:'BTVN: Luyện tập trắc nghiệm',date:'BTVN1',link:'https://drive.google.com/drive/folders/1qUZvZ0yFQBQATjHHmz-QtnZqcOIi3CTg',type:'btvn'},
@@ -671,7 +1057,6 @@ const THAY_CHI = {
     {name:'BTVN: Tiệm cận đứng, ngang',date:'BTVN5',link:'https://drive.google.com/drive/folders/1O9iq8GqchiQStGrEDtE8g9Pla2dIZzdz',type:'btvn'},
     {name:'BTVN: Biện luận tiệm cận',date:'BTVN5',link:'https://drive.google.com/drive/folders/13VRWQcK9iVGsyKZ-8rAYuBWMsS3A4ABC',type:'btvn'},
     {name:'BTVN: Tiệm cận xiên',date:'BTVN5',link:'https://drive.google.com/drive/folders/1IVBOOYU4RdZcY0PtZMW41zRQKpiluOcO',type:'btvn'},
-    // CHỮA BTVN
     {name:'Chữa BTVN: [TIẾT 1] Đơn điệu',date:'CB1',link:'https://drive.google.com/file/d/1kkHZlQXccIseM7kTUvR4oYGiYPXvE1UQ/view',type:'btvn'},
     {name:'Chữa BTVN: [TIẾT 2] Thực tế đơn điệu',date:'CB1',link:'https://drive.google.com/file/d/1AFCJ2W6WNbm_ZBwA2tj47SKdcFFi4fGo/view',type:'btvn'},
     {name:'Chữa BTVN: Luyện tập trắc nghiệm',date:'CB1',link:'https://drive.google.com/file/d/1WPGSVYACF9OlXzfFA_ClkyMFIGJs3wAF/view',type:'btvn'},
@@ -693,10 +1078,10 @@ const THAY_CHI = {
 };
 
 /* ============================================================
-   SỬ CÔ HƯƠNG SEN
+   SỬ CÔ HƯƠNG SEN (30 bài)
    ============================================================ */
 const CO_SEN = {
-  id:'co_sen',name:'SỬ CÔ HƯƠNG SEN',icon:'fa-scroll',color:'amber',group:'cosen',
+  id:'co_sen',name:'SỬ CÔ HƯƠNG SEN',desc:'Lịch sử · Cô Hương Sen · Lớp 12',icon:'fa-scroll',color:'pink',group:'cosen',
   lessons:[
     {name:'Bài 1 Liên hợp quốc',date:'Bài 1',link:'https://youtu.be/-LoBn5WekkM',type:'video'},
     {name:'Đề số 1',date:'Đề 1',link:'https://youtu.be/iTv2dbhB6kc',type:'video'},
@@ -734,11 +1119,11 @@ const CO_SEN = {
 /* ============================================================
    STATE & RENDER
    ============================================================ */
-let activeFilter='all', activeTab='all', searchTerm='';
+let activeFilter='all', activeTab='all', searchTerm='', activeView='all';
+
 const contentArea=document.getElementById('contentArea');
-const filterContainer=document.getElementById('filterContainer');
+const navList=document.getElementById('navList');
 const searchInput=document.getElementById('searchInput');
-const tabContainer=document.getElementById('tabContainer');
 
 const ALL_SUBJECTS=[
   ...MEGA_SUBJECTS.map(s=>({...s,group:'hsa'})),
@@ -752,47 +1137,89 @@ function countAllLinks(){let t=0; ALL_SUBJECTS.forEach(s=>s.lessons.forEach(l=>{
 
 function getFilteredLessons(sub){
   let L=sub.lessons;
-  if(activeTab==='video') L=L.filter(l=>l.type==='video');
-  if(activeTab==='tailieu') L=L.filter(l=>l.type==='tailieu');
-  if(activeTab==='btvn') L=L.filter(l=>l.type==='btvn');
+  if(activeView==='video') L=L.filter(l=>l.type==='video');
+  if(activeView==='tailieu') L=L.filter(l=>l.type==='tailieu');
+  if(activeView==='btvn') L=L.filter(l=>l.type==='btvn');
   if(searchTerm) L=L.filter(l=>l.name.toLowerCase().includes(searchTerm.toLowerCase()));
   return L;
 }
 
-function renderTabs(){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===activeTab));
-}
-
-function renderFilters(){
-  const groups=[
-    {id:'all',label:'Tất cả',icon:'fa-layer-group'},
-    {id:'hsa',label:'HSA',icon:'fa-graduation-cap'},
-    {id:'thaychi',label:'Thầy Chí',icon:'fa-chalkboard-teacher'},
-    {id:'cosen',label:'Cô Sen',icon:'fa-scroll'},
-    {id:'sgk',label:'SGK',icon:'fa-book'}
+/* NAV SIDEBAR */
+function renderNav(){
+  const items=[
+    {id:'all',label:'Tất cả',icon:'fa-th-large',color:'',count:countAllLessons()},
+    {id:'hsa',label:'HSA (MegaEdu)',icon:'fa-graduation-cap',color:'violet',count:MEGA_SUBJECTS.reduce((a,s)=>a+s.lessons.length,0)},
+    {id:'video',label:'Video bài giảng',icon:'fa-play-circle',color:'green',count:ALL_SUBJECTS.reduce((a,s)=>a+s.lessons.filter(l=>l.type==='video').length,0)},
+    {id:'tailieu',label:'Tài liệu',icon:'fa-file-alt',color:'amber',count:ALL_SUBJECTS.reduce((a,s)=>a+s.lessons.filter(l=>l.type==='tailieu').length,0)},
+    {id:'btvn',label:'BTVN',icon:'fa-pen-to-square',color:'red',count:ALL_SUBJECTS.reduce((a,s)=>a+s.lessons.filter(l=>l.type==='btvn').length,0)},
   ];
-  filterContainer.innerHTML='';
-  groups.forEach(g=>{
-    const b=document.createElement('button');
-    b.className=`filter-btn ${activeFilter===g.id?'active':''}`;
-    b.innerHTML=`<i class="fas ${g.icon}"></i> ${g.label}`;
-    b.addEventListener('click',()=>{activeFilter=g.id;renderFilters();renderContent();});
-    filterContainer.appendChild(b);
+  let html='';
+  items.forEach(i=>{
+    html+=`<div class="nav-item ${activeTab===i.id?'active':''}" data-tab="${i.id}" data-color="${i.color}">
+      <i class="fas ${i.icon}"></i>
+      <span>${i.label}</span>
+      <span class="nav-count">${i.count}</span>
+    </div>`;
+  });
+  html+='<div class="sidebar-divider"></div>';
+  html+='<div class="sidebar-title">Giáo viên</div>';
+  html+=`<div class="nav-item ${activeTab==='thaychi'?'active':''}" data-tab="thaychi" data-color="red">
+    <i class="fas fa-chalkboard-teacher"></i>
+    <span>Toán Thầy Chí</span>
+    <span class="nav-count">${THAY_CHI.lessons.length}</span>
+  </div>`;
+  html+=`<div class="nav-item ${activeTab==='cosen'?'active':''}" data-tab="cosen" data-color="pink">
+    <i class="fas fa-scroll"></i>
+    <span>Sử Cô Hương Sen</span>
+    <span class="nav-count">${CO_SEN.lessons.length}</span>
+  </div>`;
+  html+='<div class="sidebar-divider"></div>';
+  html+='<div class="sidebar-title">Sách giáo khoa</div>';
+  SGK_SUBJECTS.forEach(s=>{
+    html+=`<div class="nav-item ${activeFilter===s.id?'active':''}" data-filter="${s.id}" data-color="${s.color}">
+      <i class="fas ${s.icon}"></i>
+      <span>${s.name}</span>
+      <span class="nav-count">${s.lessons.length}</span>
+    </div>`;
+  });
+  html+='<div class="sidebar-divider"></div>';
+  html+='<div class="sidebar-title">Môn học HSA</div>';
+  MEGA_SUBJECTS.forEach(s=>{
+    html+=`<div class="nav-item ${activeFilter===s.id?'active':''}" data-filter="${s.id}" data-color="${s.color}">
+      <i class="fas ${s.icon}"></i>
+      <span>${s.name}</span>
+      <span class="nav-count">${s.lessons.length}</span>
+    </div>`;
+  });
+  navList.innerHTML=html;
+
+  navList.querySelectorAll('.nav-item').forEach(el=>{
+    el.addEventListener('click',()=>{
+      if(el.dataset.tab){
+        activeTab=el.dataset.tab;
+        activeFilter='all';
+      } else if(el.dataset.filter){
+        activeFilter=el.dataset.filter;
+        activeTab='all';
+      }
+      renderNav();
+      renderContent();
+    });
   });
 }
 
+/* CONTENT */
 function renderContent(){
   const filtered=ALL_SUBJECTS.filter(s=>{
-    // Tab filter
     if(activeTab==='thaychi') return s.group==='thaychi';
     if(activeTab==='cosen') return s.group==='cosen';
-    if(activeTab==='sgk') return s.group==='sgk';
     if(activeTab==='hsa') return s.group==='hsa';
-    // 'all', 'video', 'tailieu', 'btvn' → apply activeFilter
-    if(activeFilter==='hsa') return s.group==='hsa';
-    if(activeFilter==='thaychi') return s.group==='thaychi';
-    if(activeFilter==='cosen') return s.group==='cosen';
-    if(activeFilter==='sgk') return s.group==='sgk';
+    if(activeTab==='video'||activeTab==='tailieu'||activeTab==='btvn'){
+      // filter by type only
+      return true;
+    }
+    // filter by specific subject id
+    if(activeFilter!=='all') return s.id===activeFilter;
     return true;
   }).filter(s=>{
     if(!searchTerm) return true;
@@ -800,72 +1227,153 @@ function renderContent(){
     return s.name.toLowerCase().includes(t)||s.lessons.some(l=>l.name.toLowerCase().includes(t));
   });
 
-  let html='',totalShown=0;
-
-  // Bảng cho Thầy Chí & Cô Sen khi tab tương ứng
-  if(activeTab==='thaychi'||activeTab==='cosen'){
-    const sub = activeTab==='thaychi'?THAY_CHI:CO_SEN;
-    let lessons=sub.lessons;
-    if(searchTerm) lessons=lessons.filter(l=>l.name.toLowerCase().includes(searchTerm.toLowerCase()));
-    html+='<div class="table-wrap"><table><thead><tr><th>#</th><th>Bài giảng</th><th>Chương</th><th>Link</th></tr></thead><tbody>';
-    lessons.forEach((l,i)=>{
-      html+=`<tr><td>${i+1}</td><td>${l.name}</td><td>${l.date}</td><td><a class="link-btn" href="${l.link}" target="_blank"><i class="fas fa-external-link-alt"></i> Mở</a></td></tr>`;
-    });
-    html+='</tbody></table></div>';
-    totalShown=lessons.length;
-  } else {
-    html+='<div class="subjects-grid">';
-    filtered.forEach(sub=>{
-      const lessons=getFilteredLessons(sub);
-      if(lessons.length===0&&searchTerm) return;
-      if(lessons.length===0&&(activeTab==='tailieu'||activeTab==='btvn')) return;
-      const iconColor=sub.color||'';
-      const total=sub.lessons.length, shown=lessons.length;
-      let li='';
-      if(lessons.length===0){
-        li='<li style="padding:12px 8px;color:var(--muted);font-size:12px">Không có nội dung.</li>';
-      } else {
-        li=lessons.map((l,idx)=>{
-          const gi=sub.lessons.indexOf(l)+1;
-          let tag='';
-          let icon='fa-play-circle';
-          if(l.type==='tailieu'){tag='<span class="material-tag">📄 TL</span>'; icon='fa-file-download';}
-          if(l.type==='btvn'){tag='<span class="material-tag">✏️ BTVN</span>'; icon='fa-file-download';}
-          return `<li class="lesson-item" onclick="window.open('${l.link}','_blank')">
-            <span class="lesson-idx">${gi}.</span>
-            <span class="lesson-name">${l.name} ${tag}</span>
-            <span class="lesson-date">${l.date}</span>
-            <i class="fas ${icon}"></i>
-          </li>`;
-        }).join('');
-      }
-      const isHSA=sub.group==='hsa';
-      html+=`
-        <div class="subject-card">
-          <div class="card-header">
-            <div class="subject-icon ${iconColor}"><i class="fas ${sub.icon}"></i></div>
-            <div class="subject-title">
-              <h3>${sub.name} ${isHSA?'<span class="hsa-badge">HSA</span>':''}</h3>
-              <div class="lesson-count"><i class="fas fa-play-circle"></i> ${total} mục · hiển thị ${shown}</div>
-            </div>
-            <div class="progress-indicator"><i class="fas fa-check-circle"></i> 100%</div>
-          </div>
-          <ul class="lesson-list">${li}</ul>
-          <div class="card-footer">
-            <button class="btn-ghost" onclick="window.open('${lessons[0]?.link||sub.lessons[0]?.link||'#'}','_blank')"><i class="fas fa-play"></i> Học ngay</button>
-          </div>
-        </div>`;
-      totalShown+=shown;
-    });
-    html+='</div>';
+  // title
+  let title='Tất cả nội dung', titleIcon='fa-th-large';
+  if(activeTab==='thaychi'){title='Toán Thầy Chí 12'; titleIcon='fa-chalkboard-teacher';}
+  else if(activeTab==='cosen'){title='Sử Cô Hương Sen'; titleIcon='fa-scroll';}
+  else if(activeTab==='hsa'){title='HSA (MegaEdu)'; titleIcon='fa-graduation-cap';}
+  else if(activeTab==='video'){title='Video bài giảng'; titleIcon='fa-play-circle';}
+  else if(activeTab==='tailieu'){title='Tài liệu học tập'; titleIcon='fa-file-alt';}
+  else if(activeTab==='btvn'){title='BTVN & Chữa BTVN'; titleIcon='fa-pen-to-square';}
+  else if(activeFilter!=='all'){
+    const s=ALL_SUBJECTS.find(x=>x.id===activeFilter);
+    if(s){title=s.name; titleIcon=s.icon;}
   }
 
-  if(totalShown===0&&searchTerm) html=`<div class="empty-state"><i class="fas fa-search"></i>Không tìm thấy "<strong>${searchTerm}</strong>".</div>`;
-  else if(totalShown===0) html=`<div class="empty-state"><i class="fas fa-folder-open"></i>Chưa có nội dung trong mục này.</div>`;
+  let totalShown=0;
+  let html=`<div class="content-head">
+    <h2><i class="fas ${titleIcon}"></i> ${title}</h2>
+    <div class="meta">
+      <span><i class="fas fa-book"></i> <strong>${filtered.reduce((a,s)=>a+getFilteredLessons(s).length,0)}</strong> mục</span>
+      <span><i class="fas fa-layer-group"></i> ${filtered.length} môn</span>
+    </div>
+  </div>`;
+
+  if(filtered.length===0){
+    html+=`<div class="empty-state"><i class="fas fa-folder-open"></i>Chưa có nội dung trong mục này.</div>`;
+    contentArea.innerHTML=html;
+    return;
+  }
+
+  html+='<div class="subjects-grid">';
+  filtered.forEach(sub=>{
+    const lessons=getFilteredLessons(sub);
+    if(lessons.length===0) return;
+    const color=sub.color||'';
+    const total=sub.lessons.length, shown=lessons.length;
+    const videoCount=sub.lessons.filter(l=>l.type==='video').length;
+    const tlCount=sub.lessons.filter(l=>l.type==='tailieu').length;
+    const btCount=sub.lessons.filter(l=>l.type==='btvn').length;
+
+    const displayLessons = lessons.slice(0, 6);
+    let li='';
+    if(lessons.length===0){
+      li='<li style="padding:12px 8px;color:var(--muted);font-size:12px">Không có nội dung.</li>';
+    } else {
+      li=displayLessons.map((l,idx)=>{
+        const gi=sub.lessons.indexOf(l)+1;
+        let typeLabel='', typeClass='';
+        if(l.type==='tailieu'){typeLabel='Tài liệu'; typeClass='tailieu';}
+        else if(l.type==='btvn'){typeLabel='BTVN'; typeClass='btvn';}
+        else {typeLabel='Video'; typeClass='video';}
+        return `<li class="lesson-item" onclick="window.open('${l.link}','_blank')">
+          <span class="lesson-idx">${gi}.</span>
+          <div class="lesson-body">
+            <span class="lesson-name">${l.name}</span>
+            <div class="lesson-meta">
+              <span class="lesson-type ${typeClass}">${typeLabel}</span>
+              <span>${l.date}</span>
+            </div>
+          </div>
+          <i class="fas fa-arrow-right lesson-arrow"></i>
+        </li>`;
+      }).join('');
+      if(lessons.length>6){
+        li+=`<li style="padding:10px;text-align:center;color:var(--primary);font-size:11.5px;cursor:pointer;font-weight:600" onclick="event.stopPropagation();openExpand('${sub.id}')">+ Xem thêm ${lessons.length-6} mục...</li>`;
+      }
+    }
+
+    const isHSA=sub.group==='hsa';
+
+    html+=`<div class="subject-card" data-color="${color}">
+      <div class="card-header">
+        <div class="subject-icon ${color}"><i class="fas ${sub.icon}"></i></div>
+        <div class="subject-title">
+          <h3>${sub.name} ${isHSA?'<span class="hsa-badge">HSA</span>':''}</h3>
+          <div class="desc">${sub.desc||''}</div>
+        </div>
+        <div class="card-actions">
+          <button class="icon-btn expand" title="Phóng to" onclick="openExpand('${sub.id}')"><i class="fas fa-expand-alt"></i></button>
+        </div>
+      </div>
+      <ul class="lesson-list">${li}</ul>
+      <div class="card-footer">
+        <div class="count">
+          <i class="fas fa-play-circle"></i> ${videoCount} video
+          ${tlCount?`· <i class="fas fa-file-alt"></i> ${tlCount} TL`:''}
+          ${btCount?`· <i class="fas fa-pen"></i> ${btCount} BTVN`:''}
+        </div>
+        <button class="btn-ghost" onclick="window.open('${sub.lessons[0]?.link||'#'}','_blank')"><i class="fas fa-play"></i> Bắt đầu</button>
+      </div>
+    </div>`;
+    totalShown+=shown;
+  });
+  html+='</div>';
 
   contentArea.innerHTML=html;
 }
 
+/* MODAL EXPAND */
+function openExpand(subId){
+  const sub=ALL_SUBJECTS.find(s=>s.id===subId);
+  if(!sub) return;
+  const lessons=getFilteredLessons(sub);
+  document.getElementById('modalIcon').className=`subject-icon ${sub.color||''}`;
+  document.getElementById('modalIcon').innerHTML=`<i class="fas ${sub.icon}"></i>`;
+  document.getElementById('modalTitle').innerHTML=`${sub.name} ${sub.group==='hsa'?'<span class="hsa-badge">HSA</span>':''}<span class="desc">${sub.desc||''} · ${lessons.length} mục</span>`;
+  let body='<ul class="lesson-list" style="max-height:none">';
+  lessons.forEach((l,idx)=>{
+    const gi=sub.lessons.indexOf(l)+1;
+    let typeLabel='', typeClass='';
+    if(l.type==='tailieu'){typeLabel='Tài liệu'; typeClass='tailieu';}
+    else if(l.type==='btvn'){typeLabel='BTVN'; typeClass='btvn';}
+    else {typeLabel='Video'; typeClass='video';}
+    body+=`<li class="lesson-item" onclick="window.open('${l.link}','_blank')">
+      <span class="lesson-idx">${gi}.</span>
+      <div class="lesson-body">
+        <span class="lesson-name">${l.name}</span>
+        <div class="lesson-meta">
+          <span class="lesson-type ${typeClass}">${typeLabel}</span>
+          <span>${l.date}</span>
+        </div>
+      </div>
+      <i class="fas fa-arrow-right lesson-arrow"></i>
+    </li>`;
+  });
+  body+='</ul>';
+  document.getElementById('modalBody').innerHTML=body;
+  document.getElementById('expandModal').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function closeExpand(){
+  document.getElementById('expandModal').classList.remove('active');
+  document.body.style.overflow='';
+}
+document.getElementById('expandModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeExpand()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeExpand()});
+
+/* VIEW TOGGLE */
+document.querySelectorAll('.view-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTab=btn.dataset.view;
+    renderNav();
+    renderContent();
+  });
+});
+
+/* STATS */
 function updateStats(){
   const t=countAllLessons(),l=countAllLinks(),s=ALL_SUBJECTS.length;
   document.getElementById('totalLessons').textContent=t;
@@ -874,8 +1382,6 @@ function updateStats(){
   document.getElementById('infoLessons').textContent=t;
   document.getElementById('infoSubjects').textContent=s;
   document.getElementById('infoLinks').textContent=l;
-  document.getElementById('footerTotal').textContent=t;
-  document.getElementById('footerSubjects').textContent=s;
 }
 
 function toggleTheme(){
@@ -893,17 +1399,8 @@ function init(){
     document.getElementById('themeBtn').innerHTML='<i class="fas fa-sun"></i>';
   }
   updateStats();
-  renderTabs();
-  renderFilters();
+  renderNav();
   renderContent();
-
-  tabContainer.addEventListener('click',e=>{
-    const b=e.target.closest('.tab-btn');
-    if(!b) return;
-    activeTab=b.dataset.tab;
-    renderTabs();
-    renderContent();
-  });
 
   searchInput.addEventListener('input',e=>{
     searchTerm=e.target.value;
