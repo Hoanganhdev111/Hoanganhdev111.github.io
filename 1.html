@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nền tảng Từ vựng - Đọc hiểu (2027)</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+<style>
+  :root {
+    --bg:#0f1115; --bg2:#161a22; --bg3:#1d2330; --fg:#e6e8ee; --mut:#8b93a7;
+    --acc:#4f8cff; --acc2:#7c5cff; --bd:#252b38; --ok:#22c55e;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg); color: var(--fg);
+    display: flex; overflow: hidden;
+  }
+  /* ─── SIDEBAR ─────────────────────────────── */
+  aside {
+    width: 380px; flex-shrink: 0;
+    background: var(--bg2); border-right: 1px solid var(--bd);
+    display: flex; flex-direction: column;
+  }
+  .brand {
+    padding: 14px 16px; border-bottom: 1px solid var(--bd);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .brand .dot { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(135deg, var(--acc), var(--acc2)); box-shadow: 0 0 12px var(--acc); }
+  .brand h1 { font-size: 14px; margin: 0; font-weight: 700; letter-spacing: .3px; }
+  .brand small { color: var(--mut); font-size: 11px; display: block; margin-top: 2px; font-weight: 400; }
+
+  .search-wrap { padding: 10px 12px; border-bottom: 1px solid var(--bd); }
+  #search {
+    width: 100%; padding: 9px 12px; background: #0b0e14; color: var(--fg);
+    border: 1px solid var(--bd); border-radius: 8px; outline: none; font-size: 13px;
+  }
+  #search:focus { border-color: var(--acc); box-shadow: 0 0 0 3px rgba(79,140,255,.15); }
+
+  .stats { padding: 8px 14px; font-size: 11px; color: var(--mut); border-bottom: 1px solid var(--bd); }
+  .stats b { color: var(--acc); }
+
+  .tree { flex: 1; overflow-y: auto; padding-bottom: 20px; }
+  .tree::-webkit-scrollbar { width: 8px; }
+  .tree::-webkit-scrollbar-thumb { background: var(--bd); border-radius: 4px; }
+
+  .chapter {
+    padding: 10px 14px 8px; font-size: 11px; text-transform: uppercase;
+    letter-spacing: .8px; color: var(--acc); font-weight: 700;
+    border-top: 1px solid var(--bd); margin-top: 6px; position: sticky;
+    top: 0; background: var(--bg2); z-index: 2;
+  }
+  .chapter:first-child { border-top: none; margin-top: 0; }
+
+  .les {
+    padding: 9px 14px 9px 22px; cursor: pointer; font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+    border-left: 3px solid transparent; transition: .15s;
+  }
+  .les:hover { background: var(--bg3); }
+  .les.active { background: linear-gradient(90deg, rgba(79,140,255,.15), transparent); border-left-color: var(--acc); color: #fff; }
+  .les.no-video { opacity: .55; cursor: not-allowed; }
+  .les .ico { font-size: 11px; width: 14px; text-align: center; }
+  .les .txt { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .les .badge { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: var(--bg3); color: var(--mut); }
+  .les.has-video .badge { background: rgba(79,140,255,.18); color: var(--acc); }
+
+  /* ─── MAIN ─────────────────────────────────── */
+  main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  header {
+    padding: 14px 22px; border-bottom: 1px solid var(--bd);
+    background: var(--bg2); display: flex; align-items: center; gap: 14px;
+  }
+  header .title { flex: 1; min-width: 0; }
+  header h2 { margin: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header .meta { font-size: 11px; color: var(--mut); margin-top: 3px; }
+  header .actions { display: flex; gap: 8px; }
+  .btn {
+    padding: 7px 12px; background: var(--bg3); color: var(--fg); font-size: 12px;
+    border: 1px solid var(--bd); border-radius: 6px; cursor: pointer; transition: .15s;
+  }
+  .btn:hover { background: #2a3142; border-color: #3a4256; }
+  .btn.primary { background: linear-gradient(135deg, var(--acc), var(--acc2)); border: none; color: #fff; font-weight: 600; }
+
+  #player {
+    flex: 1; background: #000; position: relative;
+    display: flex; align-items: center; justify-content: center; min-height: 0;
+  }
+  #player video { width: 100%; height: 100%; display: block; background: #000; }
+  .empty {
+    text-align: center; color: var(--mut);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .empty .big { font-size: 44px; opacity: .35; }
+  .empty .sub { font-size: 12px; }
+
+  /* Loader */
+  .spinner { width: 34px; height: 34px; border: 3px solid var(--bd); border-top-color: var(--acc); border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Progress bar */
+  .prog { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--bd); overflow: hidden; }
+  .prog > i { display: block; height: 100%; background: linear-gradient(90deg, var(--acc), var(--acc2)); width: 0; transition: width .3s; }
+
+  /* Toast */
+  #toast {
+    position: fixed; top: 20px; right: 20px; padding: 10px 16px;
+    background: #dc2626; color: #fff; border-radius: 8px; font-size: 13px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.4); opacity: 0; transform: translateY(-10px);
+    transition: .25s; pointer-events: none; z-index: 100; max-width: 400px;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.ok { background: var(--ok); }
+</style>
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <div class="dot"></div>
+    <div>
+      <h1>Nền tảng Từ vựng - Đọc hiểu (2027)</h1>
+      <small>tienganhcomaiphuong.vn · no-login player</small>
+    </div>
+  </div>
+  <div class="search-wrap"><input id="search" placeholder="🔎 Tìm bài học…" autocomplete="off"></div>
+  <div class="stats" id="stats">Đang tải…</div>
+  <div class="tree" id="tree"></div>
+</aside>
+
+<main>
+  <header>
+    <div class="title">
+      <h2 id="lname">Chọn 1 bài để bắt đầu</h2>
+      <div class="meta" id="lmeta">—</div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="copyBtn" title="Copy link video">📋 Copy URL</button>
+      <button class="btn" id="openBtn" title="Mở trong tab mới">↗ Tab mới</button>
+    </div>
+  </header>
+  <div id="player">
+    <div class="empty">
+      <div class="big">🎬</div>
+      <div>Chọn một bài học ở sidebar để phát video</div>
+      <div class="sub">Video load trực tiếp từ CDN qua Worker proxy</div>
+    </div>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// CẤU HÌNH — DÁN URL WORKER CLOUDFLARE VÀO ĐÂY
+// ─────────────────────────────────────────────
+const WORKER = ''; // ví dụ: 'https://vncdn-proxy.abc.workers.dev'
+const COURSE_ID = '4829546057564160';
+const API = 'https://api-cdn-v2.ngoaingu24h.vn/api';
+const MEDIA_RE = /https?:\/\/[^"'\s<>()]+?\.(?:m3u8|mp4)(?:[^"'\s<>()]*)?/g;
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let LESSONS = [];       // full list
+let FILTERED = [];      // search result
+let CURRENT = -1;
+let HLS = null;
+
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, html) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html != null) e.innerHTML = html;
+  return e;
+};
+
+function toast(msg, ok = false) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'show' + (ok ? ' ok' : '');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.className = '', 3500);
+}
+
+// ─────────────────────────────────────────────
+// FETCH API trực tiếp — get-topic-tree
+// ─────────────────────────────────────────────
+function findMedia(obj, out = []) {
+  if (!obj) return out;
+  if (typeof obj === 'string') {
+    const m = obj.match(MEDIA_RE);
+    if (m) out.push(...m);
+    return out;
+  }
+  if (Array.isArray(obj)) { obj.forEach(v => findMedia(v, out)); return out; }
+  if (typeof obj === 'object') {
+    for (const k in obj) findMedia(obj[k], out);
+    return out;
+  }
+  return out;
+}
+
+async function fetchTree() {
+  const r = await fetch(`${API}/get-topic-tree/${COURSE_ID}`, {
+    headers: {
+      'Accept': 'application/json',
+      'Referer': 'https://tienganhcomaiphuong.vn/',
+      'Origin': 'https://tienganhcomaiphuong.vn',
+    },
+  });
+  if (!r.ok) throw new Error('API ' + r.status);
+  return await r.json();
+}
+
+function parseTree(tree) {
+  const out = [];
+  for (const ch of tree) {
+    for (const ls of (ch.childTopics || [])) {
+      const urls = [...new Set(findMedia(ls))];
+      out.push({
+        chapterId: ch.id,
+        chapterName: ch.name,
+        lessonId: ls.id,
+        lessonName: ls.name,
+        pathName: ls.pathName || '',
+        videoUrl: urls[0] || null,
+        hasVideo: urls.length > 0,
+        totalVideo: ls.totalVideo || 0,
+        totalExercise: ls.totalExercise || 0,
+      });
+    }
+  }
+  return out;
+}
+
+// ─────────────────────────────────────────────
+// RENDER SIDEBAR
+// ─────────────────────────────────────────────
+function renderTree() {
+  const root = $('tree');
+  root.innerHTML = '';
+  let curChap = null;
+  FILTERED.forEach((l, idx) => {
+    if (l.chapterName !== curChap) {
+      curChap = l.chapterName;
+      root.appendChild(el('div', 'chapter', curChap));
+    }
+    const d = el('div',
+      'les' + (l.hasVideo ? ' has-video' : ' no-video') + (l._i === CURRENT ? ' active' : '')
+    );
+    d.dataset.idx = l._i;
+    d.innerHTML = `
+      <span class="ico">${l.hasVideo ? '▶' : '📄'}</span>
+      <span class="txt">${escapeHtml(l.lessonName)}</span>
+      ${l.hasVideo ? '<span class="badge">video</span>' : ''}
+    `;
+    d.onclick = () => l.hasVideo && play(l._i);
+    root.appendChild(d);
+  });
+
+  const total = LESSONS.length;
+  const withVid = LESSONS.filter(x => x.hasVideo).length;
+  $('stats').innerHTML = `Tổng: <b>${total}</b> bài · Có video: <b>${withVid}</b> · Đang xem: <b>${FILTERED.length}</b>`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+// ─────────────────────────────────────────────
+// PLAYER
+// ─────────────────────────────────────────────
+function prox(url) {
+  if (!url) return url;
+  if (!WORKER) return url;
+  return WORKER.replace(/\/$/, '') + '/?u=' + encodeURIComponent(url);
+}
+
+function play(idx) {
+  const l = LESSONS[idx];
+  if (!l) return;
+  CURRENT = idx;
+
+  // update sidebar active
+  document.querySelectorAll('.les').forEach(e => {
+    e.classList.toggle('active', +e.dataset.idx === idx);
+  });
+
+  $('lname').textContent = l.lessonName;
+  $('lmeta').textContent = `${l.chapterName} · ${l.totalExercise} bài tập · ${l.totalVideo} video`;
+
+  const box = $('player');
+  box.innerHTML = `<div class="empty"><div class="spinner"></div><div class="sub">Đang tải video…</div></div>`;
+
+  if (HLS) { HLS.destroy(); HLS = null; }
+
+  const realUrl = prox(l.videoUrl);
+  const v = document.createElement('video');
+  v.controls = true;
+  v.autoplay = true;
+  v.playsInline = true;
+  v.preload = 'auto';
+
+  v.addEventListener('error', () => {
+    toast('Lỗi tải video — kiểm tra WORKER hoặc URL', false);
+    box.innerHTML = `<div class="empty">
+      <div class="big">⚠️</div>
+      <div>Không phát được video</div>
+      <div class="sub">${escapeHtml(l.videoUrl || '')}</div>
+    </div>`;
+  });
+
+  box.innerHTML = '';
+  box.appendChild(v);
+
+  // progress bar
+  const pb = el('div', 'prog', '<i></i>');
+  box.appendChild(pb);
+  v.addEventListener('timeupdate', () => {
+    if (v.duration) pb.querySelector('i').style.width = (v.currentTime / v.duration * 100) + '%';
+  });
+
+  if (l.videoUrl.endsWith('.m3u8') && window.Hls && Hls.isSupported()) {
+    HLS = new Hls({
+      enableWorker: true,
+      lowLatencyMode: false,
+      maxBufferLength: 30,
+      xhrSetup: (xhr) => { /* Worker đã lo CORS */ },
+    });
+    HLS.loadSource(realUrl);
+    HLS.attachMedia(v);
+    HLS.on(Hls.Events.MANIFEST_PARSED, () => v.play().catch(() => {}));
+    HLS.on(Hls.Events.ERROR, (_, data) => {
+      if (data.fatal) {
+        console.error('HLS fatal:', data);
+        toast('HLS lỗi: ' + data.type, false);
+      }
+    });
+  } else {
+    // Safari native HLS hoặc .mp4 trực tiếp
+    v.src = realUrl;
+    v.play().catch(() => {});
+  }
+}
+
+// ─────────────────────────────────────────────
+// HEADER ACTIONS
+// ─────────────────────────────────────────────
+$('copyBtn').onclick = () => {
+  const l = LESSONS[CURRENT];
+  if (!l || !l.videoUrl) return toast('Chưa chọn bài có video');
+  navigator.clipboard.writeText(prox(l.videoUrl)).then(
+    () => toast('Đã copy URL (worker-proxied)', true),
+    () => toast('Copy lỗi')
+  );
+};
+$('openBtn').onclick = () => {
+  const l = LESSONS[CURRENT];
+  if (!l || !l.videoUrl) return toast('Chưa chọn bài có video');
+  window.open(prox(l.videoUrl), '_blank');
+};
+
+// ─────────────────────────────────────────────
+// SEARCH
+// ─────────────────────────────────────────────
+$('search').oninput = (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  FILTERED = LESSONS
+    .map((l, i) => ({ ...l, _i: i }))
+    .filter(l =>
+      !q ||
+      l.lessonName.toLowerCase().includes(q) ||
+      l.chapterName.toLowerCase().includes(q)
+    );
+  renderTree();
+};
+
+// ─────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────
+(async function boot() {
+  try {
+    if (!WORKER) {
+      toast('⚠️ Chưa cấu hình WORKER — video sẽ bị 403. Xem hướng dẫn trong file.', false);
+    }
+    $('stats').innerHTML = 'Đang tải cây bài học từ API…';
+    const tree = await fetchTree();
+    LESSONS = parseTree(tree);
+    FILTERED = LESSONS.map((l, i) => ({ ...l, _i: i }));
+    renderTree();
+    toast(`✓ Đã tải ${LESSONS.length} bài (${LESSONS.filter(x => x.hasVideo).length} có video)`, true);
+
+    // Auto-play bài đầu tiên có video (không bắt buộc)
+    // const firstVid = LESSONS.findIndex(l => l.hasVideo);
+    // if (firstVid >= 0) play(firstVid);
+  } catch (e) {
+    console.error(e);
+    $('stats').innerHTML = '❌ Lỗi tải dữ liệu';
+    $('tree').innerHTML = `<div style="padding:20px;color:#f87171">
+      Không tải được API:<br><code style="color:#fca5a5">${escapeHtml(e.message)}</code>
+      <br><br>Có thể do CORS. Kiểm tra DevTools → Network.
+    </div>`;
+  }
+})();
+</script>
+</body>
+</html>
