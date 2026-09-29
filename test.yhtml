@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3105 PATCH STUDIO — Multi · 1.0/2.0 · Rules ZIP · Verify 4 lớp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #09090b; --card-bg: rgba(24, 24, 27, 0.55);
+      --card-border: rgba(255, 255, 255, 0.08); --text: #f4f4f5;
+      --muted: #a1a1aa; --accent: #6366f1; --accent-hover: #818cf8;
+      --accent-glow: rgba(99, 102, 241, 0.25); --input-bg: rgba(9, 9, 11, 0.65);
+      --ok: #10b981; --bad: #ef4444; --warn: #eab308;
+      --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      --font-mono: ui-monospace, 'JetBrains Mono', Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: var(--font-sans);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+      color: var(--text); line-height: 1.6;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 32px 16px 64px;
+    }
+    .wrap { width: 100%; max-width: 780px; position: relative; z-index: 1; }
+    header { text-align: center; margin-bottom: 24px; }
+    h1 { font-size: 1.5rem; font-weight: 700; margin: 0; letter-spacing: 0.03em; }
+    h1 small { display: block; font-size: 0.68rem; color: var(--muted); font-weight: 500; letter-spacing: 0.15em; margin-top: 4px; text-transform: uppercase; }
+    .section { margin-bottom: 14px; }
+    .section-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      color: var(--muted); text-transform: uppercase; margin: 0 0 8px 4px;
+    }
+    .section-num {
+      width: 20px; height: 20px; border-radius: 6px;
+      background: rgba(99, 102, 241, 0.18); color: var(--accent-hover);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; letter-spacing: 0;
+    }
+    .card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 20px 20px 18px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.2);
+    }
+    .card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .card-header svg { width: 18px; height: 18px; color: var(--muted); }
+    label.title { font-size: 0.875rem; font-weight: 500; color: var(--text); }
+    .drop {
+      border: 2px dashed rgba(255, 255, 255, 0.15); border-radius: 12px;
+      padding: 36px 20px; text-align: center; color: var(--muted); cursor: pointer;
+      transition: all 0.2s ease; background: var(--input-bg);
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .drop svg { width: 32px; height: 32px; color: #52525b; transition: all 0.2s; }
+    .drop:hover { border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.02); }
+    .drop.over { border-color: var(--accent); background: var(--accent-glow); color: var(--accent-hover); }
+    .drop.over svg { color: var(--accent-hover); transform: scale(1.1); }
+    .drop.has-file { border-color: var(--ok); background: rgba(16, 185, 129, 0.05); }
+    .drop.has-file svg { color: var(--ok); }
+    #file { position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none; }
+    .file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; max-height: 360px; overflow-y: auto; padding-right: 4px; }
+    .file-list::-webkit-scrollbar { width: 8px; }
+    .file-list::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+    .file-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+      transition: all 0.15s;
+    }
+    .file-item:hover { border-color: rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.05); }
+    .file-item .idx {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px;
+      background: rgba(99, 102, 241, 0.18); color: var(--accent-hover);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700;
+    }
+    .file-item .info { flex: 1; min-width: 0; }
+    .file-item .fname { font-size: 0.83rem; color: var(--text); word-break: break-all; font-weight: 500; }
+    .file-item .fsize { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .file-item .rename-input {
+      width: 100%; margin-top: 6px; padding: 6px 10px; border-radius: 8px;
+      background: rgba(9, 9, 11, 0.8); border: 1px solid var(--card-border);
+      color: var(--text); font-size: 0.78rem; font-family: var(--font-mono);
+    }
+    .file-item .rename-input:focus { outline: none; border-color: var(--accent); }
+    .file-item .actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .icon-btn {
+      width: 32px; height: 32px; border: none; border-radius: 8px;
+      background: rgba(255,255,255,0.05); color: var(--muted);
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+    .icon-btn.del:hover { background: rgba(239, 68, 68, 0.15); color: var(--bad); }
+    .icon-btn svg { width: 16px; height: 16px; }
+    .file-item .status { font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; }
+    .status.pending { background: rgba(161, 161, 170, 0.15); color: var(--muted); }
+    .status.done { background: rgba(16, 185, 129, 0.15); color: var(--ok); }
+    .status.error { background: rgba(239, 68, 68, 0.15); color: var(--bad); }
+    .status.skipped { background: rgba(234, 179, 8, 0.15); color: var(--warn); }
+    .bulk-bar {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--card-border);
+    }
+    .bulk-bar .bulk-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; width: 100%; margin-bottom: 2px; }
+    .chip-btn {
+      padding: 7px 12px; border-radius: 8px; border: 1px solid var(--card-border);
+      background: var(--input-bg); color: var(--text); cursor: pointer;
+      font-size: 0.78rem; font-family: var(--font-sans); font-weight: 500;
+      transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .chip-btn:hover { border-color: var(--accent); color: var(--accent-hover); background: rgba(99,102,241,0.08); }
+    .chip-btn.danger:hover { border-color: var(--bad); color: var(--bad); background: rgba(239,68,68,0.08); }
+    .chip-btn svg { width: 14px; height: 14px; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 12px; text-align: center; }
+    .field-label { font-size: 0.78rem; font-weight: 500; color: var(--muted); margin: 0 0 6px 2px; }
+    .input-wrapper { position: relative; }
+    .input-wrapper svg {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px; color: #52525b; pointer-events: none; transition: color 0.2s;
+    }
+    input[type="password"], input[type="text"] {
+      width: 100%; padding: 14px 16px 14px 44px; border-radius: 12px;
+      border: 1px solid var(--card-border); background: var(--input-bg); color: var(--text);
+      font-size: 0.95rem; font-family: var(--font-sans); transition: all 0.2s ease;
+    }
+    input[type="password"]:focus, input[type="text"]:focus {
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+    .input-wrapper:focus-within svg { color: var(--accent); }
+    input:disabled { background: rgba(255,255,255,0.02); color: #52525b; cursor: not-allowed; }
+    .schema-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .schema-tab {
+      padding: 14px 12px; border-radius: 12px; cursor: pointer;
+      border: 1.5px solid var(--card-border); background: var(--input-bg);
+      transition: all 0.18s; text-align: center; user-select: none;
+    }
+    .schema-tab:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.03); }
+    .schema-tab.active {
+      border-color: var(--accent); background: rgba(99,102,241,0.12);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .schema-tab .tab-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .schema-tab.active .tab-title { color: var(--accent-hover); }
+    .schema-tab .tab-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .opt {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 12px 14px; border-radius: 12px;
+      border: 1px solid var(--card-border); background: var(--input-bg);
+    }
+    .opt.danger { border-color: rgba(239, 68, 68, 0.22); background: rgba(239, 68, 68, 0.05); }
+    .opt + .opt, .opt + .new-pw-box { margin-top: 10px; }
+    .new-pw-box.off { opacity: 0.4; pointer-events: none; }
+    .switch-info { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .switch-info svg { color: var(--muted); width: 20px; height: 20px; flex-shrink: 0; }
+    .switch-text .main { font-weight: 500; font-size: 0.88rem; color: var(--text); }
+    .switch-text .sub { font-size: 0.73rem; color: var(--muted); line-height: 1.35; }
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255,255,255,0.1); transition: .3s; border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: #a1a1aa; transition: .3s; border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--accent); }
+    #remove-pw:checked + .slider { background-color: var(--bad); }
+    input:checked + .slider:before { transform: translateX(20px); background-color: #fff; }
+    .footer-actions { margin-top: 4px; width: 100%; display: flex; gap: 10px; flex-wrap: wrap; }
+    button.primary {
+      flex: 1; min-width: 200px; padding: 14px 20px; border: none; border-radius: 16px;
+      background: var(--accent); color: #fff; font-weight: 600; font-size: 1rem;
+      cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
+      transition: all 0.2s ease; box-shadow: 0 4px 12px var(--accent-glow);
+      font-family: var(--font-sans);
+    }
+    button.primary svg { width: 20px; height: 20px; }
+    button.primary:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 6px 16px var(--accent-glow); }
+    button.primary:active:not(:disabled) { transform: translateY(1px); }
+    button.primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; filter: grayscale(50%); transform: none; }
+    button.secondary {
+      padding: 14px 18px; border-radius: 16px; border: 1px solid var(--card-border);
+      background: var(--input-bg); color: var(--text); font-weight: 600; font-size: 0.92rem;
+      cursor: pointer; display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+      transition: all 0.2s; font-family: var(--font-sans);
+    }
+    button.secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-hover); }
+    button.secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .log-container {
+      background: #000; border: 1px solid var(--card-border);
+      border-radius: 16px; margin-top: 14px; overflow: hidden; display: none; width: 100%;
+    }
+    .log-container.active { display: block; }
+    .log-header {
+      background: rgba(255, 255, 255, 0.05); padding: 8px 16px;
+      font-size: 0.75rem; color: var(--muted); border-bottom: 1px solid var(--card-border);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .mac-btn { width: 10px; height: 10px; border-radius: 50%; background: #3f3f46; }
+    .log {
+      padding: 16px; font-family: var(--font-mono); font-size: 12px;
+      color: var(--muted); max-height: 340px; overflow-y: auto;
+    }
+    .log > div { display: flex; gap: 8px; margin-bottom: 6px; word-break: break-all; }
+    .log > div::before { content: '›'; color: #52525b; flex-shrink: 0; }
+    .log > div.ok { color: var(--ok); } .log > div.ok::before { content: '✓'; color: var(--ok); }
+    .log > div.bad { color: var(--bad); } .log > div.bad::before { content: '✗'; color: var(--bad); }
+    .log > div.warn { color: var(--warn); } .log > div.warn::before { content: '!'; color: var(--warn); }
+    .log::-webkit-scrollbar { width: 8px; }
+    .log::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+    .rule-item {
+      border: 1px solid var(--card-border); background: var(--input-bg);
+      border-radius: 12px; padding: 12px 14px; margin-top: 10px;
+    }
+    .rule-item:first-child { margin-top: 0; }
+    .rule-bundle { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-hover); word-break: break-all; }
+    .rule-path { font-size: 0.82rem; color: var(--text); margin-top: 4px; word-break: break-all; }
+    .rule-file { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--card-border); }
+    .rule-file-name { font-size: 0.82rem; color: var(--muted); min-width: 0; word-break: break-all; }
+    .dl-btn { flex-shrink: 0; width: 36px; height: 36px; border: none; border-radius: 10px; background: rgba(99,102,241,0.18); color: var(--accent-hover); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+    .dl-btn:hover { background: rgba(99,102,241,0.3); }
+    .dl-btn svg { width: 18px; height: 18px; }
+    .rules-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 10px; }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100;
+      display: none; align-items: center; justify-content: center; padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal {
+      background: #18181b; border: 1px solid var(--card-border); border-radius: 16px;
+      width: 100%; max-width: 480px; padding: 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+    .modal h3 { margin: 0 0 16px; font-size: 1.05rem; font-weight: 600; }
+    .modal .row { display: flex; gap: 8px; margin-top: 14px; }
+    .modal .row button { flex: 1; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>3105 PATCH STUDIO <small>Multi-file · 1.0/2.0 · Rules ZIP · Verify 4 lớp</small></h1>
+    </header>
+
+    <!-- 1 -->
+    <section class="section">
+      <div class="section-label"><span class="section-num">1</span> Danh sách file</div>
+      <div class="card">
+        <div class="card-header">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <label class="title">File patch .3105 (chọn nhiều)</label>
+        </div>
+        <label class="drop" id="drop" for="file">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+          <span>Kéo thả nhiều file .3105 vào đây hoặc <b>bấm để chọn</b></span>
+        </label>
+        <input type="file" id="file" accept=".3105,application/octet-stream" multiple hidden />
+        <div id="files-empty" class="hint" style="display:block"></div>
+        <div class="file-list" id="file-list"></div>
+        <div class="bulk-bar" id="bulk-bar" style="display:none">
+          <div class="bulk-label">Hành động hàng loạt</div>
+          <button class="chip-btn" id="btn-rename-all">Đổi tên hàng loạt</button>
+          <button class="chip-btn" id="btn-auto-suffix">Tự thêm "-v1"</button>
+          <button class="chip-btn" id="btn-reset-name">Khôi phục tên gốc</button>
+          <button class="chip-btn danger" id="btn-clear-all">Xoá tất cả</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="section">
+      <div class="section-label"><span class="section-num">2</span> Mật khẩu</div>
+      <div class="card">
+        <div class="field-label">Mật khẩu cũ (để mở khóa file gốc)</div>
+        <div class="input-wrapper">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
+          <input type="password" id="pw" placeholder="Để trống nếu file không khóa" autocomplete="off" />
+        </div>
+        <div style="margin-top:12px">
+          <div class="field-label">Tên dự án mới (áp dụng cho tất cả)</div>
+          <div class="input-wrapper">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            <input type="text" id="project-name" placeholder="Để trống = giữ tên dự án cũ" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="section">
+      <div class="section-label"><span class="section-num">3</span> Chức năng</div>
+      <div class="card">
+        <div class="field-label">Định dạng đầu ra</div>
+        <div class="schema-tabs" id="schema-tabs">
+          <div class="schema-tab active" data-schema="1">
+            <div class="tab-title">⬇ 1.0</div>
+            <div class="tab-sub">Hạ cấp 2.0 → 1.0</div>
+          </div>
+          <div class="schema-tab" data-schema="2">
+            <div class="tab-title">⬆ 2.0</div>
+            <div class="tab-sub">Nâng cấp 1.0 → 2.0</div>
+          </div>
+        </div>
+        <input type="hidden" id="target-schema" value="1" />
+        <div class="opt danger">
+          <div class="switch-info">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--bad)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
+            <div class="switch-text">
+              <div class="main">Gỡ bỏ mật khẩu</div>
+              <div class="sub">Bật = file xuất ra không còn khóa</div>
+            </div>
+          </div>
+          <label class="switch"><input type="checkbox" id="remove-pw"><span class="slider"></span></label>
+        </div>
+        <div class="opt">
+          <div class="switch-info">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+            <div class="switch-text">
+              <div class="main">Hiển thị quy tắc</div>
+              <div class="sub">ZIP kèm main.txt + rules/ + rules_summary.txt</div>
+            </div>
+          </div>
+          <label class="switch"><input type="checkbox" id="show-rules"><span class="slider"></span></label>
+        </div>
+        <div class="new-pw-box" id="new-pw-wrapper" style="margin-top:10px">
+          <div class="field-label">Mật khẩu mới (áp dụng cho tất cả)</div>
+          <div class="input-wrapper">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            <input type="password" id="new-pw" placeholder="Để trống = giữ nguyên mật khẩu cũ" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="section" id="rules-section" style="display:none">
+      <div class="section-label"><span class="section-num">4</span> Quy tắc</div>
+      <div class="card" id="rules-card">
+        <div class="hint" id="rules-empty">Chọn file rồi bật Hiển thị quy tắc.</div>
+        <div id="rules-list"></div>
+      </div>
+    </section>
+
+    <section class="section footer-actions">
+      <button class="primary" id="go" disabled>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        XỬ LÝ & TẢI VỀ (0 FILE)
+      </button>
+      <button class="secondary" id="download-zip" disabled>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        Tải ZIP
+      </button>
+      <button class="secondary" id="download-rules" disabled>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        Tải Rules (ZIP)
+      </button>
+    </section>
+
+    <div class="log-container" id="log-wrapper">
+      <div class="log-header">
+        <div class="mac-btn" style="background:#ef4444"></div>
+        <div class="mac-btn" style="background:#eab308"></div>
+        <div class="mac-btn" style="background:#10b981"></div>
+        <span style="margin-left: 8px">Process Console</span>
+      </div>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="rename-modal">
+    <div class="modal">
+      <h3>Đổi tên hàng loạt</h3>
+      <div class="field-label">Dùng {n} cho số thứ tự, {name} cho tên gốc</div>
+      <div class="input-wrapper">
+        <input type="text" id="rename-pattern" placeholder="ví dụ: patch-{n}" />
+      </div>
+      <div class="row">
+        <button class="secondary" id="rename-cancel">Huỷ</button>
+        <button class="primary" id="rename-apply">Áp dụng</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+const state = { files: [], nextId: 1 };
+
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("file");
+const goBtn = document.getElementById("go");
+const zipBtn = document.getElementById("download-zip");
+const rulesBtn = document.getElementById("download-rules");
+const filesEmpty = document.getElementById("files-empty");
+const fileListEl = document.getElementById("file-list");
+const bulkBar = document.getElementById("bulk-bar");
+const removePwCheck = document.getElementById("remove-pw");
+const newPwInput = document.getElementById("new-pw");
+const newPwWrapper = document.getElementById("new-pw-wrapper");
+
+// ═══════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════
+function log(msg, cls) {
+  document.getElementById("log-wrapper").classList.add("active");
+  const el = document.getElementById("log");
+  const d = document.createElement("div");
+  if (cls) d.className = cls;
+  d.textContent = msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+function clearLog() {
+  document.getElementById("log").textContent = "";
+  document.getElementById("log-wrapper").classList.remove("active");
+}
+function fmtSize(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / 1024 / 1024).toFixed(2) + " MB";
+}
+function defaultOutName(srcName) { return srcName.replace(/(\.3105)?$/i, "") + "-v1.3105"; }
+function sanitizeDownloadName(raw, fallback) {
+  let name = (raw || "").trim();
+  if (!name) name = fallback;
+  name = name.replace(/[\\/:*?"<>|]+/g, "_");
+  if (!/\.3105$/i.test(name)) name += ".3105";
+  return name;
+}
+// Chuẩn hoá path cho ZIP: bỏ ký tự cấm, giữ dấu /
+function zipSafePath(p) {
+  return String(p || "")
+    .replace(/\\/g, "/")
+    .split("/")
+    .map(seg => seg.replace(/[<>:"|?*\x00-\x1f]/g, "_"))
+    .filter(Boolean)
+    .join("/");
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER FILE LIST
+// ═══════════════════════════════════════════════════════════════
+function renderFiles() {
+  fileListEl.innerHTML = "";
+  if (!state.files.length) {
+    filesEmpty.style.display = "block";
+    filesEmpty.innerHTML = `
+      <div style="color:var(--warn);font-weight:600;margin-bottom:4px">⚠️ Chưa có file nào</div>
+      <div>Kéo thả file .3105 vào ô phía trên — hoặc bấm vào ô để chọn</div>
+      <div style="color:var(--muted);font-size:0.78rem;margin-top:6px">Hỗ trợ chọn nhiều file 1 lúc · giữ Ctrl/Shift khi chọn</div>
+    `;
+    bulkBar.style.display = "none";
+    goBtn.disabled = true;
+    goBtn.textContent = "XỬ LÝ & TẢI VỀ (0 FILE)";
+    zipBtn.disabled = true;
+    rulesBtn.disabled = true;
+    return;
+  }
+  filesEmpty.style.display = "none";
+  bulkBar.style.display = "flex";
+  goBtn.disabled = false;
+  zipBtn.disabled = !state.files.some(f => f.output);
+  rulesBtn.disabled = !state.files.some(f => f.rulesInfo && f.rulesInfo.rules.length);
+  goBtn.textContent = `XỬ LÝ & TẢI VỀ (${state.files.length} FILE)`;
+
+  state.files.forEach((f, i) => {
+    const item = document.createElement("div");
+    item.className = "file-item";
+    const statusCls = f.status === "done" ? "done" : f.status === "error" ? "error" : f.status === "skipped" ? "skipped" : "pending";
+    const statusTxt = f.status === "done" ? "✓ Xong" : f.status === "error" ? "✗ Lỗi" : f.status === "skipped" ? "! Bỏ qua" : "Chờ";
+    item.innerHTML = `
+      <div class="idx">${i + 1}</div>
+      <div class="info">
+        <div class="fname">${f.originalName}</div>
+        <div class="fsize">${fmtSize(f.size)}${f.output ? " → " + fmtSize(f.output.length) : ""}</div>
+        <input class="rename-input" type="text" value="${f.name}" data-id="${f.id}" placeholder="Tên file mới…" />
+      </div>
+      <div class="status ${statusCls}">${statusTxt}</div>
+      <div class="actions">
+        <button class="icon-btn del" title="Xoá" data-del="${f.id}">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+        </button>
+      </div>`;
+    item.querySelector(".rename-input").addEventListener("input", (e) => {
+      const id = Number(e.target.dataset.id);
+      const ff = state.files.find(x => x.id === id);
+      if (ff) ff.name = e.target.value;
+    });
+    item.querySelector("[data-del]").addEventListener("click", (e) => {
+      const id = Number(e.currentTarget.dataset.del);
+      state.files = state.files.filter(x => x.id !== id);
+      if (!state.files.length) drop.classList.remove("has-file");
+      renderFiles();
+    });
+    fileListEl.appendChild(item);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ADD FILES
+// ═══════════════════════════════════════════════════════════════
+function addFiles(fileList) {
+  Array.from(fileList).forEach(f => {
+    if (!state.files.find(x => x.originalName === f.name && x.size === f.size)) {
+      state.files.push({
+        id: state.nextId++, file: f,
+        name: defaultOutName(f.name),
+        originalName: f.name, size: f.size,
+        status: "pending", output: null, error: null, rulesInfo: null,
+      });
+    }
+  });
+  drop.classList.add("has-file");
+  renderFiles();
+}
+
+drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+drop.addEventListener("drop", (e) => {
+  e.preventDefault(); drop.classList.remove("over");
+  if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener("change", () => {
+  if (fileInput.files.length) addFiles(fileInput.files);
+  fileInput.value = "";
+});
+
+// ═══════════════════════════════════════════════════════════════
+// BULK ACTIONS
+// ═══════════════════════════════════════════════════════════════
+document.getElementById("btn-clear-all").addEventListener("click", () => {
+  if (!state.files.length) return;
+  if (confirm("Xoá tất cả file?")) {
+    state.files = []; drop.classList.remove("has-file"); renderFiles();
+  }
+});
+document.getElementById("btn-reset-name").addEventListener("click", () => {
+  state.files.forEach(f => { f.name = defaultOutName(f.originalName); }); renderFiles();
+});
+document.getElementById("btn-auto-suffix").addEventListener("click", () => {
+  state.files.forEach(f => {
+    const base = f.name.replace(/\.3105$/i, "").replace(/-v\d+$/, "");
+    f.name = base + "-v1.3105";
+  });
+  renderFiles();
+});
+const renameModal = document.getElementById("rename-modal");
+const renamePattern = document.getElementById("rename-pattern");
+document.getElementById("btn-rename-all").addEventListener("click", () => {
+  renamePattern.value = "patch-{n}";
+  renameModal.classList.add("active"); renamePattern.focus();
+});
+document.getElementById("rename-cancel").addEventListener("click", () => renameModal.classList.remove("active"));
+document.getElementById("rename-apply").addEventListener("click", () => {
+  const pat = renamePattern.value || "{name}";
+  state.files.forEach((f, i) => {
+    let name = pat.replace(/\{n\}/g, String(i + 1).padStart(2, "0"))
+                  .replace(/\{name\}/g, f.originalName.replace(/\.3105$/i, ""));
+    f.name = sanitizeDownloadName(name, f.name);
+  });
+  renderFiles(); renameModal.classList.remove("active");
+});
+renameModal.addEventListener("click", (e) => { if (e.target === renameModal) renameModal.classList.remove("active"); });
+
+// ═══════════════════════════════════════════════════════════════
+// SCHEMA TABS
+// ═══════════════════════════════════════════════════════════════
+const schemaTabs = document.querySelectorAll(".schema-tab");
+const targetSchemaInput = document.getElementById("target-schema");
+schemaTabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    schemaTabs.forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    targetSchemaInput.value = tab.dataset.schema;
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+// PASSWORD UI
+// ═══════════════════════════════════════════════════════════════
+removePwCheck.addEventListener("change", (e) => {
+  if (e.target.checked) {
+    newPwInput.value = ""; newPwInput.disabled = true; newPwWrapper.classList.add("off");
+  } else {
+    newPwInput.disabled = false; newPwWrapper.classList.remove("off");
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// 3105 CORE — bplist reader/writer
+// ═══════════════════════════════════════════════════════════════
+const MAGIC = new TextEncoder().encode("3105PATCH\0");
+
+function readBplist(buf) {
+  const u8 = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  const td = new TextDecoder("utf-8");
+  if (td.decode(u8.slice(0, 8)) !== "bplist00") throw new Error("Không phải bplist00");
+  const view = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+  const trailerOff = u8.length - 32;
+  const offsetSize = u8[trailerOff + 6];
+  const refSize = u8[trailerOff + 7];
+  const numObjects = Number(view.getBigUint64(trailerOff + 8));
+  const topObject = Number(view.getBigUint64(trailerOff + 16));
+  const offsetTableOff = Number(view.getBigUint64(trailerOff + 24));
+  function readSizedInt(off, size) { let n = 0n; for (let i = 0; i < size; i++) n = (n << 8n) | BigInt(u8[off + i]); return Number(n); }
+  const offsets = [];
+  for (let i = 0; i < numObjects; i++) offsets.push(readSizedInt(offsetTableOff + i * offsetSize, offsetSize));
+  function parseObject(idx, stack = new Set()) {
+    if (stack.has(idx)) throw new Error("plist cycle");
+    stack.add(idx);
+    let off = offsets[idx];
+    const marker = u8[off++];
+    const type = marker >> 4;
+    let extra = marker & 0x0f;
+    function readLen() { if (extra !== 0x0f) return extra; const m = u8[off++]; const s = 1 << (m & 0x0f); const n = readSizedInt(off, s); off += s; return n; }
+    if (marker === 0x00) return null;
+    if (marker === 0x08) return false;
+    if (marker === 0x09) return true;
+    if (type === 0x1) return readSizedInt(off, 1 << extra);
+    if (type === 0x2) {
+      const size = 1 << extra;
+      if (size === 4) return view.getFloat32(off);
+      if (size === 8) return view.getFloat64(off);
+      throw new Error("float");
+    }
+    if (type === 0x3) {
+      const size = 1 << extra;
+      let abs;
+      if (size === 4) abs = view.getFloat32(off);
+      else if (size === 8) abs = view.getFloat64(off);
+      else throw new Error("date");
+      return { $date: abs };
+    }
+    if (type === 0x4) { const len = readLen(); return u8.slice(off, off + len); }
+    if (type === 0x5) { const len = readLen(); return td.decode(u8.slice(off, off + len)); }
+    if (type === 0x6) { const len = readLen(); return new TextDecoder("utf-16be").decode(u8.slice(off, off + len * 2)); }
+    if (type === 0xA) { const len = readLen(); const arr = []; for (let i = 0; i < len; i++) arr.push(parseObject(readSizedInt(off + i * refSize, refSize), new Set(stack))); return arr; }
+    if (type === 0xD) { const len = readLen(); const obj = {}; for (let i = 0; i < len; i++) obj[parseObject(readSizedInt(off + i * refSize, refSize), new Set(stack))] = parseObject(readSizedInt(off + (len + i) * refSize, refSize), new Set(stack)); return obj; }
+    throw new Error("marker 0x" + marker.toString(16));
+  }
+  return parseObject(topObject);
+}
+
+function writeBplist(root) {
+  const table = [];
+  const seen = new Map();
+  function add(v) {
+    if (v instanceof Uint8Array) {
+      if (seen.has(v)) return seen.get(v);
+      const i = table.length; table.push(v); seen.set(v, i); return i;
+    }
+    if (Array.isArray(v)) {
+      const childRefs = v.map(item => add(item));
+      const i = table.length; table.push({ __arrayRefs: childRefs, __len: v.length }); return i;
+    }
+    if (v && typeof v === "object" && typeof v.$date !== "number") {
+      const keys = Object.keys(v);
+      const keyRefs = keys.map(k => add(String(k)));
+      const valRefs = keys.map(k => add(v[k]));
+      const i = table.length; table.push({ __dictKeyRefs: keyRefs, __dictValRefs: valRefs, __len: keys.length }); return i;
+    }
+    const i = table.length; table.push(v); return i;
+  }
+  const top = add(root);
+  const refSize = table.length < 256 ? 1 : table.length < 65536 ? 2 : 4;
+  function putInt(arr, n, size) { for (let i = size - 1; i >= 0; i--) arr.push((n >>> (8 * i)) & 0xff); }
+  function markerLen(type, len) {
+    const out = [];
+    if (len < 15) out.push((type << 4) | len);
+    else if (len < 256) out.push((type << 4) | 0x0f, 0x10, len);
+    else if (len < 65536) { out.push((type << 4) | 0x0f, 0x11); putInt(out, len, 2); }
+    else { out.push((type << 4) | 0x0f, 0x12); putInt(out, len, 4); }
+    return out;
+  }
+  function joinBytes(head, body) {
+    const out = new Uint8Array(head.length + body.length);
+    out.set(head, 0); out.set(body, head.length); return out;
+  }
+  const encoded = table.map((v) => {
+    const b = [];
+    if (v === null) { b.push(0x00); return Uint8Array.from(b); }
+    if (v === false) { b.push(0x08); return Uint8Array.from(b); }
+    if (v === true)  { b.push(0x09); return Uint8Array.from(b); }
+    if (v && typeof v === "object" && typeof v.$date === "number") {
+      b.push(0x33);
+      const tmp = new Uint8Array(8); new DataView(tmp.buffer).setFloat64(0, v.$date);
+      return joinBytes(Uint8Array.from(b), tmp);
+    }
+    if (typeof v === "number" && Number.isInteger(v)) {
+      if (v >= 0 && v < 256) { b.push(0x10); putInt(b, v, 1); }
+      else if (v >= 0 && v < 65536) { b.push(0x11); putInt(b, v, 2); }
+      else if (v >= 0 && v <= 0xffffffff) { b.push(0x12); putInt(b, v, 4); }
+      else { b.push(0x13); putInt(b, v, 8); }
+      return Uint8Array.from(b);
+    }
+    if (typeof v === "number") {
+      b.push(0x23);
+      const tmp = new Uint8Array(8); new DataView(tmp.buffer).setFloat64(0, v);
+      return joinBytes(Uint8Array.from(b), tmp);
+    }
+    if (typeof v === "string") {
+      const enc = new TextEncoder().encode(v);
+      return joinBytes(Uint8Array.from(markerLen(0x5, enc.length)), enc);
+    }
+    if (v instanceof Uint8Array) return joinBytes(Uint8Array.from(markerLen(0x4, v.length)), v);
+    if (v && v.__arrayRefs) {
+      const h = markerLen(0xA, v.__len);
+      for (const r of v.__arrayRefs) putInt(h, r, refSize);
+      return Uint8Array.from(h);
+    }
+    if (v && v.__dictKeyRefs) {
+      const h = markerLen(0xD, v.__len);
+      for (const r of v.__dictKeyRefs) putInt(h, r, refSize);
+      for (const r of v.__dictValRefs) putInt(h, r, refSize);
+      return Uint8Array.from(h);
+    }
+    throw new Error("Không encode được: " + String(v));
+  });
+  const header = new TextEncoder().encode("bplist00");
+  const offsets = []; let pos = header.length;
+  for (const c of encoded) { offsets.push(pos); pos += c.length; }
+  const offsetSize = pos < 256 ? 1 : pos < 65536 ? 2 : 4;
+  const ot = []; for (const o of offsets) putInt(ot, o, offsetSize);
+  const trailer = new Uint8Array(32);
+  trailer[6] = offsetSize; trailer[7] = refSize;
+  const dv = new DataView(trailer.buffer);
+  dv.setBigUint64(8, BigInt(table.length));
+  dv.setBigUint64(16, BigInt(top));
+  dv.setBigUint64(24, BigInt(pos));
+  const out = new Uint8Array(pos + ot.length + 32);
+  out.set(header, 0); let p = header.length;
+  for (const c of encoded) { out.set(c, p); p += c.length; }
+  out.set(ot, p); out.set(trailer, p + ot.length);
+  return out;
+}
+
+function encodeBplistString(str) {
+  const enc = new TextEncoder().encode(str);
+  const out = [];
+  function putInt(arr, n, size) { for (let i = size - 1; i >= 0; i--) arr.push((n >>> (8 * i)) & 0xff); }
+  if (enc.length < 15) out.push(0x50 | enc.length);
+  else if (enc.length < 256) { out.push(0x5f, 0x10, enc.length); }
+  else if (enc.length < 65536) { out.push(0x5f, 0x11); putInt(out, enc.length, 2); }
+  else { out.push(0x5f, 0x12); putInt(out, enc.length, 4); }
+  out.push(...enc);
+  return Uint8Array.from(out);
+}
+
+function replaceBplistProjectName(buf, newName) {
+  const name = (newName || "").trim();
+  if (!name) return buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  const nameBytes = new TextEncoder().encode(name);
+  if (nameBytes.length === 0 || nameBytes.length > 120) throw new Error("Tên dự án 1–120 byte.");
+
+  const u8 = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  const td = new TextDecoder("utf-8");
+  if (td.decode(u8.slice(0, 8)) !== "bplist00") throw new Error("Payload không phải bplist00");
+  const view = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+  const trailerOff = u8.length - 32;
+  const offsetSize = u8[trailerOff + 6];
+  const refSize = u8[trailerOff + 7];
+  const numObjects = Number(view.getBigUint64(trailerOff + 8));
+  const topObject = Number(view.getBigUint64(trailerOff + 16));
+  const offsetTableOff = Number(view.getBigUint64(trailerOff + 24));
+  function readSizedInt(off, size) { let n = 0n; for (let i = 0; i < size; i++) n = (n << 8n) | BigInt(u8[off + i]); return Number(n); }
+  const offsets = [];
+  for (let i = 0; i < numObjects; i++) offsets.push(readSizedInt(offsetTableOff + i * offsetSize, offsetSize));
+  const sortedOff = offsets.map((o, i) => ({ o, i })).sort((a, b) => a.o - b.o);
+  function objectRaw(idx) {
+    const start = offsets[idx];
+    let end = offsetTableOff;
+    for (const item of sortedOff) { if (item.o > start && item.o < end) end = item.o; }
+    return u8.slice(start, end);
+  }
+  function parseRefAt(off) { return readSizedInt(off, refSize); }
+  function inspect(idx, stack = new Set()) {
+    if (stack.has(idx)) throw new Error("plist cycle");
+    stack.add(idx);
+    let off = offsets[idx];
+    const marker = u8[off++];
+    const type = marker >> 4;
+    let extra = marker & 0x0f;
+    function readLen() {
+      if (extra !== 0x0f) return extra;
+      const m = u8[off++]; const s = 1 << (m & 0x0f); const n = readSizedInt(off, s); off += s; return n;
+    }
+    if (type === 0x5) { const len = readLen(); return { kind: "str", value: td.decode(u8.slice(off, off + len)) }; }
+    if (type === 0x6) { const len = readLen(); return { kind: "str", value: new TextDecoder("utf-16be").decode(u8.slice(off, off + len * 2)) }; }
+    if (type === 0xD) {
+      const len = readLen();
+      const keys = []; const vals = [];
+      for (let i = 0; i < len; i++) keys.push(parseRefAt(off + i * refSize));
+      for (let i = 0; i < len; i++) vals.push(parseRefAt(off + (len + i) * refSize));
+      return { kind: "dict", keys, vals };
+    }
+    return { kind: "other" };
+  }
+  const root = inspect(topObject);
+  if (root.kind !== "dict") throw new Error("Payload không phải dictionary");
+  let projectIdx = null;
+  for (let i = 0; i < root.keys.length; i++) {
+    const k = inspect(root.keys[i]);
+    if (k.kind === "str" && k.value === "project") { projectIdx = root.vals[i]; break; }
+  }
+  if (projectIdx == null) throw new Error("Không thấy project");
+  const project = inspect(projectIdx);
+  if (project.kind !== "dict") throw new Error("project không phải dict");
+  let nameIdx = null; let oldName = "";
+  for (let i = 0; i < project.keys.length; i++) {
+    const k = inspect(project.keys[i]);
+    if (k.kind === "str" && k.value === "name") {
+      nameIdx = project.vals[i];
+      const nv = inspect(nameIdx);
+      if (nv.kind !== "str") throw new Error("Tên không phải chuỗi");
+      oldName = nv.value;
+      break;
+    }
+  }
+  if (nameIdx == null) throw new Error("Không thấy name");
+  if (oldName === name) return u8;
+
+  const newObj = encodeBplistString(name);
+  const encoded = [];
+  for (let i = 0; i < numObjects; i++) encoded.push(i === nameIdx ? newObj : objectRaw(i));
+  const header = new TextEncoder().encode("bplist00");
+  const newOffsets = []; let pos = header.length;
+  for (const c of encoded) { newOffsets.push(pos); pos += c.length; }
+  const newOffsetSize = pos < 256 ? 1 : pos < 65536 ? 2 : 4;
+  function putInt(arr, n, size) { for (let i = size - 1; i >= 0; i--) arr.push((n >>> (8 * i)) & 0xff); }
+  const ot = []; for (const o of newOffsets) putInt(ot, o, newOffsetSize);
+  const trailer = new Uint8Array(32);
+  trailer[6] = newOffsetSize; trailer[7] = refSize;
+  const dv = new DataView(trailer.buffer);
+  dv.setBigUint64(8, BigInt(numObjects));
+  dv.setBigUint64(16, BigInt(topObject));
+  dv.setBigUint64(24, BigInt(pos));
+  const out = new Uint8Array(pos + ot.length + 32);
+  out.set(header, 0); let p = header.length;
+  for (const c of encoded) { out.set(c, p); p += c.length; }
+  out.set(ot, p); out.set(trailer, p + ot.length);
+  return { bytes: out, oldName };
+}
+
+function concatBytes(...parts) { const len = parts.reduce((a, b) => a + b.length, 0); const out = new Uint8Array(len); let o = 0; for (const p of parts) { out.set(p, o); o += p.length; } return out; }
+function bytesEq(a, b) { if (a.length !== b.length) return false; let x = 0; for (let i = 0; i < a.length; i++) x |= a[i] ^ b[i]; return x === 0; }
+async function sha256(data) { return new Uint8Array(await crypto.subtle.digest("SHA-256", data)); }
+async function pbkdf2(password, salt, iterations) { const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]); return new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt, iterations }, key, 256)); }
+async function aesGcmOpen(combined, keyBytes, aad) { const nonce = combined.slice(0, 12); const rest = combined.slice(12); const key = await crypto.subtle.importKey("raw", keyBytes, "AES-GCM", false, ["decrypt"]); return new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: nonce, additionalData: aad, tagLength: 128 }, key, rest)); }
+async function aesGcmSeal(plain, keyBytes, aad) { const nonce = crypto.getRandomValues(new Uint8Array(12)); const key = await crypto.subtle.importKey("raw", keyBytes, "AES-GCM", false, ["encrypt"]); return concatBytes(nonce, new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv: nonce, additionalData: aad, tagLength: 128 }, key, plain))); }
+function aadKey(id, v) { return new TextEncoder().encode("3105PATCH/v" + v + "/key/" + id); }
+function aadPayload(id, v) { return new TextEncoder().encode("3105PATCH/v" + v + "/payload/" + id); }
+function asBytes(v) { if (v instanceof Uint8Array) return v; throw new Error("kỳ vọng Data"); }
+function canonPackageID(raw) {
+  if (raw instanceof Uint8Array && raw.length === 16) {
+    const hex = [...raw].map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+    return hex.slice(0, 8) + "-" + hex.slice(8, 12) + "-" + hex.slice(12, 16) + "-" + hex.slice(16, 20) + "-" + hex.slice(20);
+  }
+  const s = String(raw).trim().toUpperCase();
+  const hex = s.replace(/[^0-9A-F]/g, "");
+  if (hex.length === 32) return hex.slice(0, 8) + "-" + hex.slice(8, 12) + "-" + hex.slice(12, 16) + "-" + hex.slice(16, 20) + "-" + hex.slice(20);
+  return s;
+}
+
+function extractRules(payloadObj) {
+  const project = payloadObj && payloadObj.project ? payloadObj.project : payloadObj;
+  const rules = (project && project.rules) || [];
+  return {
+    name: project && project.name ? String(project.name) : "",
+    rules: rules.map((r, i) => ({
+      i,
+      bundleID: r.bundleID || r.bundleId || "",
+      relativePath: r.relativePath || "",
+      filename: r.replacementFilename || "file.bin",
+      data: r.replacementData instanceof Uint8Array ? r.replacementData : null
+    }))
+  };
+}
+
+async function openPackage(fileBuf, oldPassword) {
+  const u8 = new Uint8Array(fileBuf);
+  if (u8.length < MAGIC.length + 40) throw new Error("File quá ngắn");
+  for (let i = 0; i < MAGIC.length; i++) if (u8[i] !== MAGIC[i]) throw new Error("Không phải file 3105PATCH");
+  const envelope = readBplist(u8.slice(MAGIC.length));
+  const schema = envelope.schemaVersion;
+  const packageID = canonPackageID(envelope.packageID);
+  let contentKey; let originalWrappingKey = null;
+  if (envelope.isPasswordProtected) {
+    if (!oldPassword) throw new Error("File đang khóa — cần Mật Khẩu Cũ.");
+    const salt = asBytes(envelope.kdfSalt);
+    const iterations = envelope.kdfIterations | 0;
+    originalWrappingKey = await pbkdf2(oldPassword, salt, iterations);
+    const keyVer = envelope.keyAADVersion != null ? envelope.keyAADVersion : schema;
+    try {
+      contentKey = await aesGcmOpen(asBytes(envelope.wrappedContentKey), originalWrappingKey, aadKey(packageID, keyVer));
+    } catch {
+      throw new Error("Sai mật khẩu CŨ hoặc dữ liệu hỏng!");
+    }
+  } else {
+    contentKey = asBytes(envelope.publicContentKey);
+  }
+  if (contentKey.length !== 32) throw new Error("Content key không hợp lệ (32 bytes)");
+  const fp = await sha256(contentKey);
+  if (!bytesEq(fp, asBytes(envelope.keyFingerprint))) throw new Error("keyFingerprint không khớp");
+  const payloadBytes = await aesGcmOpen(asBytes(envelope.encryptedPayload), contentKey, aadPayload(packageID, schema));
+  let payloadObj = null;
+  try { payloadObj = readBplist(payloadBytes); } catch { payloadObj = null; }
+  return { envelope, schema, packageID, contentKey, originalWrappingKey, payloadBytes, payloadObj };
+}
+
+async function convert(fileBuf, oldPassword, newPassword, isRemovePassword, newProjectName, fileTag, targetSchema) {
+  const opened = await openPackage(fileBuf, oldPassword);
+  const { envelope, schema, packageID, contentKey, originalWrappingKey } = opened;
+  let payload = opened.payloadBytes;
+
+  log(`[${fileTag}] schema nguồn=${schema} · target=${targetSchema}`);
+  log(`[${fileTag}] Mở khóa OK (${payload.length} byte)`);
+
+  if (opened.payloadObj) {
+    const info = extractRules(opened.payloadObj);
+    if (info.name) log(`[${fileTag}] Tên dự án gốc: ${info.name}`);
+  }
+
+  const wantedName = (newProjectName || "").trim();
+  if (wantedName) {
+    const renamed = replaceBplistProjectName(payload, wantedName);
+    payload = renamed.bytes || renamed;
+    log(`[${fileTag}] Đổi tên: ${renamed.oldName || "?"} → ${wantedName}`, "ok");
+    let checkName;
+    try { checkName = readBplist(payload); }
+    catch (e) { throw new Error("Payload hỏng sau khi sửa tên: " + (e.message || e)); }
+    const now = checkName && checkName.project && checkName.project.name;
+    if (now !== wantedName) throw new Error("Tên sau sửa không khớp: " + now);
+  }
+
+  const targetKeyVer = targetSchema;
+  const targetPayloadVer = targetSchema;
+
+  let finalIsProtected = false;
+  let finalWrappedKey = null;
+  let finalSalt = null;
+  let finalIterations = null;
+  let finalWrappingKey = null;
+
+  if (isRemovePassword) {
+    log(`[${fileTag}] XÓA MẬT KHẨU.`, "warn");
+    finalIsProtected = false;
+  } else if (newPassword) {
+    log(`[${fileTag}] Đặt MẬT KHẨU MỚI.`);
+    finalIsProtected = true;
+    finalSalt = crypto.getRandomValues(new Uint8Array(16));
+    finalIterations = 100000;
+    finalWrappingKey = await pbkdf2(newPassword, finalSalt, finalIterations);
+  } else if (envelope.isPasswordProtected) {
+    log(`[${fileTag}] Giữ MẬT KHẨU CŨ.`);
+    finalIsProtected = true;
+    finalSalt = asBytes(envelope.kdfSalt);
+    finalIterations = envelope.kdfIterations | 0;
+    finalWrappingKey = originalWrappingKey;
+  } else {
+    finalIsProtected = false;
+  }
+
+  if (finalIsProtected) {
+    finalWrappedKey = await aesGcmSeal(contentKey, finalWrappingKey, aadKey(packageID, targetKeyVer));
+  }
+  const newEncPayload = await aesGcmSeal(payload, contentKey, aadPayload(packageID, targetPayloadVer));
+
+  const newEnv = {};
+  newEnv.schemaVersion = targetSchema;
+  if (targetSchema === 2) newEnv.keyAADVersion = 2;
+  newEnv.packageID = packageID;
+  newEnv.isPasswordProtected = finalIsProtected;
+  if (finalIsProtected) {
+    newEnv.kdfSalt = finalSalt;
+    newEnv.kdfIterations = finalIterations;
+    newEnv.wrappedContentKey = finalWrappedKey;
+  } else {
+    newEnv.publicContentKey = contentKey;
+  }
+  newEnv.keyFingerprint = await sha256(contentKey);
+  newEnv.encryptedPayload = newEncPayload;
+
+  const body = writeBplist(newEnv);
+  const out = concatBytes(MAGIC, body);
+
+  // VERIFY 4 lớp
+  let check;
+  try { check = readBplist(out.slice(MAGIC.length)); }
+  catch (e) { throw new Error("Envelope hỏng sau khi build: " + (e.message || e)); }
+  if (check.schemaVersion !== targetSchema) throw new Error(`Verify: schema = ${check.schemaVersion}`);
+  if (targetSchema === 2 && check.keyAADVersion !== 2) throw new Error("Verify: schema 2 thiếu keyAADVersion");
+  if (targetSchema === 1 && check.keyAADVersion != null) throw new Error("Verify: schema 1 còn keyAADVersion");
+  if (String(check.packageID).toUpperCase() !== packageID) throw new Error("Verify: packageID lệch");
+
+  let ck;
+  if (check.isPasswordProtected) {
+    const pw = newPassword || oldPassword;
+    const wrapKey = await pbkdf2(pw, asBytes(check.kdfSalt), check.kdfIterations | 0);
+    try { ck = await aesGcmOpen(asBytes(check.wrappedContentKey), wrapKey, aadKey(packageID, targetKeyVer)); }
+    catch { throw new Error("Verify: unwrap key fail"); }
+  } else {
+    ck = asBytes(check.publicContentKey);
+  }
+  if (!bytesEq(ck, contentKey)) throw new Error("Verify: content key lệch");
+  let pt;
+  try { pt = await aesGcmOpen(asBytes(check.encryptedPayload), ck, aadPayload(packageID, targetPayloadVer)); }
+  catch { throw new Error("Verify: decrypt payload fail"); }
+  if (!bytesEq(pt, payload)) throw new Error("Verify: payload lệch");
+  try { readBplist(pt); } catch (e) { throw new Error("Payload không phải bplist: " + (e.message || e)); }
+
+  log(`[${fileTag}] Verify OK · schema=${targetSchema}`, "ok");
+  return out;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RULES UI — hỗ trợ NHIỀU file
+// ═══════════════════════════════════════════════════════════════
+function renderAllRules(infos) {
+  const list = document.getElementById("rules-list");
+  const empty = document.getElementById("rules-empty");
+  list.innerHTML = "";
+  if (!infos || !infos.length) {
+    empty.style.display = "block";
+    empty.textContent = "Không có quy tắc.";
+    return;
+  }
+  empty.style.display = "none";
+
+  const totalRules = infos.reduce((a, x) => a + (x.rules ? x.rules.length : 0), 0);
+  const header = document.createElement("div");
+  header.className = "rules-meta";
+  header.style.marginBottom = "14px";
+  header.style.fontSize = "0.85rem";
+  header.innerHTML = `<strong style="color:var(--text)">${infos.length} file · ${totalRules} quy tắc tổng cộng</strong>`;
+  list.appendChild(header);
+
+  infos.forEach((info, fileIdx) => {
+    const block = document.createElement("div");
+    block.style.marginBottom = "16px";
+    block.style.padding = "12px 14px";
+    block.style.border = "1px solid var(--card-border)";
+    block.style.borderRadius = "12px";
+    block.style.background = "rgba(255,255,255,0.02)";
+
+    const hdr = document.createElement("div");
+    hdr.style.fontSize = "0.82rem";
+    hdr.style.fontWeight = "700";
+    hdr.style.color = "var(--text)";
+    hdr.style.marginBottom = "8px";
+    hdr.style.wordBreak = "break-all";
+    hdr.innerHTML = `📄 [${fileIdx + 1}] ${info.__fileTag || "(không tên)"} <span style="color:var(--muted);font-weight:500">· ${(info.rules || []).length} rule</span>`;
+    block.appendChild(hdr);
+
+    if (info.__error) {
+      const err = document.createElement("div");
+      err.style.fontSize = "0.78rem";
+      err.style.color = "var(--bad)";
+      err.textContent = "✗ " + info.__error;
+      block.appendChild(err);
+      list.appendChild(block);
+      return;
+    }
+    if (info.name) {
+      const nm = document.createElement("div");
+      nm.style.fontSize = "0.78rem";
+      nm.style.color = "var(--muted)";
+      nm.style.marginBottom = "8px";
+      nm.innerHTML = `Dự án: <strong style="color:var(--accent-hover)">${info.name}</strong>`;
+      block.appendChild(nm);
+    }
+    (info.rules || []).forEach((r) => {
+      const item = document.createElement("div");
+      item.className = "rule-item";
+      item.innerHTML = `
+        <div class="rule-bundle">${r.bundleID || "(không có bundle ID)"}</div>
+        <div class="rule-path">${r.relativePath || "(không có đường dẫn)"}</div>
+        <div class="rule-file">
+          <div class="rule-file-name">${r.filename}${r.data ? " · " + (r.data.length / 1024).toFixed(1) + " KB" : ""}</div>
+          <button type="button" class="dl-btn" title="Tải file thay thế" ${r.data ? "" : "disabled"}>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          </button>
+        </div>`;
+      const btn = item.querySelector(".dl-btn");
+      btn.addEventListener("click", () => {
+        if (!r.data) return;
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([r.data], { type: "application/octet-stream" }));
+        a.download = r.filename || "replacement.bin";
+        a.click(); URL.revokeObjectURL(a.href);
+      });
+      block.appendChild(item);
+    });
+    list.appendChild(block);
+  });
+}
+
+async function refreshAllRules() {
+  const list = document.getElementById("rules-list");
+  const empty = document.getElementById("rules-empty");
+  list.innerHTML = "";
+  if (!state.files.length) {
+    empty.style.display = "block";
+    empty.textContent = "Chưa có file nào — kéo thả file vào MỤC 1 trước.";
+    return;
+  }
+  empty.style.display = "block";
+  empty.textContent = `Đang trích rules từ ${state.files.length} file...`;
+
+  const pw = document.getElementById("pw").value;
+  const allInfos = [];
+
+  for (let i = 0; i < state.files.length; i++) {
+    const f = state.files[i];
+    try {
+      const buf = await f.file.arrayBuffer();
+      const opened = await openPackage(buf, pw);
+      if (opened.payloadObj) {
+        const info = extractRules(opened.payloadObj);
+        info.__fileTag = f.originalName;
+        f.rulesInfo = info;
+        allInfos.push(info);
+      } else {
+        allInfos.push({ __fileTag: f.originalName, name: "", rules: [], __error: "Giải mã payload nhưng không đọc được quy tắc" });
+      }
+    } catch (e) {
+      allInfos.push({ __fileTag: f.originalName, name: "", rules: [], __error: e.message || String(e) });
+    }
+  }
+  if (!allInfos.length) {
+    empty.style.display = "block";
+    empty.textContent = "Không trích được rules từ file nào.";
+    return;
+  }
+  renderAllRules(allInfos);
+  rulesBtn.disabled = !state.files.some(f => f.rulesInfo && f.rulesInfo.rules.length);
+}
+
+document.getElementById("show-rules").addEventListener("change", async () => {
+  const section = document.getElementById("rules-section");
+  if (!document.getElementById("show-rules").checked) {
+    section.style.display = "none"; return;
+  }
+  section.style.display = "block";
+  await refreshAllRules();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// RUN
+// ═══════════════════════════════════════════════════════════════
+goBtn.addEventListener("click", async () => {
+  if (!state.files.length) {
+    clearLog();
+    log("⚠️ Chưa có file nào trong danh sách.", "warn");
+    log("→ Hãy kéo thả file .3105 vào ô phía trên (MỤC 1) trước.", "warn");
+    return;
+  }
+  clearLog();
+  goBtn.disabled = true; zipBtn.disabled = true; rulesBtn.disabled = true;
+  log(`📦 Sẽ xử lý ${state.files.length} file.`);
+
+  const oldPw = document.getElementById("pw").value;
+  const newPw = document.getElementById("new-pw").value;
+  const removeFlag = removePwCheck.checked;
+  const newProjectName = document.getElementById("project-name").value;
+  const targetSchema = Number(document.getElementById("target-schema").value) || 1;
+  const wantRules = document.getElementById("show-rules").checked;
+
+  log(`Chế độ output: schema ${targetSchema}.0 · rules=${wantRules}`);
+
+  let ok = 0, err = 0;
+
+  for (let i = 0; i < state.files.length; i++) {
+    const f = state.files[i];
+    f.status = "pending"; f.output = null; f.error = null; f.rulesInfo = null;
+    renderFiles();
+    log(`━━━ [${i + 1}/${state.files.length}] ${f.originalName} ━━━`);
+    try {
+      const buf = await f.file.arrayBuffer();
+      if (wantRules) {
+        try {
+          const opened = await openPackage(buf, oldPw);
+          if (opened.payloadObj) {
+            const info = extractRules(opened.payloadObj);
+            info.__fileTag = f.originalName;
+            f.rulesInfo = info;
+          }
+        } catch (e) {
+          log(`[${f.originalName}] Không trích được rules: ${e.message}`, "warn");
+        }
+      }
+      const out = await convert(buf, oldPw, newPw, removeFlag, newProjectName, f.originalName, targetSchema);
+      f.output = out;
+      f.status = "done";
+      ok++;
+      const name = sanitizeDownloadName(f.name, defaultOutName(f.originalName));
+      f.name = name;
+      log(`[${f.originalName}] → ${name} (${(out.length / 1024).toFixed(1)} KB)`, "ok");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([out], { type: "application/octet-stream" }));
+      a.download = name; a.click();
+      URL.revokeObjectURL(a.href);
+      await new Promise(r => setTimeout(r, 150));
+    } catch (e) {
+      f.status = "error"; f.error = e.message || String(e); err++;
+      log(`[${f.originalName}] LỖI: ${f.error}`, "bad");
+    }
+    renderFiles();
+  }
+
+  const total = state.files.length;
+  log(`━━━ HOÀN TẤT: ${ok}/${total} thành công · ${err} lỗi ━━━`, ok > 0 ? "ok" : "bad");
+  if (ok < total) log(`⚠️ Còn ${total - ok} file chưa xử lý được — xem log phía trên.`, "warn");
+  goBtn.disabled = false;
+  zipBtn.disabled = !state.files.some(f => f.output);
+  if (wantRules) await refreshAllRules();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// ZIP BUILDER — cấu trúc PKZIP 2.0 chuẩn (fix lỗi Windows)
+// ═══════════════════════════════════════════════════════════════
+const ZIP_CRC_TABLE = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+function crc32(data) {
+  let c = 0xffffffff;
+  for (let i = 0; i < data.length; i++) c = ZIP_CRC_TABLE[(c ^ data[i]) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+function u16le(n) { return [n & 0xff, (n >> 8) & 0xff]; }
+function u32le(n) { n = n >>> 0; return [n & 0xff, (n >> 8) & 0xff, (n >> 16) & 0xff, (n >> 24) & 0xff]; }
+function dosTime(d) { return ((d.getHours() & 0x1f) << 11) | ((d.getMinutes() & 0x3f) << 5) | (Math.floor(d.getSeconds() / 2) & 0x1f); }
+function dosDate(d) { return (((d.getFullYear() - 1980) & 0x7f) << 9) | (((d.getMonth() + 1) & 0x0f) << 5) | (d.getDate() & 0x1f); }
+
+function buildZip(entries) {
+  const enc = new TextEncoder();
+  const parts = [];
+  const central = [];
+  let offset = 0;
+  const now = new Date();
+  const timeVal = dosTime(now);
+  const dateVal = dosDate(now);
+
+  for (const e of entries) {
+    const nameBytes = enc.encode(e.name);
+    const data = e.data instanceof Uint8Array ? e.data : new Uint8Array(e.data);
+    const crc = crc32(data);
+    const size = data.length;
+
+    const local = new Uint8Array([
+      0x50, 0x4b, 0x03, 0x04,
+      0x14, 0x00, 0x00, 0x00,
+      0x00, 0x00,
+      ...u16le(timeVal), ...u16le(dateVal),
+      ...u32le(crc),
+      ...u32le(size), ...u32le(size),
+      ...u16le(nameBytes.length), ...u16le(0),
+    ]);
+    parts.push(local, nameBytes, data);
+
+    const cd = new Uint8Array([
+      0x50, 0x4b, 0x01, 0x02,
+      0x14, 0x00, 0x14, 0x00,
+      0x00, 0x00,
+      0x00, 0x00,
+      ...u16le(timeVal), ...u16le(dateVal),
+      ...u32le(crc),
+      ...u32le(size), ...u32le(size),
+      ...u16le(nameBytes.length),
+      ...u16le(0), ...u16le(0),
+      ...u16le(0), ...u16le(0),
+      ...u32le(0),
+      ...u32le(offset),
+    ]);
+    central.push(cd, nameBytes);
+
+    offset += local.length + nameBytes.length + data.length;
+  }
+
+  const centralStart = offset;
+  let centralSize = 0;
+  for (const c of central) centralSize += c.length;
+
+  const eocd = new Uint8Array([
+    0x50, 0x4b, 0x05, 0x06,
+    ...u16le(0), ...u16le(0),
+    ...u16le(entries.length), ...u16le(entries.length),
+    ...u32le(centralSize), ...u32le(centralStart),
+    ...u16le(0),
+  ]);
+
+  const all = [...parts, ...central, eocd];
+  let total = 0;
+  for (const p of all) total += p.length;
+  const out = new Uint8Array(total);
+  let o = 0;
+  for (const p of all) { out.set(p, o); o += p.length; }
+  return out;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DOWNLOAD ZIP — file + rules theo cấu trúc iOS path + main.txt
+// ═══════════════════════════════════════════════════════════════
+zipBtn.addEventListener("click", async () => {
+  const ready = state.files.filter(f => f.output);
+  if (!ready.length) return;
+  zipBtn.disabled = true;
+  try {
+    const wantRules = document.getElementById("show-rules").checked;
+    const entries = [];
+    const now = new Date();
+
+    let mainTxt = `# 3105 PATCH STUDIO — MAIN\n`;
+    mainTxt += `# Thời gian: ${now.toLocaleString("vi-VN")}\n`;
+    mainTxt += `# Schema: ${document.getElementById("target-schema").value}.0\n`;
+    mainTxt += `# Số file: ${ready.length}\n`;
+    mainTxt += `═══════════════════════════════════════════════════════════\n\n`;
+
+    for (let i = 0; i < ready.length; i++) {
+      const f = ready[i];
+      const fname = sanitizeDownloadName(f.name, defaultOutName(f.originalName));
+      mainTxt += `[${String(i + 1).padStart(2, "0")}] ${fname}\n`;
+      mainTxt += `     Tên gốc   : ${f.originalName}\n`;
+      mainTxt += `     Kích thước: ${(f.output.length / 1024).toFixed(1)} KB\n`;
+      if (f.rulesInfo && f.rulesInfo.name) mainTxt += `     Dự án     : ${f.rulesInfo.name}\n`;
+      mainTxt += `\n`;
+
+      // File .3105 ở gốc ZIP
+      entries.push({ name: fname, data: f.output });
+
+      // Rules
+      if (wantRules && f.rulesInfo && f.rulesInfo.rules.length) {
+        const folderBase = zipSafePath(fname.replace(/\.3105$/i, ""));
+        f.rulesInfo.rules.forEach((r, ri) => {
+          mainTxt += `  Rule ${ri + 1}:\n`;
+          mainTxt += `    bundleID : ${r.bundleID || "(trống)"}\n`;
+          mainTxt += `    path     : ${r.relativePath || "(trống)"}\n`;
+          mainTxt += `    filename : ${r.filename}\n`;
+          mainTxt += `    size     : ${r.data ? (r.data.length / 1024).toFixed(1) + " KB" : "N/A"}\n`;
+          mainTxt += `    zip entry: ${folderBase}/${r.relativePath || ""}\n\n`;
+          if (r.data) {
+            const inner = r.relativePath ? zipSafePath(r.relativePath) : r.filename;
+            const zipPath = `${folderBase}/${inner}`;
+            entries.push({ name: zipPath, data: r.data });
+          }
+        });
+        mainTxt += `───────────────────────────────────────────\n\n`;
+      } else {
+        mainTxt += `───────────────────────────────────────────\n\n`;
+      }
+    }
+
+    entries.push({ name: "main.txt", data: new TextEncoder().encode(mainTxt) });
+
+    const zip = buildZip(entries);
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([zip], { type: "application/zip" }));
+    a.download = `3105-${wantRules ? "with-rules" : "patches"}-${Date.now()}.zip`;
+    a.click(); URL.revokeObjectURL(a.href);
+    log(`Đã tải ZIP (${entries.length} entries)`, "ok");
+    entries.slice(0, 20).forEach(e => log(`  · ${e.name}`, "ok"));
+    if (entries.length > 20) log(`  ... và ${entries.length - 20} entry khác`, "ok");
+  } catch (e) {
+    log("Lỗi ZIP: " + (e.message || e), "bad");
+  } finally {
+    zipBtn.disabled = false;
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// DOWNLOAD RULES ONLY
+// ═══════════════════════════════════════════════════════════════
+rulesBtn.addEventListener("click", async () => {
+  if (!state.files.length) return;
+  rulesBtn.disabled = true;
+  try {
+    const ready = state.files.filter(f => f.rulesInfo && f.rulesInfo.rules.length);
+    if (!ready.length) {
+      alert("Chưa có rule nào. Bật 'Hiển thị quy tắc' và bấm 'Xử lý' trước.");
+      rulesBtn.disabled = false;
+      return;
+    }
+    const entries = [];
+    const now = new Date();
+    let mainTxt = `# 3105 RULES ONLY\n# ${now.toLocaleString("vi-VN")}\n# Số file: ${ready.length}\n═══════════════════════════════════════════════════════════\n\n`;
+
+    for (const f of ready) {
+      const folderBase = zipSafePath(f.originalName.replace(/\.3105$/i, ""));
+      mainTxt += `FILE: ${f.originalName}\n`;
+      if (f.rulesInfo.name) mainTxt += `DỰ ÁN: ${f.rulesInfo.name}\n`;
+      mainTxt += `SỐ RULE: ${f.rulesInfo.rules.length}\n\n`;
+      f.rulesInfo.rules.forEach((r, ri) => {
+        mainTxt += `  Rule ${ri + 1}:\n    bundleID : ${r.bundleID || "(trống)"}\n    path     : ${r.relativePath || "(trống)"}\n    filename : ${r.filename}\n    size     : ${r.data ? (r.data.length / 1024).toFixed(1) + " KB" : "N/A"}\n\n`;
+        if (r.data) {
+          const inner = r.relativePath ? zipSafePath(r.relativePath) : r.filename;
+          entries.push({ name: `${folderBase}/${inner}`, data: r.data });
+        }
+      });
+      mainTxt += `───────────────────────────────────────────\n\n`;
+    }
+    entries.push({ name: "main.txt", data: new TextEncoder().encode(mainTxt) });
+
+    const zip = buildZip(entries);
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([zip], { type: "application/zip" }));
+    a.download = `3105-rules-${Date.now()}.zip`;
+    a.click(); URL.revokeObjectURL(a.href);
+    log(`Đã tải rules ZIP (${entries.length} entries)`, "ok");
+  } catch (e) {
+    log("Lỗi rules ZIP: " + (e.message || e), "bad");
+  } finally {
+    rulesBtn.disabled = false;
+  }
+});
+
+renderFiles();
+</script>
+</body>
+</html>
