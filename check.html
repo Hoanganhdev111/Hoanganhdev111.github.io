@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THPT — Ôn Thi</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg-base: #0b0f0b;
+    --bg-panel: #0f1410;
+    --bg-card: #141a14;
+    --bg-hover: #1a221a;
+    --bg-input: #0b0f0b;
+    --border: #243024;
+    --border-active: #3fb950;
+    --text-primary: #d8e8d8;
+    --text-secondary: #7a9e7a;
+    --text-muted: #3d5c3d;
+    --accent-blue: #3fb950;
+    --accent-green: #3fb950;
+    --accent-red: #f85149;
+    --accent-yellow: #d29922;
+    --accent-purple: #39d353;
+    --accent-teal: #39d353;
+    --opt-a: #1a221a;
+    --opt-b: #1a221a;
+    --opt-c: #1a221a;
+    --opt-d: #1a221a;
+    --radius-sm: 5px;
+    --radius-md: 7px;
+    --radius-lg: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ─── LAYOUT ─── */
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 10;
+  }
+
+  .sidebar-logo {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .logo-icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #1a5c1a, #3fb950);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+
+  .logo-text { font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: 0.02em; }
+  .logo-sub { font-size: 10px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
+
+  .sidebar-nav { padding: 8px; flex: 1; overflow-y: auto; }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px 8px 4px;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 13px;
+    transition: background 0.15s, color 0.15s;
+    border: 1px solid transparent;
+    margin-bottom: 1px;
+  }
+
+  .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .nav-item.active { background: rgba(56, 139, 253, 0.12); color: var(--accent-blue); border-color: rgba(56, 139, 253, 0.2); }
+
+  .nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+
+  .sidebar-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .status-dot {
+    display: inline-block; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--accent-green);
+    margin-right: 6px; animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .status-text { font-size: 11px; color: var(--text-muted); }
+
+  /* ─── MAIN ─── */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 9;
+  }
+
+  .breadcrumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .breadcrumb span { color: var(--text-secondary); }
+  .breadcrumb .sep { color: var(--text-muted); }
+
+  .topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+  .badge {
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .badge-green { background: rgba(63, 185, 80, 0.15); color: var(--accent-green); border: 1px solid rgba(63, 185, 80, 0.3); }
+  .badge-blue { background: rgba(56, 139, 253, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 139, 253, 0.3); }
+  .badge-yellow { background: rgba(210, 153, 34, 0.15); color: var(--accent-yellow); border: 1px solid rgba(210, 153, 34, 0.3); }
+  .badge-red { background: rgba(248, 81, 73, 0.15); color: var(--accent-red); border: 1px solid rgba(248, 81, 73, 0.3); }
+  .badge-purple { background: rgba(188, 140, 255, 0.15); color: var(--accent-purple); border: 1px solid rgba(188, 140, 255, 0.3); }
+
+  .content { padding: 24px; flex: 1; }
+
+  /* ─── PAGE SECTIONS ─── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-header { margin-bottom: 24px; }
+  .page-title { font-size: 22px; font-weight: 600; color: var(--text-primary); }
+  .page-sub { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* ─── SETUP PANEL ─── */
+  .setup-row {
+    display: flex; gap: 12px; align-items: flex-end;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 11px; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  .field input, .field select {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    padding: 7px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field input:focus, .field select:focus { border-color: var(--accent-blue); }
+  .field input[type="number"] { width: 100px; }
+
+  .btn {
+    padding: 7px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  .btn-primary {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+  }
+  .btn-primary:hover { background: #1f6feb; }
+
+  .btn-success {
+    background: rgba(63, 185, 80, 0.15);
+    color: var(--accent-green);
+    border-color: rgba(63, 185, 80, 0.4);
+  }
+  .btn-success:hover { background: rgba(63, 185, 80, 0.25); }
+
+  .btn-danger {
+    background: rgba(248, 81, 73, 0.12);
+    color: var(--accent-red);
+    border-color: rgba(248, 81, 73, 0.3);
+  }
+  .btn-danger:hover { background: rgba(248, 81, 73, 0.22); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border);
+  }
+  .btn-ghost:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+  .btn-purple {
+    background: rgba(188, 140, 255, 0.12);
+    color: var(--accent-purple);
+    border-color: rgba(188, 140, 255, 0.3);
+  }
+  .btn-purple:hover { background: rgba(188, 140, 255, 0.22); }
+
+  /* ─── ANSWER GRID ─── */
+  .grid-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .grid-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .answer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .answer-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 8px 12px;
+    transition: border-color 0.15s;
+  }
+
+  .answer-row:hover { border-color: var(--border-active); }
+  .answer-row.has-answer { border-color: rgba(63,185,80,0.3); }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 4px;
+    user-select: none;
+    letter-spacing: 0.04em;
+  }
+
+  .opts {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .opt-btn {
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.12s;
+    text-align: center;
+    letter-spacing: 0.06em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .opt-btn:hover { border-color: var(--accent-green); color: var(--accent-green); background: rgba(63,185,80,0.08); }
+
+  .opt-btn.selected-A { background: rgba(56,189,248,0.18); border-color: #56bdf8; color: #56bdf8; }
+  .opt-btn.selected-B { background: rgba(188,140,255,0.18); border-color: #bc8cff; color: #bc8cff; }
+  .opt-btn.selected-C { background: rgba(63,185,80,0.22); border-color: #3fb950; color: #3fb950; }
+  .opt-btn.selected-D { background: rgba(210,153,34,0.22); border-color: #d29922; color: #d29922; }
+
+  /* After grading */
+  .opt-btn.correct { background: rgba(63,185,80,0.28); border-color: #3fb950; color: #3fb950; box-shadow: 0 0 0 1px rgba(63,185,80,0.3); }
+  .opt-btn.wrong { background: rgba(248,81,73,0.22); border-color: #f85149; color: #f85149; }
+  .opt-btn.missed { background: rgba(63,185,80,0.1); border-color: rgba(63,185,80,0.5); color: #3fb950; font-weight: 800; }
+
+  .q-status {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 2px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ─── KEY INPUT ROW ─── */
+  .key-row {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+  }
+
+  .key-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    width: 32px; flex-shrink: 0;
+  }
+
+  .key-select {
+    flex: 1;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    padding: 4px 8px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    outline: none;
+  }
+
+  .key-select:focus { border-color: var(--accent-blue); }
+
+  /* ─── RESULT PANEL ─── */
+  .result-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    display: none;
+  }
+
+  .result-panel.visible { display: block; }
+
+  .result-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .score-bar-wrap {
+    margin-top: 16px;
+  }
+
+  .score-bar-label {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;
+  }
+
+  .score-bar-track {
+    height: 8px;
+    background: var(--bg-input);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    background: linear-gradient(90deg, #1a5c1a, #3fb950);
+  }
+
+  /* ─── WRONG LIST ─── */
+  .wrong-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+
+  .wrong-chip {
+    background: rgba(248,81,73,0.1);
+    border: 1px solid rgba(248,81,73,0.25);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent-red);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .wrong-chip:hover { background: rgba(248,81,73,0.2); }
+
+  /* ─── KEY MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    display: none;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    width: 500px;
+    max-width: 95vw;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .modal-title { font-size: 15px; font-weight: 600; }
+
+  .modal-close {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 18px; cursor: pointer; padding: 4px;
+    border-radius: 4px; transition: color 0.15s;
+  }
+
+  .modal-close:hover { color: var(--text-primary); }
+
+  .key-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  /* ─── METHODS PAGE ─── */
+  .methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .method-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    transition: border-color 0.15s;
+  }
+
+  .method-card:hover { border-color: var(--border-active); }
+
+  .method-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .method-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .method-title { font-size: 14px; font-weight: 600; }
+  .method-tag { font-size: 10px; color: var(--text-muted); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+
+  .method-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
+
+  .method-steps { list-style: none; padding: 0; }
+  .method-steps li {
+    font-size: 12px; color: var(--text-secondary);
+    padding: 4px 0;
+    display: flex; align-items: flex-start; gap: 8px;
+    border-top: 1px solid var(--border);
+  }
+  .method-steps li:first-child { border-top: none; }
+
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-blue);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ─── FLASHCARD PAGE ─── */
+  .flashcard-setup {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .flashcard-area {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 16px;
+  }
+
+  .flashcard {
+    width: 100%;
+    max-width: 560px;
+    height: 240px;
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  .flashcard-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+    position: relative;
+  }
+
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+  .fc-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 24px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .fc-front {
+    background: var(--bg-card);
+  }
+
+  .fc-back {
+    background: rgba(56,139,253,0.06);
+    border-color: rgba(56,139,253,0.3);
+    transform: rotateY(180deg);
+  }
+
+  .fc-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; }
+  .fc-text { font-size: 18px; color: var(--text-primary); font-weight: 500; line-height: 1.5; }
+  .fc-sub { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+
+  .fc-controls {
+    display: flex; gap: 8px; align-items: center;
+  }
+
+  .fc-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .fc-textarea {
+    width: 100%;
+    max-width: 560px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    padding: 12px;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .fc-textarea:focus { border-color: var(--accent-blue); }
+  .fc-textarea::placeholder { color: var(--text-muted); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--text-primary);
+    z-index: 200;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.2s;
+    pointer-events: none;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .answer-grid { grid-template-columns: 1fr; }
+    .methods-grid { grid-template-columns: 1fr; }
+  }
+
+  .section-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 20px 0;
+  }
+
+  .section-divider span {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .section-divider::before, .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .inline-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    padding: 6px 10px;
+    background: var(--bg-input);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    display: inline-block;
+  }
+
+  .subject-bar {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .subject-chip {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+
+  .subject-chip.active { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(56,139,253,0.1); }
+  .subject-chip:hover:not(.active) { border-color: var(--border-active); color: var(--text-primary); }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">T</div>
+      <div>
+        <div class="logo-text">THPT · Ôn Thi</div>
+        <div class="logo-sub">v1.0 · offline</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Workspace</div>
+
+      <div class="nav-item active" onclick="goPage('exam')">
+        <span class="nav-icon">📝</span>
+        <span>Làm Bài</span>
+      </div>
+      <div class="nav-item" onclick="goPage('flashcard')">
+        <span class="nav-icon">🃏</span>
+        <span>Flashcard</span>
+      </div>
+      <div class="nav-item" onclick="goPage('methods')">
+        <span class="nav-icon">🧠</span>
+        <span>Phương Pháp Học</span>
+      </div>
+
+      <div class="nav-section-label">Quick Stats</div>
+      <div style="padding: 8px 10px;">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Phiên này</div>
+        <div style="display:flex;flex-direction:column;gap:4px;" id="sidebar-stats">
+          <div style="font-size:12px;color:var(--text-secondary);">Chưa có dữ liệu</div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="status-dot"></span>
+      <span class="status-text">Ready — no server needed</span>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <div class="main">
+    <div class="topbar">
+      <div class="breadcrumb">
+        <span>THPT</span>
+        <span class="sep">/</span>
+        <span id="breadcrumb-current">Làm Bài</span>
+      </div>
+      <div class="topbar-actions">
+        <span id="topbar-badge" class="badge badge-blue">Chưa chấm</span>
+        <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ═══ PAGE: EXAM ═══ -->
+      <div id="page-exam" class="page active">
+        <div class="page-header">
+          <div class="page-title">Phiếu Trả Lời</div>
+          <div class="page-sub">Điền số câu → chọn đáp án → chấm bài → xem kết quả</div>
+        </div>
+
+        <!-- Setup -->
+        <div class="setup-row">
+          <div class="field">
+            <label>Số Câu</label>
+            <input type="number" id="num-questions" value="40" min="1" max="120" placeholder="40">
+          </div>
+          <div class="field">
+            <label>Câu Bắt Đầu</label>
+            <input type="number" id="start-question" value="1" min="1" placeholder="1">
+          </div>
+          <div class="field">
+            <label>Môn Học</label>
+            <select id="subject-select">
+              <option value="Toán">Toán</option>
+              <option value="Lý">Vật Lý</option>
+              <option value="Hóa">Hóa Học</option>
+              <option value="Sinh">Sinh Học</option>
+              <option value="Văn">Ngữ Văn</option>
+              <option value="Sử">Lịch Sử</option>
+              <option value="Địa">Địa Lý</option>
+              <option value="Anh">Tiếng Anh</option>
+              <option value="GDCD">GDCD</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="buildGrid()">⚡ Tạo Phiếu</button>
+        </div>
+
+        <!-- Answer grid -->
+        <div id="answer-section" style="display:none;">
+          <div class="grid-header">
+            <span class="grid-title" id="grid-label">Đáp Án</span>
+            <div class="btn-group">
+              <button class="btn btn-ghost" onclick="clearAnswers()">Xóa Hết</button>
+              <button class="btn btn-purple" onclick="openKeyModal()">🔑 Nhập Đáp Án</button>
+              <button class="btn btn-success" onclick="gradeExam()">✓ Chấm Bài</button>
+            </div>
+          </div>
+
+          <div id="answer-grid" class="answer-grid"></div>
+
+          <!-- Result -->
+          <div id="result-panel" class="result-panel">
+            <div style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;">Kết Quả</div>
+            <div class="result-stats" id="result-stats"></div>
+
+            <div class="score-bar-wrap">
+              <div class="score-bar-label">
+                <span>Điểm</span>
+                <span id="score-display">—</span>
+              </div>
+              <div class="score-bar-track">
+                <div class="score-bar-fill" id="score-bar" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div class="section-divider"><span>Câu Sai</span></div>
+            <div id="wrong-list" class="wrong-list"></div>
+
+            <div class="section-divider"><span>Hành Động</span></div>
+            <div class="btn-group">
+              <button class="btn btn-ghost" onclick="regrade()">🔄 Chấm Lại</button>
+              <button class="btn btn-primary" onclick="copyWrong()">📋 Copy Câu Sai</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="empty-state" style="text-align:center;padding:60px 0;color:var(--text-muted);">
+          <div style="font-size:32px;margin-bottom:12px;">📋</div>
+          <div style="font-size:14px;">Điền số câu và nhấn <strong style="color:var(--text-secondary)">Tạo Phiếu</strong> để bắt đầu</div>
+        </div>
+      </div>
+
+      <!-- ═══ PAGE: FLASHCARD ═══ -->
+      <div id="page-flashcard" class="page">
+        <div class="page-header">
+          <div class="page-title">Flashcard</div>
+          <div class="page-sub">Nhập từ/kiến thức — ôn theo cặp hỏi/đáp</div>
+        </div>
+
+        <div class="flashcard-setup">
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:6px;">Nhập Flashcard (mỗi dòng: câu hỏi | đáp án)</label>
+            <textarea id="fc-input" class="fc-textarea" placeholder="Số Avogadro là gì? | 6.022 × 10²³
+Công thức tính vận tốc | v = s/t
+Năm kết thúc chiến tranh VN | 1975
+Thủ đô của Pháp | Paris"></textarea>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="buildFlashcards()">⚡ Tạo Flashcard</button>
+            <button class="btn btn-ghost" onclick="shuffleCards()">🔀 Xáo Bài</button>
+            <span id="fc-count" class="inline-note">0 thẻ</span>
+          </div>
+        </div>
+
+        <div class="flashcard-area" id="fc-area" style="display:none;">
+          <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="flashcard-inner">
+              <div class="fc-face fc-front">
+                <div class="fc-label">Câu Hỏi — click để lật</div>
+                <div class="fc-text" id="fc-front-text">—</div>
+              </div>
+              <div class="fc-face fc-back">
+                <div class="fc-label">Đáp Án</div>
+                <div class="fc-text" id="fc-back-text">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fc-controls">
+            <button class="btn btn-ghost" onclick="prevCard()">← Trước</button>
+            <span class="fc-counter" id="fc-counter">1 / 1</span>
+            <button class="btn btn-primary" onclick="nextCard()">Tiếp →</button>
+          </div>
+
+          <div class="btn-group" style="margin-top:4px;">
+            <button class="btn btn-success" onclick="markKnow()">✓ Thuộc rồi</button>
+            <button class="btn btn-danger" onclick="markDontKnow()">✗ Chưa thuộc</button>
+            <span id="fc-progress" class="inline-note">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PAGE: METHODS ═══ -->
+      <div id="page-methods" class="page">
+        <div class="page-header">
+          <div class="page-title">Phương Pháp Học Thuộc</div>
+          <div class="page-sub">6 kỹ thuật đã được nghiên cứu — chọn cái phù hợp với bạn</div>
+        </div>
+
+        <div class="methods-grid">
+
+          <div class="method-card">
+            <div class="method-header">
+              <div class="method-icon" style="background:rgba(56,139,253,0.15);">🔁</div>
+              <div>
+                <div class="method-title">Spaced Repetition</div>
+                <div class="method-tag">Lặp lại ngắt quãng — Ebbinghaus</div>
+              </div>
+            </div>
+            <div class="method-desc">Ôn đúng lúc não sắp quên — hiệu quả hơn nhồi nhét 5–10 lần. Khoảng cách tăng dần theo mỗi lần nhớ đúng.</div>
+            <ul class="method-steps">
+              <li><span class="step-num">01</span>Học lần đầu → ôn sau 1 ngày</li>
+              <li><span class="step-num">02</span>Đúng → ôn sau 3 ngày; Sai → về 1 ngày</li>
+              <li><span class="step-num">03</span>Đúng → 7 ngày → 14 ngày → 30 ngày</li>
+              <li><span class="step-num">04</span>Dùng app Anki hoặc flashcard tab bên trái</li>
+            </ul>
+          </div>
+
+          <div class="method-card">
+            <div class="method-header">
+              <div class="method-icon" style="background:rgba(188,140,255,0.15);">🧩</div>
+              <div>
+                <div class="method-title">Active Recall</div>
+                <div class="method-tag">Chủ động gợi nhớ — không nhìn đáp án</div>
+              </div>
+            </div>
+            <div class="method-desc">Đọc câu hỏi → đóng tài liệu → cố nhớ trước khi kiểm tra. Não học qua việc truy xuất, không phải đọc lại.</div>
+            <ul class="method-steps">
+              <li><span class="step-num">01</span>Đọc nội dung 1 lần, hiểu cấu trúc</li>
+              <li><span class="step-num">02</span>Gập sách lại — tự hỏi không nhìn</li>
+              <li><span class="step-num">03</span>Viết ra những gì nhớ được</li>
+              <li><span class="step-num">04</span>Mở ra kiểm tra — đánh dấu sai → ôn lại</li>
+            </ul>
+          </div>
+
+          <div class="method-card">
+            <div class="method-header">
+              <div class="method-icon" style="background:rgba(57,211,83,0.15);">🎓</div>
+              <div>
+                <div class="method-title">Feynman Technique</div>
+                <div class="method-tag">Dạy lại để hiểu thật sự</div>
+              </div>
+            </div>
+            <div class="method-desc">Nếu bạn không thể giải thích đơn giản — bạn chưa thực sự hiểu. Dạy lại bằng ngôn ngữ của mình, không học vẹt.</div>
+            <ul class="method-steps">
+              <li><span class="step-num">01</span>Học kiến thức, ghi chú bình thường</li>
+              <li><span class="step-num">02</span>Giải thích lại như đang dạy người khác</li>
+              <li><span class="step-num">03</span>Chỗ nào ấp úng = chỗ chưa hiểu → quay lại</li>
+              <li><span class="step-num">04</span>Đơn giản hóa — dùng ví dụ thực tế</li>
+            </ul>
+          </div>
+
+          <div class="method-card">
+            <div class="method-header">
+              <div class="method-icon" style="background:rgba(210,153,34,0.15);">⏱️</div>
+              <div>
+                <div class="method-title">Pomodoro × Chunking</div>
+                <div class="method-tag">25 phút tập trung + chia nhỏ</div>
+              </div>
+            </div>
+            <div class="method-desc">Não người chỉ tập trung cao độ ~25 phút liên tục. Chia nội dung thành block nhỏ — xử lý từng block trong 1 Pomodoro.</div>
+            <ul class="method-steps">
+              <li><span class="step-num">01</span>Chia chương/bài thành các phần 5–10 điểm</li>
+              <li><span class="step-num">02</span>Hẹn giờ 25 phút — tắt mọi thứ khác</li>
+              <li><span class="step-num">03</span>Nghỉ 5 phút — không mang não đi đâu</li>
+              <li><span class="step-num">04</span>4 Pomodoro = nghỉ dài 20–30 phút</li>
+            </ul>
+          </div>
+
+          <div class="method-card">
+            <div class="method-header">
+              <div class="method-icon" style="background:rgba(248,81,73,0.15);">🗺️</div>
+              <div>
+                <div class="method-title">Mind Map + Ký Ức Hình Ảnh</div>
+                <div class="method-tag">Não ghi nhớ hình tốt hơn chữ 6×</div>
+              </div>
+            </div>
+            <div class="method-desc">Vẽ sơ đồ tư duy thay vì viết thẳng. Màu sắc, hình vẽ, vị trí không gian — tất cả là móc nhớ. Càng kỳ lạ càng khó quên.</div>
+            <ul class="method-steps">
+              <li><span class="step-num">01</span>Chủ đề chính ở giữa — nhánh ra các ý lớn</li>
+              <li><span class="step-num">02</span>Mỗi nhánh con = 1 từ khóa, không viết câu dài</li>
+              <li><span class="step-num">03</span>Dùng màu khác nhau cho mỗi nhánh lớn</li>
+              <li><span class="step-num">04</span>Vẽ biểu tượng/hình ảnh kỳ lạ để móc nhớ</li>
+            </ul>
+          </div>
+
+          <div class="method-card">
+            <div class="method-header">
+              <div class="method-icon" style="background:rgba(57,211,83,0.15);">📝</div>
+              <div>
+                <div class="method-title">Interleaving — Ôn Xen Kẽ</div>
+                <div class="method-tag">Trộn bài — không học từng block</div>
+              </div>
+            </div>
+            <div class="method-desc">Đừng học hết chương 1 rồi mới sang 2. Trộn nhiều dạng bài lại — não phải nhận dạng mỗi lần, học sâu hơn nhiều.</div>
+            <ul class="method-steps">
+              <li><span class="step-num">01</span>Pha trộn dạng bài: Toán → Hóa → Toán → Lý</li>
+              <li><span class="step-num">02</span>Không lặp 2 bài cùng dạng liên tiếp</li>
+              <li><span class="step-num">03</span>Khi thi thử: tự tạo đề ngẫu nhiên</li>
+              <li><span class="step-num">04</span>Dùng phiếu trả lời bên trái để luyện</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="section-divider" style="margin-top:32px;"><span>Lịch Học Khẩn Cấp — 7 Ngày Trước Thi</span></div>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">
+            <div style="background:var(--bg-panel);border-radius:var(--radius-md);padding:12px;border:1px solid var(--border);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-blue);margin-bottom:6px;">Ngày -7</div>
+              <div style="font-size:12px;color:var(--text-secondary);">Lập danh sách điểm yếu — làm đề cũ 1 lần, đánh dấu sai</div>
+            </div>
+            <div style="background:var(--bg-panel);border-radius:var(--radius-md);padding:12px;border:1px solid var(--border);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-purple);margin-bottom:6px;">Ngày -6, -5</div>
+              <div style="font-size:12px;color:var(--text-secondary);">Tập trung chỉ vào câu sai — Feynman + Active Recall</div>
+            </div>
+            <div style="background:var(--bg-panel);border-radius:var(--radius-md);padding:12px;border:1px solid var(--border);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-teal);margin-bottom:6px;">Ngày -4, -3</div>
+              <div style="font-size:12px;color:var(--text-secondary);">Làm 2 đề đầy đủ thi thử — bấm giờ chuẩn</div>
+            </div>
+            <div style="background:var(--bg-panel);border-radius:var(--radius-md);padding:12px;border:1px solid var(--border);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-yellow);margin-bottom:6px;">Ngày -2</div>
+              <div style="font-size:12px;color:var(--text-secondary);">Flashcard nhanh toàn bộ công thức + mốc quan trọng</div>
+            </div>
+            <div style="background:var(--bg-panel);border-radius:var(--radius-md);padding:12px;border:1px solid var(--border);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-red);margin-bottom:6px;">Ngày -1</div>
+              <div style="font-size:12px;color:var(--text-secondary);">Không học nội dung mới — chỉ xem lại sai, ngủ đủ giấc</div>
+            </div>
+            <div style="background:rgba(56,139,253,0.08);border-radius:var(--radius-md);padding:12px;border:1px solid rgba(56,139,253,0.25);">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-blue);margin-bottom:6px;">Ngày thi</div>
+              <div style="font-size:12px;color:var(--text-secondary);">Flashcard 30 phút buổi sáng — ăn uống đủ — vào phòng sớm</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── KEY MODAL ─── -->
+<div class="modal-overlay" id="key-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🔑 Nhập Đáp Án Đúng</span>
+      <button class="modal-close" onclick="closeKeyModal()">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Chọn đáp án đúng cho từng câu — dùng để chấm bài tự động</div>
+    <div id="key-grid" class="key-grid"></div>
+    <div class="btn-group" style="margin-top:4px;">
+      <button class="btn btn-ghost" onclick="fillKeyFromInput()">Nhập nhanh (VD: ABCD...)</button>
+    </div>
+    <div style="margin-top:10px;" id="quick-input-area" style="display:none;">
+      <textarea id="quick-key-input" class="fc-textarea" style="min-height:60px;" placeholder="Nhập chuỗi đáp án liên tiếp: ABCDABCD..."></textarea>
+      <button class="btn btn-primary" style="margin-top:8px;" onclick="applyQuickKey()">Áp Dụng</button>
+    </div>
+    <hr class="divider">
+    <div class="btn-group">
+      <button class="btn btn-success" onclick="closeKeyModal(); gradeExam();">✓ Xong — Chấm Bài</button>
+      <button class="btn btn-ghost" onclick="closeKeyModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ───
+let state = {
+  numQ: 0,
+  startQ: 1,
+  answers: {}, // q_num -> 'A'|'B'|'C'|'D'|null
+  key: {},     // q_num -> 'A'|'B'|'C'|'D'
+  graded: false,
+  subject: 'Toán',
+  // flashcard
+  cards: [],
+  cardIndex: 0,
+  cardKnow: new Set(),
+  cardDont: new Set(),
+};
+
+// ─── NAV ───
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const labels = { exam: 'Làm Bài', flashcard: 'Flashcard', methods: 'Phương Pháp Học' };
+  document.getElementById('breadcrumb-current').textContent = labels[name] || name;
+  // find nav item
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.textContent.includes(labels[name] || name)) n.classList.add('active');
+  });
+  // fix active nav
+  const maps = { exam: 0, flashcard: 1, methods: 2 };
+  document.querySelectorAll('.nav-item')[maps[name]]?.classList.add('active');
+}
+
+// ─── EXAM BUILD ───
+function buildGrid() {
+  const n = parseInt(document.getElementById('num-questions').value) || 40;
+  const start = parseInt(document.getElementById('start-question').value) || 1;
+  state.numQ = n;
+  state.startQ = start;
+  state.subject = document.getElementById('subject-select').value;
+  state.answers = {};
+  state.key = {};
+  state.graded = false;
+
+  const grid = document.getElementById('answer-grid');
+  grid.innerHTML = '';
+
+  for (let i = start; i < start + n; i++) {
+    state.answers[i] = null;
+    const row = document.createElement('div');
+    row.className = 'answer-row';
+    row.id = 'row-' + i;
+    row.innerHTML = `
+      <span class="q-num">câu ${i}</span>
+      <div class="opts">
+        ${['A','B','C','D'].map(o => `<button class="opt-btn" id="opt-${i}-${o}" onclick="selectAnswer(${i},'${o}')">${o}</button>`).join('')}
+      </div>
+      <span class="q-status" id="status-${i}"></span>
+    `;
+    grid.appendChild(row);
+  }
+
+  document.getElementById('answer-section').style.display = 'block';
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('result-panel').classList.remove('visible');
+  document.getElementById('grid-label').textContent = `${state.subject} — ${n} câu (${start}–${start+n-1})`;
+  setTopbarBadge('Chưa chấm', 'badge-blue');
+  updateSidebarStats();
+  toast('Phiếu trả lời đã tạo xong ⚡');
+}
+
+function selectAnswer(q, opt) {
+  if (state.graded) return;
+  const prev = state.answers[q];
+  if (prev) {
+    const prevBtn = document.getElementById(`opt-${q}-${prev}`);
+    if (prevBtn) prevBtn.classList.remove(`selected-${prev}`);
+  }
+  state.answers[q] = opt;
+  const btn = document.getElementById(`opt-${q}-${opt}`);
+  if (btn) btn.classList.add(`selected-${opt}`);
+  const row = document.getElementById(`row-${q}`);
+  if (row) row.classList.add('has-answer');
+  updateSidebarStats();
+}
+
+function clearAnswers() {
+  if (state.graded) { regrade(); return; }
+  for (let q in state.answers) {
+    const prev = state.answers[q];
+    if (prev) {
+      const btn = document.getElementById(`opt-${q}-${prev}`);
+      if (btn) btn.classList.remove(`selected-${prev}`);
+    }
+    state.answers[q] = null;
+    const row = document.getElementById(`row-${q}`);
+    if (row) row.classList.remove('has-answer');
+  }
+  updateSidebarStats();
+  toast('Đã xóa hết đáp án');
+}
+
+// ─── KEY MODAL ───
+function openKeyModal() {
+  const modal = document.getElementById('key-modal');
+  const grid = document.getElementById('key-grid');
+  grid.innerHTML = '';
+
+  const start = state.startQ;
+  const n = state.numQ;
+
+  for (let i = start; i < start + n; i++) {
+    const row = document.createElement('div');
+    row.className = 'key-row';
+    row.innerHTML = `
+      <span class="key-num">${i}</span>
+      <select class="key-select" id="key-${i}">
+        <option value="">—</option>
+        ${['A','B','C','D'].map(o => `<option value="${o}" ${state.key[i]===o?'selected':''}>${o}</option>`).join('')}
+      </select>
+    `;
+    grid.appendChild(row);
+  }
+  modal.classList.add('open');
+  document.getElementById('quick-input-area').style.display = 'none';
+}
+
+function closeKeyModal() {
+  // save key from selects
+  const start = state.startQ;
+  const n = state.numQ;
+  for (let i = start; i < start + n; i++) {
+    const sel = document.getElementById(`key-${i}`);
+    if (sel) state.key[i] = sel.value || null;
+  }
+  document.getElementById('key-modal').classList.remove('open');
+}
+
+function fillKeyFromInput() {
+  const area = document.getElementById('quick-input-area');
+  area.style.display = area.style.display === 'none' ? 'block' : 'none';
+}
+
+function applyQuickKey() {
+  const raw = document.getElementById('quick-key-input').value.toUpperCase().replace(/[^ABCD]/g, '');
+  const start = state.startQ;
+  const n = state.numQ;
+  for (let i = 0; i < Math.min(raw.length, n); i++) {
+    const q = start + i;
+    state.key[q] = raw[i];
+    const sel = document.getElementById(`key-${q}`);
+    if (sel) sel.value = raw[i];
+  }
+  toast('Đã nhập ' + Math.min(raw.length, n) + ' đáp án');
+}
+
+// ─── GRADING ───
+function gradeExam() {
+  const hasKey = Object.values(state.key).some(v => v);
+  if (!hasKey) {
+    toast('Chưa có đáp án đúng — nhấn 🔑 Nhập Đáp Án trước', 2500);
+    return;
+  }
+  state.graded = true;
+
+  const start = state.startQ;
+  const n = state.numQ;
+  let correct = 0, wrong = [], blank = [];
+
+  for (let i = start; i < start + n; i++) {
+    const ans = state.answers[i];
+    const key = state.key[i];
+    const statusEl = document.getElementById(`status-${i}`);
+    // clear all opts
+    ['A','B','C','D'].forEach(o => {
+      const btn = document.getElementById(`opt-${i}-${o}`);
+      if (!btn) return;
+      btn.classList.remove('selected-A','selected-B','selected-C','selected-D');
+    });
+
+    if (!key) {
+      if (statusEl) statusEl.textContent = '';
+      continue;
+    }
+
+    if (!ans) {
+      blank.push(i);
+      if (statusEl) statusEl.textContent = '—';
+      // show correct
+      const kb = document.getElementById(`opt-${i}-${key}`);
+      if (kb) kb.classList.add('missed');
+    } else if (ans === key) {
+      correct++;
+      const ab = document.getElementById(`opt-${i}-${ans}`);
+      if (ab) ab.classList.add('correct');
+      if (statusEl) statusEl.textContent = '✓';
+    } else {
+      wrong.push(i);
+      const ab = document.getElementById(`opt-${i}-${ans}`);
+      if (ab) ab.classList.add('wrong');
+      const kb = document.getElementById(`opt-${i}-${key}`);
+      if (kb) kb.classList.add('missed');
+      if (statusEl) statusEl.textContent = '✗';
+    }
+  }
+
+  const total = Object.values(state.key).filter(v => v).length;
+  const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+  const score = total > 0 ? (correct / total * 10).toFixed(2) : '0.00';
+
+  // Show result
+  const panel = document.getElementById('result-panel');
+  panel.classList.add('visible');
+
+  const grades = getGrade(parseFloat(score));
+  document.getElementById('result-stats').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--accent-green)">${correct}</div>
+      <div class="stat-label">Câu Đúng</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--accent-red)">${wrong.length}</div>
+      <div class="stat-label">Câu Sai</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--accent-yellow)">${blank.length}</div>
+      <div class="stat-label">Bỏ Trống</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--accent-blue)">${total}</div>
+      <div class="stat-label">Tổng Câu</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:${grades.color}">${score}</div>
+      <div class="stat-label">Điểm / 10</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:${grades.color};font-size:20px;">${grades.label}</div>
+      <div class="stat-label">Xếp Loại</div>
+    </div>
+  `;
+
+  document.getElementById('score-display').textContent = `${score}/10 — ${pct}%`;
+  setTimeout(() => {
+    document.getElementById('score-bar').style.width = pct + '%';
+  }, 100);
+
+  const wrongList = document.getElementById('wrong-list');
+  if (wrong.length === 0) {
+    wrongList.innerHTML = '<span style="color:var(--accent-green);font-size:13px;">🎉 Không có câu sai!</span>';
+  } else {
+    wrongList.innerHTML = wrong.map(q =>
+      `<span class="wrong-chip" title="Câu ${q}" onclick="scrollToQ(${q})">Câu ${q}</span>`
+    ).join('');
+  }
+
+  setTopbarBadge(`${score}/10`, pct >= 80 ? 'badge-green' : pct >= 50 ? 'badge-yellow' : 'badge-red');
+  updateSidebarStats(correct, wrong.length, blank.length, total, score);
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function getGrade(score) {
+  if (score >= 9) return { label: 'Xuất Sắc', color: '#3fb950' };
+  if (score >= 8) return { label: 'Giỏi', color: '#39d353' };
+  if (score >= 7) return { label: 'Khá', color: '#388bfd' };
+  if (score >= 5) return { label: 'Trung Bình', color: '#d29922' };
+  if (score >= 3.5) return { label: 'Yếu', color: '#f85149' };
+  return { label: 'Kém', color: '#8b949e' };
+}
+
+function scrollToQ(q) {
+  const row = document.getElementById('row-' + q);
+  if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function regrade() {
+  state.graded = false;
+  const start = state.startQ;
+  const n = state.numQ;
+  for (let i = start; i < start + n; i++) {
+    ['A','B','C','D'].forEach(o => {
+      const btn = document.getElementById(`opt-${i}-${o}`);
+      if (!btn) return;
+      btn.classList.remove('correct','wrong','missed','selected-A','selected-B','selected-C','selected-D');
+    });
+    const s = document.getElementById(`status-${i}`);
+    if (s) s.textContent = '';
+  }
+  // restore selected
+  for (let q in state.answers) {
+    const ans = state.answers[q];
+    if (ans) {
+      const btn = document.getElementById(`opt-${q}-${ans}`);
+      if (btn) btn.classList.add(`selected-${ans}`);
+    }
+  }
+  document.getElementById('result-panel').classList.remove('visible');
+  document.getElementById('score-bar').style.width = '0%';
+  setTopbarBadge('Chưa chấm', 'badge-blue');
+  toast('Đã mở lại phiếu — có thể sửa đáp án');
+}
+
+function copyWrong() {
+  const wrongChips = document.querySelectorAll('.wrong-chip');
+  const nums = Array.from(wrongChips).map(c => c.textContent);
+  navigator.clipboard.writeText(nums.join(', ')).then(() => toast('Đã copy danh sách câu sai'));
+}
+
+function resetAll() {
+  state = { numQ: 0, startQ: 1, answers: {}, key: {}, graded: false, subject: 'Toán', cards: [], cardIndex: 0, cardKnow: new Set(), cardDont: new Set() };
+  document.getElementById('answer-section').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'block';
+  document.getElementById('result-panel').classList.remove('visible');
+  setTopbarBadge('Chưa chấm', 'badge-blue');
+  updateSidebarStats();
+  toast('Đã reset toàn bộ');
+}
+
+// ─── TOPBAR ───
+function setTopbarBadge(text, cls) {
+  const b = document.getElementById('topbar-badge');
+  b.textContent = text;
+  b.className = 'badge ' + cls;
+}
+
+function updateSidebarStats(correct, wrong, blank, total, score) {
+  const el = document.getElementById('sidebar-stats');
+  const answered = Object.values(state.answers).filter(v => v).length;
+  const n = state.numQ;
+  if (!n) { el.innerHTML = '<div style="font-size:12px;color:var(--text-secondary);">Chưa có dữ liệu</div>'; return; }
+
+  if (score !== undefined) {
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);">
+        <span>Điểm</span><span style="color:var(--text-primary);font-family:'JetBrains Mono',monospace;">${score}/10</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);">
+        <span>Đúng</span><span style="color:var(--accent-green);">${correct}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);">
+        <span>Sai</span><span style="color:var(--accent-red);">${wrong}</span>
+      </div>
+    `;
+  } else {
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);">
+        <span>Đã điền</span><span style="color:var(--text-primary);font-family:'JetBrains Mono',monospace;">${answered}/${n}</span>
+      </div>
+      <div style="height:4px;background:var(--bg-input);border-radius:2px;margin-top:4px;">
+        <div style="height:100%;width:${n?Math.round(answered/n*100):0}%;background:var(--accent-blue);border-radius:2px;transition:width .3s;"></div>
+      </div>
+    `;
+  }
+}
+
+// ─── FLASHCARD ───
+function buildFlashcards() {
+  const raw = document.getElementById('fc-input').value.trim();
+  if (!raw) { toast('Nhập nội dung flashcard trước'); return; }
+  const lines = raw.split('\n').filter(l => l.trim());
+  state.cards = lines.map(l => {
+    const parts = l.split('|');
+    return { q: parts[0]?.trim() || l.trim(), a: parts[1]?.trim() || '(chưa có đáp án)' };
+  });
+  state.cardIndex = 0;
+  state.cardKnow = new Set();
+  state.cardDont = new Set();
+  document.getElementById('fc-count').textContent = state.cards.length + ' thẻ';
+  showCard();
+  document.getElementById('fc-area').style.display = 'flex';
+  document.getElementById('flashcard').classList.remove('flipped');
+  toast('Đã tạo ' + state.cards.length + ' flashcard');
+}
+
+function showCard() {
+  if (!state.cards.length) return;
+  const c = state.cards[state.cardIndex];
+  document.getElementById('fc-front-text').textContent = c.q;
+  document.getElementById('fc-back-text').textContent = c.a;
+  document.getElementById('fc-counter').textContent = (state.cardIndex + 1) + ' / ' + state.cards.length;
+  document.getElementById('flashcard').classList.remove('flipped');
+  updateFCProgress();
+}
+
+function flipCard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard() {
+  if (state.cardIndex < state.cards.length - 1) state.cardIndex++;
+  else state.cardIndex = 0;
+  showCard();
+}
+
+function prevCard() {
+  if (state.cardIndex > 0) state.cardIndex--;
+  else state.cardIndex = state.cards.length - 1;
+  showCard();
+}
+
+function shuffleCards() {
+  for (let i = state.cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [state.cards[i], state.cards[j]] = [state.cards[j], state.cards[i]];
+  }
+  state.cardIndex = 0;
+  state.cardKnow = new Set();
+  state.cardDont = new Set();
+  showCard();
+  toast('Đã xáo bài 🔀');
+}
+
+function markKnow() {
+  state.cardKnow.add(state.cardIndex);
+  state.cardDont.delete(state.cardIndex);
+  updateFCProgress();
+  nextCard();
+}
+
+function markDontKnow() {
+  state.cardDont.add(state.cardIndex);
+  state.cardKnow.delete(state.cardIndex);
+  updateFCProgress();
+  nextCard();
+}
+
+function updateFCProgress() {
+  const k = state.cardKnow.size;
+  const d = state.cardDont.size;
+  const t = state.cards.length;
+  document.getElementById('fc-progress').textContent = `✓${k}  ✗${d}  ?${t-k-d}`;
+}
+
+// ─── TOAST ───
+function toast(msg, dur) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur || 1800);
+}
+
+// ─── KEYBOARD SHORTCUTS ───
+document.addEventListener('keydown', e => {
+  // A B C D to fill current focused question
+  if (['a','b','c','d'].includes(e.key.toLowerCase()) && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const focused = document.activeElement;
+    // only if no input focused
+    if (focused.tagName === 'INPUT' || focused.tagName === 'TEXTAREA' || focused.tagName === 'SELECT') return;
+  }
+});
+
+// Click outside modal to close
+document.getElementById('key-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeKeyModal();
+});
+</script>
+</body>
+</html>

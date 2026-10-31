@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SSH Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/5.3.0/xterm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/5.3.0/xterm.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/5.3.0/addon-fit.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#0D1117;--bg1:#161B22;--bg2:#1C2128;--bg3:#21262D;
+  --border:#30363D;--text:#E6EDF3;--text2:#8B949E;--text3:#484F58;
+  --cyan:#00D9FF;--cyan-d:#00b8d9;--cyan-bg:rgba(0,217,255,.08);
+  --violet:#7C3AED;--green:#3FB950;--red:#F85149;--yellow:#D29922;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--text);font-family:'Inter',sans-serif;font-size:13px}
+
+/* ── layout ── */
+#app{display:flex;height:100vh;overflow:hidden}
+#sidebar{width:220px;min-width:220px;background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── logo ── */
+#logo{padding:16px 14px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.logo-mark{width:28px;height:28px;background:linear-gradient(135deg,var(--cyan),var(--violet));border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.logo-name{font-size:15px;font-weight:600;letter-spacing:-.3px}.logo-name span{color:var(--cyan)}
+
+/* ── connection form in sidebar ── */
+#conn-panel{padding:12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.field-label{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3);letter-spacing:.8px;margin-bottom:4px}
+.field-row{display:flex;gap:6px}
+input,select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:5px;font-size:12px;font-family:'JetBrains Mono',monospace;outline:none;width:100%;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--cyan)}
+input::placeholder{color:var(--text3)}
+input[type=number]{width:64px;min-width:64px;flex-shrink:0}
+.btn-main{background:var(--cyan);border:none;color:var(--bg0);padding:7px 10px;border-radius:5px;font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace;cursor:pointer;width:100%;transition:background .15s}
+.btn-main:hover{background:var(--cyan-d)}
+.btn-main:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── relay config ── */
+#relay-toggle{font-size:11px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:4px;padding:2px 0}
+#relay-toggle:hover{color:var(--text2)}
+#relay-section{display:none}
+#relay-section.open{display:block}
+
+/* ── nav ── */
+nav{flex:1;padding:6px 0;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;color:var(--text2);border-left:2px solid transparent;transition:all .1s;user-select:none}
+.nav-item:hover{color:var(--text);background:var(--bg2)}
+.nav-item.active{color:var(--cyan);border-left-color:var(--cyan);background:var(--cyan-bg)}
+.nav-item .ni{font-size:15px;width:18px;text-align:center}
+.nav-item .nl{font-size:13px;font-weight:500}
+
+/* ── status ── */
+#status-bar{padding:10px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text3)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:all .3s}
+.dot.on{background:var(--green);box-shadow:0 0 6px var(--green)}
+.dot.err{background:var(--red)}
+#status-bar.connected{color:var(--text2)}
+
+/* ── topbar ── */
+#topbar{height:44px;background:var(--bg1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0}
+#page-title{font-size:13px;font-weight:600;flex:1}
+.pill{font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 8px;border-radius:20px;background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.pill.g{color:var(--green);border-color:rgba(63,185,80,.3);background:rgba(63,185,80,.08)}
+.pill.c{color:var(--cyan);border-color:rgba(0,217,255,.3);background:var(--cyan-bg)}
+.pill.r{color:var(--red);border-color:rgba(248,81,73,.3);background:rgba(248,81,73,.08)}
+.tb-btn{background:var(--bg2);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:4px;font-size:12px;cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .15s}
+.tb-btn:hover{color:var(--text);border-color:var(--cyan)}
+
+/* ── panels ── */
+.panel{display:none;flex:1;overflow:hidden;flex-direction:column}
+.panel.active{display:flex}
+
+/* ── terminal ── */
+#panel-terminal{flex-direction:column}
+#term-wrap{flex:1;padding:4px;background:var(--bg0);overflow:hidden}
+#xterm-el{width:100%;height:100%}
+
+/* ── dashboard ── */
+#panel-dash{padding:18px;overflow-y:auto;flex-direction:column;gap:14px}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:14px}
+.stat-lbl{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3);letter-spacing:.8px;margin-bottom:6px}
+.stat-val{font-size:20px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--cyan);line-height:1;margin-bottom:3px}
+.stat-sub{font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace}
+.bar-wrap{margin-top:7px}.bar-bg{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.bar-f{height:100%;border-radius:2px;background:var(--cyan);transition:width .4s}
+.bar-f.w{background:var(--yellow)}.bar-f.d{background:var(--red)}
+.sec{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3);letter-spacing:.8px;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.dash-box{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:12px}
+.dash-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+table.dt{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:11px}
+table.dt th{text-align:left;padding:5px 8px;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:.4px}
+table.dt td{padding:6px 8px;color:var(--text2);border-bottom:1px solid rgba(48,54,61,.4)}
+table.dt tr:hover td{background:var(--bg2);color:var(--text)}
+.pbadge{background:rgba(0,217,255,.1);color:var(--cyan);border:1px solid rgba(0,217,255,.2);padding:2px 6px;border-radius:3px;font-size:10px}
+
+/* ── help panel ── */
+#panel-help{padding:20px;overflow-y:auto;flex-direction:column;gap:12px}
+.help-card{background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:16px}
+.help-card h3{font-size:13px;font-weight:600;margin-bottom:10px;color:var(--cyan)}
+.help-card code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg3);padding:2px 6px;border-radius:3px;color:var(--text)}
+.help-card pre{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg0);padding:12px;border-radius:6px;border:1px solid var(--border);color:var(--text2);white-space:pre-wrap;line-height:1.6;margin-top:8px}
+.help-card p{color:var(--text2);line-height:1.6;margin-bottom:8px}
+.step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--cyan-bg);border:1px solid rgba(0,217,255,.3);color:var(--cyan);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.step-txt{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* ── scrollbars ── */
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+
+/* ── toast ── */
+#toasts{position:fixed;bottom:18px;right:18px;display:flex;flex-direction:column;gap:6px;z-index:999}
+.t{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:9px 13px;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--text);max-width:260px;animation:tin .2s ease}
+.t.ok{border-left:3px solid var(--green)}.t.err{border-left:3px solid var(--red)}.t.inf{border-left:3px solid var(--cyan)}
+@keyframes tin{from{transform:translateX(16px);opacity:0}to{transform:none;opacity:1}}
+
+/* ── disconnect btn ── */
+#btn-disc{display:none}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ── SIDEBAR ── -->
+<div id="sidebar">
+  <div id="logo">
+    <div class="logo-mark">S</div>
+    <div class="logo-name">SSH<span>Panel</span></div>
+  </div>
+
+  <!-- connection form -->
+  <div id="conn-panel">
+    <div>
+      <div class="field-label">HOST</div>
+      <div class="field-row">
+        <input id="f-host" placeholder="192.168.1.1" type="text">
+        <input id="f-port" placeholder="22" type="number" value="22" min="1" max="65535">
+      </div>
+    </div>
+    <div>
+      <div class="field-label">USER</div>
+      <input id="f-user" placeholder="root" type="text">
+    </div>
+    <div>
+      <div class="field-label">PASSWORD</div>
+      <input id="f-pass" placeholder="••••••••" type="password">
+    </div>
+
+    <div id="relay-toggle" onclick="toggleRelay()">▸ Relay / WebSocket</div>
+    <div id="relay-section">
+      <div class="field-label" style="margin-top:6px">RELAY WS URL</div>
+      <input id="f-relay" placeholder="ws://YOUR_VPS:8023" type="text">
+      <div style="font-size:10px;color:var(--text3);margin-top:4px;line-height:1.5">
+        Run websockify on VPS:<br>
+        <code style="color:var(--cyan)">websockify 8023 localhost:22</code>
+      </div>
+    </div>
+
+    <button class="btn-main" id="btn-conn" onclick="doConnect()">Connect</button>
+  </div>
+
+  <!-- nav -->
+  <nav>
+    <div class="nav-item active" data-p="terminal"><span class="ni">▶</span><span class="nl">Terminal</span></div>
+    <div class="nav-item" data-p="dash"><span class="ni">⬡</span><span class="nl">Dashboard</span></div>
+    <div class="nav-item" data-p="help"><span class="ni">◎</span><span class="nl">Setup Guide</span></div>
+  </nav>
+
+  <div id="status-bar">
+    <div class="dot" id="dot"></div>
+    <span id="status-txt">disconnected</span>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div id="main">
+  <div id="topbar">
+    <span id="page-title">Terminal</span>
+    <span id="tb-host" class="pill" style="display:none"></span>
+    <span id="tb-conn" class="pill">disconnected</span>
+    <button class="tb-btn" onclick="doDisconnect()" id="btn-disc">✕ Disconnect</button>
+    <button class="tb-btn" onclick="refreshPanel()">↺ Refresh</button>
+  </div>
+
+  <!-- Terminal panel -->
+  <div class="panel active" id="panel-terminal">
+    <div id="term-wrap"><div id="xterm-el"></div></div>
+  </div>
+
+  <!-- Dashboard panel -->
+  <div class="panel" id="panel-dash">
+    <div id="dash-inner" style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:12px">
+      Connect to a VPS first, then switch here.
+    </div>
+  </div>
+
+  <!-- Help panel -->
+  <div class="panel" id="panel-help">
+    <div class="help-card">
+      <h3>What this is</h3>
+      <p>Pure browser SSH console. No Node.js needed locally. You need a tiny <strong>WebSocket relay</strong> running on your VPS — it bridges browser WebSocket → raw SSH TCP.</p>
+    </div>
+
+    <div class="help-card">
+      <h3>Option A — websockify (simplest)</h3>
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Install on your VPS:</div></div>
+      <pre>pip3 install websockify</pre>
+      <div class="step"><div class="step-n">2</div><div class="step-txt">Start the relay (bridges port 8023 → SSH port 22):</div></div>
+      <pre>websockify 0.0.0.0:8023 localhost:22 --daemon</pre>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">Open firewall port 8023 on your VPS:</div></div>
+      <pre>ufw allow 8023/tcp</pre>
+      <div class="step"><div class="step-n">4</div><div class="step-txt">In the sidebar relay field enter: <code>ws://YOUR_VPS_IP:8023</code></div></div>
+    </div>
+
+    <div class="help-card">
+      <h3>Option B — tiny Node.js relay (more control)</h3>
+      <p>Save as <code>relay.js</code> on your VPS:</p>
+      <pre>const net=require('net'),{WebSocketServer}=require('ws');
+const wss=new WebSocketServer({port:8023});
+wss.on('connection',(ws,req)=>{
+  const url=new URL(req.url,'http://x');
+  const host=url.searchParams.get('host')||'127.0.0.1';
+  const port=parseInt(url.searchParams.get('port')||'22');
+  const tcp=net.connect(port,host);
+  ws.on('message',d=>tcp.write(d));
+  tcp.on('data',d=>ws.readyState===1&&ws.send(d));
+  tcp.on('close',()=>ws.close());
+  ws.on('close',()=>tcp.destroy());
+});
+console.log('relay :8023');</pre>
+      <pre>npm install ws && node relay.js</pre>
+      <p>Relay URL: <code>ws://YOUR_VPS:8023?host=127.0.0.1&amp;port=22</code></p>
+    </div>
+
+    <div class="help-card">
+      <h3>Security note</h3>
+      <p>The relay listens on 8023 — anyone with access can attempt SSH through it. For production: add an auth token check in the relay, or bind to <code>127.0.0.1</code> and use SSH tunnel + nginx proxy with HTTPS/WSS.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="toasts"></div>
+
+<script>
+var term=null,fitAddon=null,ws=null;
+var connected=false;
+
+// ── xterm init ────────────────────────────────────────────────
+function initTerm(){
+  if(term){term.dispose();term=null}
+  term=new Terminal({
+    theme:{
+      background:'#0D1117',foreground:'#E6EDF3',cursor:'#00D9FF',
+      cursorAccent:'#0D1117',selection:'rgba(0,217,255,0.15)',
+      black:'#21262D',red:'#F85149',green:'#3FB950',yellow:'#D29922',
+      blue:'#388BFD',magenta:'#BC8CFF',cyan:'#00D9FF',white:'#E6EDF3',
+      brightBlack:'#484F58',brightRed:'#FF7B72',brightGreen:'#56D364',
+      brightYellow:'#E3B341',brightBlue:'#79C0FF',brightMagenta:'#D2A8FF',
+      brightCyan:'#39C5CF',brightWhite:'#FFFFFF'
+    },
+    fontFamily:"'JetBrains Mono','Cascadia Code','Fira Code',monospace",
+    fontSize:14,lineHeight:1.5,cursorBlink:true,allowTransparency:true,
+    scrollback:5000,convertEol:false
+  });
+  fitAddon=new FitAddon.FitAddon();
+  term.loadAddon(fitAddon);
+  var el=document.getElementById('xterm-el');
+  el.innerHTML='';
+  term.open(el);
+  setTimeout(()=>fitAddon.fit(),50);
+  term.onData(function(d){
+    if(ws&&ws.readyState===1){
+      var buf=new TextEncoder().encode(d);
+      ws.send(buf.buffer);
+    }
+  });
+  window.addEventListener('resize',function(){fitAddon&&fitAddon.fit()});
+}
+
+// ── connect ───────────────────────────────────────────────────
+function doConnect(){
+  var host =document.getElementById('f-host').value.trim();
+  var port =document.getElementById('f-port').value||'22';
+  var user =document.getElementById('f-user').value.trim();
+  var pass =document.getElementById('f-pass').value;
+  var relay=document.getElementById('f-relay').value.trim();
+
+  if(!host){toast('Enter host','err');return}
+  if(!relay){
+    // guess default relay url from host
+    relay='ws://'+host+':8023';
+    document.getElementById('f-relay').value=relay;
+  }
+
+  setStatus('connecting…','');
+  initTerm();
+  term.writeln('\x1b[36m[SSH Panel]\x1b[0m connecting to \x1b[33m'+host+':'+port+'\x1b[0m via relay…\r\n');
+
+  // build relay url — some relays accept ssh creds as query params (Node relay above)
+  var relayUrl=relay;
+  // append host/port for Node relay style
+  if(!relayUrl.includes('?')){
+    relayUrl+='?host=127.0.0.1&port=22';
+  }
+
+  try{ws=new WebSocket(relayUrl)}catch(e){term.writeln('\x1b[31mWS error: '+e.message+'\x1b[0m\r\n');setStatus('error','err');return}
+
+  ws.binaryType='arraybuffer';
+
+  ws.onopen=function(){
+    connected=true;
+    setStatus(user+'@'+host,'on');
+    document.getElementById('tb-host').textContent=user+'@'+host+':'+port;
+    document.getElementById('tb-host').style.display='inline';
+    document.getElementById('tb-conn').textContent='connected';
+    document.getElementById('tb-conn').className='pill g';
+    document.getElementById('btn-disc').style.display='inline';
+    document.getElementById('btn-conn').textContent='Connected';
+    document.getElementById('btn-conn').disabled=true;
+    toast('Connected to '+host,'ok');
+    // xterm raw mode — send password if provided
+    // For websockify the SSH login prompt will appear
+    // so no auto-auth here; user types password in terminal
+  };
+
+  ws.onmessage=function(e){
+    var data;
+    if(e.data instanceof ArrayBuffer){
+      data=new TextDecoder('utf-8',{fatal:false}).decode(new Uint8Array(e.data));
+    }else{data=e.data}
+    if(term)term.write(data);
+  };
+
+  ws.onerror=function(){
+    if(term)term.writeln('\r\n\x1b[31m[connection error — check relay URL and VPS firewall]\x1b[0m\r\n');
+    setStatus('error','err');
+    toast('Connection error','err',5000);
+    resetConn();
+  };
+
+  ws.onclose=function(ev){
+    if(term)term.writeln('\r\n\x1b[33m[session closed'+(ev.code?' ('+ev.code+')'‌:''‌)+']\x1b[0m\r\n');
+    setStatus('disconnected','');
+    toast('Disconnected','inf');
+    resetConn();
+  };
+}
+
+function doDisconnect(){
+  if(ws){ws.close();ws=null}
+  if(term)term.writeln('\r\n\x1b[33m[disconnected by user]\x1b[0m\r\n');
+  resetConn();
+}
+
+function resetConn(){
+  connected=false;
+  document.getElementById('tb-host').style.display='none';
+  document.getElementById('tb-conn').textContent='disconnected';
+  document.getElementById('tb-conn').className='pill';
+  document.getElementById('btn-disc').style.display='none';
+  document.getElementById('btn-conn').textContent='Connect';
+  document.getElementById('btn-conn').disabled=false;
+  setStatus('disconnected','');
+}
+
+function setStatus(txt,cls){
+  document.getElementById('status-txt').textContent=txt;
+  var d=document.getElementById('dot');
+  d.className='dot'+(cls?' '+cls:'');
+  var sb=document.getElementById('status-bar');
+  sb.className=(cls==='on')?'connected':'';
+}
+
+// ── nav ───────────────────────────────────────────────────────
+document.querySelectorAll('.nav-item').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.nav-item').forEach(function(i){i.classList.remove('active')});
+    el.classList.add('active');
+    var p=el.dataset.p;
+    document.querySelectorAll('.panel').forEach(function(pan){pan.classList.remove('active')});
+    document.getElementById('panel-'+p).classList.add('active');
+    var titles={terminal:'Terminal',dash:'Dashboard',help:'Setup Guide'};
+    document.getElementById('page-title').textContent=titles[p]||p;
+    if(p==='dash'&&connected)loadDash();
+    if(p==='terminal'){setTimeout(function(){fitAddon&&fitAddon.fit()},60)}
+  });
+});
+
+function refreshPanel(){
+  var active=document.querySelector('.nav-item.active');
+  if(!active)return;
+  var p=active.dataset.p;
+  if(p==='terminal'){fitAddon&&fitAddon.fit()}
+  if(p==='dash'&&connected)loadDash();
+}
+
+// ── relay toggle ─────────────────────────────────────────────
+function toggleRelay(){
+  var s=document.getElementById('relay-section');
+  var t=document.getElementById('relay-toggle');
+  if(s.classList.contains('open')){s.classList.remove('open');t.textContent='▸ Relay / WebSocket'}
+  else{s.classList.add('open');t.textContent='▾ Relay / WebSocket';document.getElementById('f-relay').focus()}
+}
+
+// ── dashboard via exec-over-ws ────────────────────────────────
+// We run commands by injecting them into the terminal and capturing output
+// This works differently — we use a hidden approach: open a second channel
+// For pure websockify there's no second channel, so we run a quick script
+// and parse what appears. A simpler approach: just show what we can.
+
+var dashScript=[
+  "printf 'VPSP_UPTIME:'; uptime -p 2>/dev/null || uptime",
+  "printf 'VPSP_MEM:'; free -m 2>/dev/null | awk 'NR==2{print $2,$3,$4}'",
+  "printf 'VPSP_DISK:'; df -h / 2>/dev/null | awk 'NR==2{print $2,$3,$4,$5}'",
+  "printf 'VPSP_CPU:'; nproc 2>/dev/null; cat /proc/cpuinfo 2>/dev/null | grep 'model name' | head -1 | cut -d: -f2 | xargs",
+  "printf 'VPSP_LOAD:'; cat /proc/loadavg 2>/dev/null",
+  "printf 'VPSP_OS:'; cat /etc/os-release 2>/dev/null | grep PRETTY | cut -d= -f2 | tr -d '\"'",
+  "printf 'VPSP_PORTS:'; ss -tlnp 2>/dev/null | grep LISTEN | awk '{print $4}' | grep -oP ':\\K[0-9]+' | sort -n | uniq | tr '\\n' ','",
+  "printf 'VPSP_PROCS:'; ps aux --sort=-%cpu 2>/dev/null | awk 'NR>1&&NR<10{print $1\"|\"$2\"|\"$3\"|\"$4\"|\"$11}' | tr '\\n' ';'",
+  "echo VPSP_END"
+].join('; ');
+
+var dashCapturing=false,dashBuf='';
+
+function loadDash(){
+  if(!connected||!ws||!term){
+    document.getElementById('dash-inner').innerHTML='<div style="color:var(--text3);font-family:JetBrains Mono,monospace;font-size:12px">Connect first.</div>';
+    return;
+  }
+  document.getElementById('dash-inner').innerHTML='<div style="color:var(--text3);font-family:JetBrains Mono,monospace;font-size:12px">Fetching VPS stats…</div>';
+  dashCapturing=true;
+  dashBuf='';
+
+  // intercept terminal data temporarily
+  var origWrite=term.write.bind(term);
+  var intercepting=true;
+
+  // override term write to also capture
+  term._dashCapture=function(data){
+    if(!intercepting)return;
+    dashBuf+=data;
+    if(dashBuf.includes('VPSP_END')){
+      intercepting=false;
+      term._dashCapture=null;
+      parseDash(dashBuf);
+      // clear the injected output from terminal view
+      // by sending ctrl+l after a tick
+      setTimeout(function(){
+        if(ws&&ws.readyState===1){
+          var cl=new TextEncoder().encode('\x0c');
+          ws.send(cl.buffer);
+        }
+      },200);
+    }
+  };
+
+  // patch term.write
+  var origW=term.write;
+  term.write=function(data){
+    origW.call(term,data);
+    if(term._dashCapture)term._dashCapture(typeof data==='string'?data:new TextDecoder().decode(data));
+  };
+
+  // inject command
+  var cmd=dashScript+'\n';
+  var buf=new TextEncoder().encode(cmd);
+  if(ws&&ws.readyState===1)ws.send(buf.buffer);
+
+  // timeout fallback
+  setTimeout(function(){
+    if(intercepting){
+      intercepting=false;
+      term.write=origW;
+      parseDash(dashBuf);
+    }
+  },4000);
+}
+
+function parseDash(raw){
+  var get=function(key){
+    var m=raw.match(new RegExp(key+':(.*?)(?=VPSP_|$)','s'));
+    return m?m[1].replace(/\x1b\[[0-9;]*m/g,'').trim():'';
+  };
+  var uptime=get('VPSP_UPTIME');
+  var memRaw=get('VPSP_MEM').split(/\s+/);
+  var diskRaw=get('VPSP_DISK').split(/\s+/);
+  var cpuRaw=get('VPSP_CPU').split('\n');
+  var load=get('VPSP_LOAD').split(' ').slice(0,3).join(' ');
+  var os=get('VPSP_OS');
+  var ports=(get('VPSP_PORTS')||'').split(',').filter(Boolean);
+  var procsRaw=(get('VPSP_PROCS')||'').split(';').filter(Boolean);
+
+  var mUsed=parseInt(memRaw[1])||0,mTotal=parseInt(memRaw[0])||1;
+  var mPct=Math.round(mUsed/mTotal*100);
+  var dPct=parseInt((diskRaw[3]||'0%'))||0;
+
+  function bc(p){return p>85?'d':p>65?'w':''}
+
+  var procs=procsRaw.map(function(p){
+    var pp=p.split('|');
+    return{user:pp[0]||'',pid:pp[1]||'',cpu:pp[2]||'0',mem:pp[3]||'0',cmd:(pp[4]||'').replace(/^[\[\]]/g,'')};
+  }).slice(0,8);
+
+  var svcMap={22:'SSH',80:'HTTP',443:'HTTPS',3306:'MySQL',5432:'PG',6379:'Redis',
+    27017:'MongoDB',3000:'Node',8080:'HTTP-Alt',21:'FTP',25:'SMTP',53:'DNS',
+    8443:'HTTPS-Alt',9200:'ES',5000:'Dev',8023:'WS-Relay'};
+
+  var html='<div class="dash-grid">'
+    +'<div class="stat"><div class="stat-lbl">UPTIME</div><div class="stat-val" style="font-size:12px;margin-top:4px">'+uptime+'</div></div>'
+    +'<div class="stat"><div class="stat-lbl">CPU CORES</div><div class="stat-val">'+(cpuRaw[0]||'?')+'</div><div class="stat-sub">'+(cpuRaw[1]||'')+'</div></div>'
+    +'<div class="stat"><div class="stat-lbl">MEMORY</div><div class="stat-val">'+mUsed+' <span style="font-size:12px;color:var(--text2)">/ '+mTotal+' MB</span></div><div class="stat-sub">'+mPct+'% used</div>'
+      +'<div class="bar-wrap"><div class="bar-bg"><div class="bar-f '+bc(mPct)+'" style="width:'+mPct+'%"></div></div></div></div>'
+    +'<div class="stat"><div class="stat-lbl">DISK /</div><div class="stat-val">'+(diskRaw[1]||'?')+' <span style="font-size:12px;color:var(--text2)">/ '+(diskRaw[0]||'?')+'</span></div><div class="stat-sub">'+dPct+'% — '+(diskRaw[2]||'?')+' free</div>'
+      +'<div class="bar-wrap"><div class="bar-bg"><div class="bar-f '+bc(dPct)+'" style="width:'+dPct+'%"></div></div></div></div>'
+    +'<div class="stat"><div class="stat-lbl">LOAD AVG</div><div class="stat-val" style="font-size:13px">'+load+'</div></div>'
+    +'<div class="stat"><div class="stat-lbl">OS</div><div class="stat-val" style="font-size:11px;line-height:1.3">'+os+'</div></div>'
+    +'</div>'
+    +'<div class="dash-cols">'
+    +'<div class="dash-box"><div class="sec">OPEN PORTS ('+ports.length+')</div>'
+      +'<table class="dt"><thead><tr><th>PORT</th><th>SERVICE</th></tr></thead><tbody>'
+      +ports.map(function(p){return'<tr><td><span class="pbadge">'+p+'</span></td><td>'+(svcMap[parseInt(p)]||'—')+'</td></tr>'}).join('')
+      +'</tbody></table></div>'
+    +'<div class="dash-box"><div class="sec">TOP PROCESSES</div>'
+      +'<table class="dt"><thead><tr><th>PID</th><th>CPU</th><th>MEM</th><th>CMD</th></tr></thead><tbody>'
+      +procs.map(function(p){
+        var cc=parseFloat(p.cpu)>10?'var(--red)':parseFloat(p.cpu)>3?'var(--yellow)':'var(--text2)';
+        return'<tr><td>'+p.pid+'</td><td style="color:'+cc+'">'+p.cpu+'%</td><td>'+p.mem+'%</td><td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.cmd+'</td></tr>';
+      }).join('')
+      +'</tbody></table></div>'
+    +'</div>';
+
+  document.getElementById('dash-inner').innerHTML=html;
+}
+
+// ── toast ─────────────────────────────────────────────────────
+function toast(msg,type,dur){
+  type=type||'inf';dur=dur||3000;
+  var el=document.createElement('div');
+  el.className='t '+type;el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(function(){el.remove()},dur);
+}
+
+// ── keyboard ─────────────────────────────────────────────────
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'&&!connected)doConnect();
+});
+document.getElementById('f-pass').addEventListener('keydown',function(e){
+  if(e.key==='Enter')doConnect();
+});
+
+// ── init ─────────────────────────────────────────────────────
+initTerm();
+term.writeln('\x1b[36m  SSH Panel\x1b[0m — enter credentials and click Connect\r\n');
+term.writeln('\x1b[2m  Need a relay? Check the Setup Guide tab.\x1b[0m\r\n');
+document.getElementById('f-host').focus();
+</script>
+</body>
+</html>
+HTMLEOF
